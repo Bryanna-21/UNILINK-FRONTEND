@@ -63,7 +63,25 @@ body {
   border-radius: 20px;
   cursor: pointer;
 }
+
 body.dark {
   background: #121212;
   color: white;
+}
+button {
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+.sidebar p {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.sidebar p:hover {
+  background: #f0f0f0;
 }
