@@ -40,3 +40,13 @@ export default function Feed() {
     </MainLayout>
   );
 }
+const [image, setImage] = useState("");
+<input
+  placeholder="Image URL (optional)"
+  value={image}
+  onChange={(e) => setImage(e.target.value)}
+/>
+await API.post("/posts/create", {
+  content,
+  mediaUrl: image
+});
