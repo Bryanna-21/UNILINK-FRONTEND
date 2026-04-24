@@ -1,26 +1,47 @@
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f7fa;
+  font-family: Arial;
+  background: #f0f2f5;
 }
 
 /* layout */
-.container {
-  max-width: 600px;
+.main {
+  display: flex;
+}
+
+.sidebar {
+  width: 220px;
+  background: white;
+  height: 100vh;
+  padding: 20px;
+  border-right: 1px solid #ddd;
+}
+
+.content {
+  flex: 1;
+  max-width: 700px;
   margin: auto;
   padding: 20px;
 }
 
-/* card */
+/* navbar */
+.navbar {
+  background: white;
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  font-weight: bold;
+}
+
+/* cards */
 .card {
   background: white;
   padding: 15px;
   margin-bottom: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
-/* input bar */
+/* post box */
 .post-box {
   display: flex;
   gap: 10px;
@@ -29,45 +50,16 @@ body {
 
 .post-box input {
   flex: 1;
-  padding: 10px;
+  padding: 12px;
   border-radius: 20px;
   border: 1px solid #ccc;
 }
 
 .post-box button {
-  padding: 10px 15px;
+  padding: 10px 18px;
   border: none;
-  background: #0a66c2;
+  background: black;
   color: white;
   border-radius: 20px;
   cursor: pointer;
-}
-
-/* auth pages */
-.auth-container {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.auth-box {
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  width: 300px;
-}
-
-.auth-box input {
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 10px;
-}
-
-.auth-box button {
-  width: 100%;
-  padding: 10px;
-  background: black;
-  color: white;
-  border: none;
 }
