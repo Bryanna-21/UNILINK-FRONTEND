@@ -23,3 +23,14 @@ export default function PostCard({ post, refresh }) {
     </div>
   );
 }
+{post.mediaUrl && (
+  <img
+    src={post.mediaUrl}
+    alt=""
+    style={{
+      width: "100%",
+      borderRadius: "10px",
+      marginTop: "10px"
+    }}
+  />
+)}
