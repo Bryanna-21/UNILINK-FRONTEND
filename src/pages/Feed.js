@@ -1,23 +1,19 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
 import PostCard from "../components/PostCard";
+import MainLayout from "../layout/MainLayout";
 
 export default function Feed() {
   const [posts, setPosts] = useState([]);
   const [content, setContent] = useState("");
 
   const fetchFeed = async () => {
-    try {
-      const res = await API.get("/posts/feed");
-      setPosts(res.data);
-    } catch {
-      alert("Failed to load feed");
-    }
+    const res = await API.get("/posts/feed");
+    setPosts(res.data);
   };
 
   const createPost = async () => {
     if (!content) return;
-
     await API.post("/posts/create", { content });
     setContent("");
     fetchFeed();
@@ -28,21 +24,19 @@ export default function Feed() {
   }, []);
 
   return (
-    <div>
-      <h2>🌍 Global Feed</h2>
-
-      <div>
+    <MainLayout>
+      <div className="post-box">
         <input
-          placeholder="What's happening?"
+          placeholder="Share something..."
           value={content}
           onChange={(e) => setContent(e.target.value)}
         />
         <button onClick={createPost}>Post</button>
       </div>
 
-      {posts.map((post) => (
-        <PostCard key={post._id} post={post} refresh={fetchFeed} />
+      {posts.map((p) => (
+        <PostCard key={p._id} post={p} refresh={fetchFeed} />
       ))}
-    </div>
+    </MainLayout>
   );
 }
