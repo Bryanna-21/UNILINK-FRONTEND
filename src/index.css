@@ -63,3 +63,7 @@ body {
   border-radius: 20px;
   cursor: pointer;
 }
+body.dark {
+  background: #121212;
+  color: white;
+}
