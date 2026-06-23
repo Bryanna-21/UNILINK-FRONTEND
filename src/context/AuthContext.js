@@ -1,54 +1,92 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+createContext,
+useContext,
+useEffect,
+useState,
+} from "react";
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+export const AuthProvider = ({
+children,
+}) => {
+const [user, setUser] =
+useState(null);
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+useEffect(() => {
+const storedUser =
+localStorage.getItem("user");
 
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (err) {
-        console.error(err);
-        localStorage.removeItem("user");
-      }
-    }
-  }, []);
-
-  const login = (userData, token) => {
-    localStorage.setItem("token", token);
-    localStorage.setItem(
-      "user",
-      JSON.stringify(userData)
+```
+if (storedUser) {
+  try {
+    setUser(
+      JSON.parse(storedUser)
     );
+  } catch (error) {
+    console.error(error);
+    localStorage.removeItem(
+      "user"
+    );
+  }
+}
+```
 
-    setUser(userData);
-  };
+}, []);
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+const login = (
+userData,
+token
+) => {
+localStorage.setItem(
+"token",
+token
+);
 
-    setUser(null);
-  };
+```
+localStorage.setItem(
+  "user",
+  JSON.stringify(userData)
+);
 
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        login,
-        logout,
-        isAuthenticated: !!localStorage.getItem("token"),
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+setUser(userData);
+```
+
 };
 
-export const useAuth = () => useContext(AuthContext);
+const logout = () => {
+localStorage.removeItem(
+"token"
+);
+
+```
+localStorage.removeItem(
+  "user"
+);
+
+setUser(null);
+```
+
+};
+
+return (
+<AuthContext.Provider
+value={{
+user,
+login,
+logout,
+isAuthenticated:
+!!localStorage.getItem(
+"token"
+),
+}}
+>
+{children}
+</AuthContext.Provider>
+);
+};
+
+export const useAuth = () =>
+useContext(AuthContext);
 
 export default AuthContext;
