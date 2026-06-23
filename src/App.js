@@ -25,8 +25,19 @@ function App() {
   return (
     <Routes>
 
-      <Route path="/" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+      {/* Public Routes */}
+
+      <Route
+        path="/"
+        element={<Login />}
+      />
+
+      <Route
+        path="/register"
+        element={<Register />}
+      />
+
+      {/* Protected Routes */}
 
       <Route
         path="/feed"
@@ -136,30 +147,42 @@ function App() {
         }
       />
 
+      {/* Student Dashboard */}
+
       <Route
         path="/student"
         element={
-          <RoleGuard allowedRoles={["student"]}>
-            <StudentDashboard />
-          </RoleGuard>
+          <ProtectedRoute>
+            <RoleGuard allowedRoles={["student"]}>
+              <StudentDashboard />
+            </RoleGuard>
+          </ProtectedRoute>
         }
       />
+
+      {/* Lecturer Dashboard */}
 
       <Route
         path="/lecturer"
         element={
-          <RoleGuard allowedRoles={["lecturer"]}>
-            <LecturerDashboard />
-          </RoleGuard>
+          <ProtectedRoute>
+            <RoleGuard allowedRoles={["lecturer"]}>
+              <LecturerDashboard />
+            </RoleGuard>
+          </ProtectedRoute>
         }
       />
+
+      {/* Admin Dashboard */}
 
       <Route
         path="/admin"
         element={
-          <RoleGuard allowedRoles={["admin"]}>
-            <AdminDashboard />
-          </RoleGuard>
+          <ProtectedRoute>
+            <RoleGuard allowedRoles={["admin"]}>
+              <AdminDashboard />
+            </RoleGuard>
+          </ProtectedRoute>
         }
       />
 
