@@ -1,146 +1,102 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import API from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import "../styles/Auth.css";
 
 export default function Login() {
-const navigate = useNavigate();
-const { login } = useAuth();
+  const [form, setForm] = useState({
+    email: "",
+    password: ""
+  });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
-const [form, setForm] = useState({
-email: "",
-password: "",
-});
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
 
-const [loading, setLoading] =
-useState(false);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
-const [error, setError] =
-useState("");
+    if (!form.email.trim() || !form.password) {
+      setError("Please enter email and password");
+      setLoading(false);
+      return;
+    }
 
-const handleChange = (e) => {
-setForm({
-...form,
-[e.target.name]:
-e.target.value,
-});
-};
+    try {
+      const res = await API.post("/auth/login", {
+        email: form.email.trim(),
+        password: form.password,
+      });
 
-const handleSubmit = async (
-e
-) => {
-e.preventDefault();
+      login(res.data.user, res.data.token);
+      navigate("/feed");
+    } catch (err) {
+      console.error(err);
+      const errorMessage = err.response?.data?.message || "Login failed. Please check your credentials.";
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-```
-setError("");
-setLoading(true);
+  return (
+    <div className="auth-container">
+      <div className="auth-box">
+        <h2>Welcome Back to UniLink</h2>
+        <p className="subtitle">Sign in to continue</p>
 
-try {
-  const res = await API.post(
-    "/auth/login",
-    form
+        {error && <div className="error-message">{error}</div>}
+
+        <form onSubmit={handleSubmit}>
+          <input
+            name="email"
+            type="email"
+            placeholder="Email Address"
+            value={form.email}
+            onChange={handleInputChange}
+            className="input-field"
+            disabled={loading}
+            required
+          />
+
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleInputChange}
+            className="input-field"
+            disabled={loading}
+            required
+          />
+
+          <button 
+            type="submit" 
+            className="auth-button"
+            disabled={loading}
+          >
+            {loading ? "Signing In..." : "Sign In"}
+          </button>
+        </form>
+
+        <p className="auth-link">
+          Don't have an account?{" "}
+          <span 
+            onClick={() => navigate("/register")} 
+            style={{ cursor: "pointer", color: "#007bff" }}
+          >
+            Register here
+          </span>
+        </p>
+      </div>
+    </div>
   );
-
-  const {
-    token,
-    user,
-  } = res.data;
-
-  login(user, token);
-
-  switch (user.role) {
-    case "admin":
-      navigate("/admin");
-      break;
-
-    case "lecturer":
-      navigate(
-        "/lecturer"
-      );
-      break;
-
-    default:
-      navigate(
-        "/student"
-      );
-  }
-} catch (err) {
-  setError(
-    err.response?.data
-      ?.message ||
-      "Login failed"
-  );
-} finally {
-  setLoading(false);
-}
-```
-
-};
-
-return ( <div className="auth-container"> <div className="auth-card"> <h1>UniLink</h1>
-
-```
-    <h2>Login</h2>
-
-    {error && (
-      <p className="error">
-        {error}
-      </p>
-    )}
-
-    <form
-      onSubmit={
-        handleSubmit
-      }
-    >
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        value={
-          form.email
-        }
-        onChange={
-          handleChange
-        }
-        required
-      />
-
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        value={
-          form.password
-        }
-        onChange={
-          handleChange
-        }
-        required
-      />
-
-      <button
-        type="submit"
-        disabled={
-          loading
-        }
-      >
-        {loading
-          ? "Signing In..."
-          : "Login"}
-      </button>
-    </form>
-
-    <p>
-      Don't have an
-      account?{" "}
-      <Link to="/register">
-        Register
-      </Link>
-    </p>
-  </div>
-</div>
-```
-
-);
 }
