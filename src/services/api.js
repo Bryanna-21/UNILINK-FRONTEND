@@ -3,7 +3,7 @@ import axios from "axios";
 const API = axios.create({
   baseURL:
     process.env.REACT_APP_BACKEND_URL ||
-    "http:unilink-backend.railway.internal",
+    "http://localhost:5000/api",
 });
 
 API.interceptors.request.use(
