@@ -1,7 +1,5 @@
 import { useState } from "react";
 import API from "../services/api";
-import MainLayout from "../layout/MainLayout";
-
 export default function EditProfile() {
   const [form, setForm] = useState({
     name: "",
@@ -24,7 +22,7 @@ export default function EditProfile() {
   };
 
   return (
-    <MainLayout>
+    <>
       <form onSubmit={handleSubmit}>
         <input
           placeholder="Name"
@@ -52,6 +50,6 @@ export default function EditProfile() {
           Save Profile
         </button>
       </form>
-    </MainLayout>
+    </>
   );
 }
