@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import socket from "../services/socket";
-import MainLayout from "../layout/MainLayout";
-
 export default function ChatRoom() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -36,7 +34,7 @@ export default function ChatRoom() {
   };
 
   return (
-    <MainLayout>
+    <>
       <h2>Campus Chat</h2>
 
       <div className="card">
@@ -55,6 +53,6 @@ export default function ChatRoom() {
       <button onClick={sendMessage}>
         Send
       </button>
-    </MainLayout>
+    </>
   );
 }
