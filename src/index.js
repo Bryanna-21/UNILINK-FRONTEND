@@ -19,6 +19,11 @@ root.render(
           reverseOrder={false}
           toastOptions={{
             duration: 4000,
+            style: {
+              borderRadius: "10px",
+              background: "#1f2937",
+              color: "#fff",
+            },
           }}
         />
         <App />
