@@ -1,5 +1,3 @@
-import MainLayout from "../layout/MainLayout";
-
 export default function Notifications() {
   const notifications = [
     "New post in your community",
@@ -8,7 +6,7 @@ export default function Notifications() {
   ];
 
   return (
-    <MainLayout>
+    <>
       <h2>Notifications</h2>
 
       {notifications.map((n, i) => (
@@ -16,6 +14,6 @@ export default function Notifications() {
           {n}
         </div>
       ))}
-    </MainLayout>
+    </>
   );
 }
