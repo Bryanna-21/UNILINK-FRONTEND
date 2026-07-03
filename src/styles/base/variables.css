@@ -1,0 +1,34 @@
+:root{
+
+--primary:#2563eb;
+--primary-dark:#1d4ed8;
+
+--secondary:#0f172a;
+
+--success:#22c55e;
+
+--warning:#f59e0b;
+
+--danger:#ef4444;
+
+--background:#f5f7fb;
+
+--surface:#ffffff;
+
+--border:#d9dde5;
+
+--text:#1e293b;
+
+--text-light:#64748b;
+
+--radius:12px;
+
+--shadow:0 6px 18px rgba(0,0,0,.08);
+
+--transition:.25s ease;
+
+--sidebar-width:270px;
+
+--topbar-height:70px;
+
+}
