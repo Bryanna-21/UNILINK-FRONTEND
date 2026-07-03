@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
 import PostCard from "../components/PostCard";
-import MainLayout from "../layout/MainLayout";
 import "../styles/Feed.css";
 
 export default function Feed() {
@@ -67,7 +66,7 @@ export default function Feed() {
   }, []);
 
   return (
-    <MainLayout>
+    <>
       <div className="feed-container">
         {/* Post Creation Box */}
         <div className="post-creation-box">
@@ -109,6 +108,6 @@ export default function Feed() {
           ))}
         </div>
       </div>
-    </MainLayout>
+    </>
   );
 }
