@@ -1,5 +1,3 @@
-import MainLayout from "../layout/MainLayout";
-
 export default function Communities() {
   const communities = [
     {
@@ -17,7 +15,7 @@ export default function Communities() {
   ];
 
   return (
-    <MainLayout>
+    <>
       <h2>Communities</h2>
 
       {communities.map((community) => (
@@ -29,6 +27,6 @@ export default function Communities() {
           </button>
         </div>
       ))}
-    </MainLayout>
+    </>
   );
 }
