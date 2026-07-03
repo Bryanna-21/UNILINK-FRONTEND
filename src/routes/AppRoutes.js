@@ -5,50 +5,49 @@ import PublicRoute from "./PublicRoute";
 import RoleGuard from "./RoleGuard";
 
 /* ---------- AUTH ---------- */
-
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 
 /* ---------- LAYOUT ---------- */
-
 import MainLayout from "../layouts/MainLayout";
 
-/* ---------- STUDENT ---------- */
-
+/* ---------- DASHBOARDS ---------- */
 import StudentDashboard from "../pages/student/Dashboard";
-
-/* ---------- LECTURER ---------- */
-
 import LecturerDashboard from "../pages/lecturer/Dashboard";
-
-/* ---------- ADMIN ---------- */
-
 import AdminDashboard from "../pages/admin/Dashboard";
 
-/* ---------- COMMON ---------- */
+/* ---------- COMMON PAGES ---------- */
+import Feed from "../pages/Feed";
+import Profile from "../pages/Profile";
+import EditProfile from "../pages/EditProfile";
+import Communities from "../pages/Communities";
+import CreateCommunity from "../pages/CreateCommunity";
+import Events from "../pages/Events";
+import CreateEvent from "../pages/CreateEvent";
+import Search from "../pages/Search";
+import Messages from "../pages/Messages";
+import ChatRoom from "../pages/ChatRoom";
+import Notifications from "../pages/Notifications";
+import Settings from "../pages/Settings";
 
+/* ---------- UTILITY PAGES ---------- */
 import NotFound from "../pages/NotFound";
 import Unauthorized from "../pages/Unauthorized";
 
 export default function AppRoutes() {
   return (
     <Routes>
-
       {/* Public Routes */}
-
       <Route element={<PublicRoute />}>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Route>
 
       {/* Protected Routes */}
-
       <Route element={<ProtectedRoute />}>
-
         <Route element={<MainLayout />}>
-
-          {/* Student */}
-
+          
+          {/* Dashboards */}
           <Route
             path="/student"
             element={
@@ -57,9 +56,6 @@ export default function AppRoutes() {
               </RoleGuard>
             }
           />
-
-          {/* Lecturer */}
-
           <Route
             path="/lecturer"
             element={
@@ -68,9 +64,6 @@ export default function AppRoutes() {
               </RoleGuard>
             }
           />
-
-          {/* Admin */}
-
           <Route
             path="/admin"
             element={
@@ -80,25 +73,26 @@ export default function AppRoutes() {
             }
           />
 
-        </Route>
+          {/* Common Portal Pages */}
+          <Route path="/feed" element={<Feed />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/edit" element={<EditProfile />} />
+          <Route path="/communities" element={<Communities />} />
+          <Route path="/communities/create" element={<CreateCommunity />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/events/create" element={<CreateEvent />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/messages" element={<Messages />} />
+          <Route path="/messages/chat/:id" element={<ChatRoom />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/settings" element={<Settings />} />
 
+        </Route>
       </Route>
 
-      <Route
-        path="/unauthorized"
-        element={<Unauthorized />}
-      />
-
-      <Route
-        path="/"
-        element={<Navigate to="/login" replace />}
-      />
-
-      <Route
-        path="*"
-        element={<NotFound />}
-      />
-
+      <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
