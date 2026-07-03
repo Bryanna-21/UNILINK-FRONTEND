@@ -1,5 +1,3 @@
-import MainLayout from "../layout/MainLayout";
-
 export default function Events() {
   const events = [
     {
@@ -15,7 +13,7 @@ export default function Events() {
   ];
 
   return (
-    <MainLayout>
+    <>
       <h2>Upcoming Events</h2>
 
       {events.map((event) => (
@@ -24,6 +22,6 @@ export default function Events() {
           <p>{event.date}</p>
         </div>
       ))}
-    </MainLayout>
+    </>
   );
 }
