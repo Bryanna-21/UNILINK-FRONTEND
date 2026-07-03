@@ -1,6 +1,4 @@
 import { useState } from "react";
-import MainLayout from "../layout/MainLayout";
-
 export default function Search() {
   const [query, setQuery] = useState("");
 
@@ -15,7 +13,7 @@ export default function Search() {
   );
 
   return (
-    <MainLayout>
+    <>
       <h2>Search</h2>
 
       <input
@@ -32,6 +30,6 @@ export default function Search() {
           {item}
         </div>
       ))}
-    </MainLayout>
+    </>
   );
 }
