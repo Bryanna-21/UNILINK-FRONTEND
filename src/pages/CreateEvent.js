@@ -1,7 +1,5 @@
 import { useState } from "react";
 import API from "../services/api";
-import MainLayout from "../layout/MainLayout";
-
 export default function CreateEvent() {
   const [title, setTitle] =
     useState("");
@@ -23,7 +21,7 @@ export default function CreateEvent() {
   };
 
   return (
-    <MainLayout>
+    <>
       <h2>Create Event</h2>
 
       <input
@@ -44,6 +42,6 @@ export default function CreateEvent() {
       <button onClick={createEvent}>
         Create Event
       </button>
-    </MainLayout>
+    </>
   );
 }
