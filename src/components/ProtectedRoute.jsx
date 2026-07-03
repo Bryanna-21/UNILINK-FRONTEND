@@ -1,11 +1,48 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
-export default function ProtectedRoute({ children }) {
-const token = localStorage.getItem("token");
+const FullScreenLoader = () => {
+  return (
+    <div
+      style={{
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "#f8fafc",
+      }}
+    >
+      <div
+        style={{
+          width: "60px",
+          height: "60px",
+          border: "6px solid #e5e7eb",
+          borderTop: "6px solid #2563eb",
+          borderRadius: "50%",
+          animation: "spin 1s linear infinite",
+        }}
+      />
+    </div>
+  );
+};
 
-if (!token) {
-return <Navigate to="/" replace />;
-}
+export default function ProtectedRoute() {
+  const { loading, isAuthenticated } = useAuth();
+  const location = useLocation();
 
-return children;
+  if (loading) {
+    return <FullScreenLoader />;
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <Navigate
+        to="/login"
+        state={{ from: location }}
+        replace
+      />
+    );
+  }
+
+  return <Outlet />;
 }
