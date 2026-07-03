@@ -1,87 +1,23 @@
-body {
-  margin: 0;
-  font-family: Arial;
-  background: #f0f2f5;
-}
+@import "./styles/base/reset.css";
 
-/* layout */
-.main {
-  display: flex;
-}
+@import "./styles/base/variables.css";
 
-.sidebar {
-  width: 220px;
-  background: white;
-  height: 100vh;
-  padding: 20px;
-  border-right: 1px solid #ddd;
-}
+@import "./styles/base/typography.css";
 
-.content {
-  flex: 1;
-  max-width: 700px;
-  margin: auto;
-  padding: 20px;
-}
+@import "./styles/base/animations.css";
 
-/* navbar */
-.navbar {
-  background: white;
-  padding: 15px;
-  border-bottom: 1px solid #ddd;
-  font-weight: bold;
-}
+@import "./styles/layout/sidebar.css";
 
-/* cards */
-.card {
-  background: white;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-}
+@import "./styles/layout/topbar.css";
 
-/* post box */
-.post-box {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
+@import "./styles/layout/layout.css";
 
-.post-box input {
-  flex: 1;
-  padding: 12px;
-  border-radius: 20px;
-  border: 1px solid #ccc;
-}
+@import "./styles/layout/footer.css";
 
-.post-box button {
-  padding: 10px 18px;
-  border: none;
-  background: black;
-  color: white;
-  border-radius: 20px;
-  cursor: pointer;
-}
+@import "./styles/components/buttons.css";
 
-body.dark {
-  background: #121212;
-  color: white;
-}
-button {
-  cursor: pointer;
-}
+@import "./styles/components/cards.css";
 
-button:hover {
-  opacity: 0.85;
-}
+@import "./styles/components/forms.css";
 
-.sidebar p {
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 6px;
-}
-
-.sidebar p:hover {
-  background: #f0f0f0;
-}
+@import "./styles/components/tables.css";
