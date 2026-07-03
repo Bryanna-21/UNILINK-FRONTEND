@@ -5,7 +5,7 @@ import {
   FaHospital,
   FaHeartbeat,
   FaSignOutAlt,
-  FaExclamationTriangle,
+  FaExclamationTriangle
 } from "react-icons/fa";
 
 export default function EmergencyMenu() {
@@ -39,7 +39,7 @@ export default function EmergencyMenu() {
     await API.post("/emergency/report", {
       type: "general",
       message,
-      location: "unknown",
+      location: "unknown"
     });
 
     alert("Report sent.");
@@ -54,7 +54,10 @@ export default function EmergencyMenu() {
   return (
     <>
       {/* Floating Button */}
-      <div onClick={() => setOpen(!open)} style={fab}>
+      <div
+        onClick={() => setOpen(!open)}
+        style={fab}
+      >
         ⚠️
       </div>
 
@@ -65,16 +68,12 @@ export default function EmergencyMenu() {
           <h4>Emergency Contacts</h4>
           {contacts.map((c, i) => (
             <p key={i} style={item}>
-              <FaPhone /> {c.name}: <a href={`tel:${c.phone}`}>{c.phone}</a>
+              <FaPhone /> {c.name}:{" "}
+              <a href={`tel:${c.phone}`}>{c.phone}</a>
             </p>
           ))}
 
-          <p
-            style={item}
-            onClick={() =>
-              window.open("https://www.google.com/maps/search/hospital+near+me")
-            }
-          >
+          <p style={item} onClick={() => window.open("https://www.google.com/maps/search/hospital+near+me")}>
             <FaHospital /> Nearby Hospitals
           </p>
 
@@ -106,7 +105,7 @@ const fab = {
   padding: "16px",
   borderRadius: "50%",
   cursor: "pointer",
-  zIndex: 999,
+  zIndex: 999
 };
 
 const menu = {
@@ -118,7 +117,7 @@ const menu = {
   borderRadius: "10px",
   boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
   padding: "10px",
-  zIndex: 999,
+  zIndex: 999
 };
 
 const item = {
@@ -126,5 +125,5 @@ const item = {
   cursor: "pointer",
   display: "flex",
   gap: "10px",
-  alignItems: "center",
+  alignItems: "center"
 };
