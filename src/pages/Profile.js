@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
-import MainLayout from "../layout/MainLayout";
-
 export default function Profile() {
   const [user, setUser] = useState(null);
 
@@ -19,7 +17,7 @@ export default function Profile() {
   };
 
   return (
-    <MainLayout>
+    <>
       <div className="card">
         <h2>My Profile</h2>
 
@@ -33,6 +31,6 @@ export default function Profile() {
           <p>Loading profile...</p>
         )}
       </div>
-    </MainLayout>
+    </>
   );
 }
