@@ -1,90 +1,125 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import api from "../services/api";
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 export const useAuth = () => useContext(AuthContext);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token") || "");
+
+  const [token, setToken] = useState(
+    localStorage.getItem("token") || ""
+  );
+
   const [loading, setLoading] = useState(true);
 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   useEffect(() => {
-    const initialize = async () => {
-      try {
-        if (!token) {
-          setLoading(false);
-          return;
-        }
-
-        api.defaults.headers.common.Authorization = `Bearer ${token}`;
-
-        const { data } = await api.get("/auth/me");
-
-        setUser(data.user);
-      } catch (error) {
-        console.error("Authentication initialization failed:", error);
-
-        logout();
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    initialize();
+    initializeAuth();
   }, []);
 
   useEffect(() => {
     if (token) {
-      api.defaults.headers.common.Authorization = `Bearer ${token}`;
+      api.defaults.headers.Authorization = `Bearer ${token}`;
     } else {
-      delete api.defaults.headers.common.Authorization;
+      delete api.defaults.headers.Authorization;
     }
   }, [token]);
 
+  const initializeAuth = async () => {
+    try {
+      const savedToken = localStorage.getItem("token");
+
+      const savedUser = localStorage.getItem("user");
+
+      if (!savedToken) {
+        setLoading(false);
+        return;
+      }
+
+      setToken(savedToken);
+
+      if (savedUser) {
+        setUser(JSON.parse(savedUser));
+        setIsAuthenticated(true);
+      }
+    } catch (error) {
+      console.error(error);
+
+      logout();
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const login = async (email, password) => {
     try {
-      const { data } = await api.post("/auth/login", {
+      const response = await api.post("/auth/login", {
         email,
         password,
       });
 
+      const data = response.data;
+
       localStorage.setItem("token", data.token);
 
+      localStorage.setItem(
+        "user",
+        JSON.stringify(data.user)
+      );
+
       setToken(data.token);
+
       setUser(data.user);
 
-      api.defaults.headers.common.Authorization = `Bearer ${data.token}`;
+      setIsAuthenticated(true);
 
       return {
         success: true,
-        user: data.user,
       };
     } catch (error) {
       return {
         success: false,
         message:
           error.response?.data?.message ||
-          "Unable to login. Please try again.",
+          "Login failed.",
       };
     }
   };
 
   const register = async (payload) => {
     try {
-      const { data } = await api.post("/auth/register", payload);
+      const response = await api.post(
+        "/auth/register",
+        payload
+      );
+
+      const data = response.data;
 
       localStorage.setItem("token", data.token);
 
+      localStorage.setItem(
+        "user",
+        JSON.stringify(data.user)
+      );
+
       setToken(data.token);
+
       setUser(data.user);
 
-      api.defaults.headers.common.Authorization = `Bearer ${data.token}`;
+      setIsAuthenticated(true);
 
       return {
         success: true,
-        user: data.user,
       };
     } catch (error) {
       return {
@@ -99,48 +134,80 @@ export function AuthProvider({ children }) {
   const logout = () => {
     localStorage.removeItem("token");
 
-    delete api.defaults.headers.common.Authorization;
+    localStorage.removeItem("user");
 
     setUser(null);
+
     setToken("");
+
+    setIsAuthenticated(false);
   };
 
   const refreshUser = async () => {
     try {
-      const { data } = await api.get("/auth/me");
+      const response = await api.get("/auth/me");
 
-      setUser(data.user);
+      const updatedUser = response.data.user;
+
+      setUser(updatedUser);
+
+      localStorage.setItem(
+        "user",
+        JSON.stringify(updatedUser)
+      );
 
       return true;
-    } catch {
-      logout();
+    } catch (error) {
+      console.error(error);
+
       return false;
     }
   };
 
-  const isAuthenticated = !!user && !!token;
+  const updateUser = (updatedUser) => {
+    setUser(updatedUser);
 
-  const isAdmin = user?.role === "admin";
-
-  const isLecturer = user?.role === "lecturer";
-
-  const isStudent = user?.role === "student";
-
-  const value = {
-    user,
-    token,
-    loading,
-
-    login,
-    logout,
-    register,
-    refreshUser,
-
-    isAuthenticated,
-    isAdmin,
-    isLecturer,
-    isStudent,
+    localStorage.setItem(
+      "user",
+      JSON.stringify(updatedUser)
+    );
   };
+
+  const hasRole = (...roles) => {
+    if (!user) return false;
+
+    return roles.includes(user.role);
+  };
+
+  const value = useMemo(
+    () => ({
+      user,
+
+      token,
+
+      loading,
+
+      isAuthenticated,
+
+      login,
+
+      logout,
+
+      register,
+
+      refreshUser,
+
+      updateUser,
+
+      hasRole,
+    }),
+    [
+      user,
+      token,
+      loading,
+      isAuthenticated,
+    ]
+  );
 
   return (
     <AuthContext.Provider value={value}>
