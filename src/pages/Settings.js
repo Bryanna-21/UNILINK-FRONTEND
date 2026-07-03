@@ -1,8 +1,6 @@
-import MainLayout from "../layout/MainLayout";
-
 export default function Settings() {
   return (
-    <MainLayout>
+    <>
       <h2>Settings</h2>
 
       <div className="card">
@@ -14,6 +12,6 @@ export default function Settings() {
         <h3>Privacy</h3>
         <p>Privacy settings will appear here.</p>
       </div>
-    </MainLayout>
+    </>
   );
 }
