@@ -25,6 +25,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     initializeAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -201,6 +202,7 @@ export function AuthProvider({ children }) {
 
       hasRole,
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       user,
       token,
