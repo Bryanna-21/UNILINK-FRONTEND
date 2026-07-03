@@ -5,7 +5,11 @@ export default function RoleGuard({
   roles = [],
   children,
 }) {
-  const { user } = useAuth();
+  const { loading, user } = useAuth();
+
+  if (loading) {
+    return null;
+  }
 
   if (!user) {
     return <Navigate to="/login" replace />;
