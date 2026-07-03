@@ -1,7 +1,5 @@
 import { useState } from "react";
 import API from "../services/api";
-import MainLayout from "../layout/MainLayout";
-
 export default function CreateCommunity() {
   const [name, setName] =
     useState("");
@@ -20,7 +18,7 @@ export default function CreateCommunity() {
   };
 
   return (
-    <MainLayout>
+    <>
       <h2>Create Community</h2>
 
       <input
@@ -33,6 +31,6 @@ export default function CreateCommunity() {
       <button onClick={submit}>
         Create
       </button>
-    </MainLayout>
+    </>
   );
 }
