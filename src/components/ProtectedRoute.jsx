@@ -1,6 +1,5 @@
-// DEPRECATED: This file is kept for backward compatibility only.
-// Use src/routes/ProtectedRoute.js instead.
-// This component has been moved to the routes folder for better organization.
+// This file is deprecated. Use src/routes/ProtectedRoute.js instead.
+// Kept for backward compatibility but should not be used in new code.
 
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
