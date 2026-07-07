@@ -6,37 +6,39 @@ const Button = ({
   type = "button",
   variant = "primary",
   size = "medium",
+  fullWidth = false,
   disabled = false,
   loading = false,
-  fullWidth = false,
   icon = null,
+  iconPosition = "left",
   onClick,
-  className = "",
 }) => {
-  const classes = [
-    "btn",
-    `btn-${variant}`,
-    `btn-${size}`,
-    fullWidth ? "btn-full" : "",
-    disabled ? "btn-disabled" : "",
-    className,
-  ]
-    .filter(Boolean)
-    .join(" ");
-
   return (
     <button
       type={type}
-      className={classes}
       disabled={disabled || loading}
       onClick={onClick}
+      className={[
+        "app-button",
+        `btn-${variant}`,
+        `btn-${size}`,
+        fullWidth ? "btn-full" : "",
+        disabled ? "btn-disabled" : "",
+      ].join(" ")}
     >
       {loading ? (
         <span className="btn-spinner"></span>
       ) : (
         <>
-          {icon && <span className="btn-icon">{icon}</span>}
+          {icon && iconPosition === "left" && (
+            <span className="btn-icon">{icon}</span>
+          )}
+
           <span>{children}</span>
+
+          {icon && iconPosition === "right" && (
+            <span className="btn-icon">{icon}</span>
+          )}
         </>
       )}
     </button>
