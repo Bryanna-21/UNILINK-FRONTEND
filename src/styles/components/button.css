@@ -1,0 +1,89 @@
+.btn {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all .25s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn:hover{
+    transform: translateY(-2px);
+}
+
+.btn:active{
+    transform: scale(.98);
+}
+
+.btn-full{
+    width:100%;
+}
+
+.btn-small{
+    padding:8px 14px;
+    font-size:13px;
+}
+
+.btn-medium{
+    padding:12px 22px;
+    font-size:15px;
+}
+
+.btn-large{
+    padding:15px 28px;
+    font-size:17px;
+}
+
+.btn-primary{
+    background:#2563eb;
+    color:white;
+}
+
+.btn-secondary{
+    background:#f3f4f6;
+    color:#111827;
+}
+
+.btn-success{
+    background:#10b981;
+    color:white;
+}
+
+.btn-danger{
+    background:#ef4444;
+    color:white;
+}
+
+.btn-warning{
+    background:#f59e0b;
+    color:white;
+}
+
+.btn-dark{
+    background:#111827;
+    color:white;
+}
+
+.btn-disabled{
+    opacity:.55;
+    cursor:not-allowed;
+}
+
+.btn-spinner{
+    width:18px;
+    height:18px;
+    border:3px solid rgba(255,255,255,.3);
+    border-top:3px solid white;
+    border-radius:50%;
+    animation:spin .7s linear infinite;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
