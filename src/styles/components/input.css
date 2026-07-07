@@ -1,0 +1,85 @@
+.input-group{
+    width:100%;
+    margin-bottom:20px;
+}
+
+.input-label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+    color:#374151;
+}
+
+.required{
+    color:#ef4444;
+    margin-left:3px;
+}
+
+.input-wrapper{
+    display:flex;
+    align-items:center;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    background:white;
+    transition:.2s;
+}
+
+.input-wrapper:focus-within{
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.15);
+}
+
+.input-icon{
+    padding-left:12px;
+    color:#6b7280;
+}
+
+.app-input{
+    flex:1;
+    border:none;
+    outline:none;
+    padding:14px;
+    font-size:15px;
+    background:transparent;
+}
+
+.textarea{
+    resize:vertical;
+    min-height:120px;
+}
+
+.toggle-password{
+    border:none;
+    background:none;
+    cursor:pointer;
+    padding:12px;
+    font-weight:600;
+    color:#2563eb;
+}
+
+.character-counter{
+    margin-top:6px;
+    text-align:right;
+    color:#6b7280;
+    font-size:12px;
+}
+
+.error-text{
+    margin-top:6px;
+    color:#ef4444;
+    font-size:13px;
+}
+
+.success-text{
+    margin-top:6px;
+    color:#10b981;
+    font-size:13px;
+}
+
+.input-error{
+    border-color:#ef4444;
+}
+
+.input-success{
+    border-color:#10b981;
+}
