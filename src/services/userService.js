@@ -14,21 +14,6 @@ const userService = {
     const response = await api.put("/users/me", profileData);
     return response.data;
   },
-
-  async uploadProfilePhoto(formData) {
-    const response = await api.post(
-      "/users/profile/photo",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-
-    return response.data;
-  },
-
   // ==========================================
   // User Lookup
   // ==========================================
