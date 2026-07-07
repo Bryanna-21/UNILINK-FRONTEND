@@ -2,32 +2,52 @@ import React from "react";
 import { Toaster } from "react-hot-toast";
 
 const Toast = () => {
+
   return (
+
     <Toaster
+
       position="top-right"
+
       reverseOrder={false}
+
+      gutter={8}
+
       toastOptions={{
-        duration: 3000,
+
+        duration: 3500,
+
         style: {
+
           fontSize: "14px",
-          borderRadius: "10px",
-          padding: "12px 16px",
+
+          borderRadius: "12px",
+
+          padding: "14px 18px",
+
         },
+
+
         success: {
-          iconTheme: {
-            primary: "#16a34a",
-            secondary: "#ffffff",
-          },
+
+          duration: 3000,
+
         },
+
+
         error: {
-          iconTheme: {
-            primary: "#dc2626",
-            secondary: "#ffffff",
-          },
-        },
+
+          duration: 5000,
+
+        }
+
       }}
+
     />
+
   );
+
 };
+
 
 export default Toast;
