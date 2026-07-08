@@ -1,0 +1,95 @@
+.lecturer-courses-page {
+
+  display:flex;
+
+  min-height:100vh;
+
+  background:var(--background-color,#f9fafb);
+
+}
+
+
+
+.lecturer-courses-content {
+
+  flex:1;
+
+  padding:30px;
+
+}
+
+
+
+.lecturer-courses-header {
+
+  margin-bottom:30px;
+
+}
+
+
+
+.lecturer-courses-header h1 {
+
+  margin:0;
+
+  font-size:32px;
+
+}
+
+
+
+.lecturer-courses-header p {
+
+  color:#6b7280;
+
+  margin-top:8px;
+
+}
+
+
+
+.lecturer-courses-grid {
+
+  display:grid;
+
+  grid-template-columns:repeat(
+    auto-fit,
+    minmax(280px,1fr)
+  );
+
+  gap:25px;
+
+}
+
+
+
+.empty-courses {
+
+  background:white;
+
+  padding:40px;
+
+  border-radius:12px;
+
+  text-align:center;
+
+}
+
+
+
+@media(max-width:768px){
+
+  .lecturer-courses-page{
+
+    flex-direction:column;
+
+  }
+
+
+  .lecturer-courses-content{
+
+    padding:20px;
+
+  }
+
+}
