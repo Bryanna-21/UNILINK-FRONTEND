@@ -1,0 +1,207 @@
+.attendance-page {
+
+  display:flex;
+
+  min-height:100vh;
+
+  background:var(--background-color,#f9fafb);
+
+}
+
+
+
+.attendance-content {
+
+  flex:1;
+
+  padding:30px;
+
+}
+
+
+
+.attendance-header {
+
+  margin-bottom:30px;
+
+}
+
+
+
+.attendance-header h1 {
+
+  margin:0;
+
+  font-size:32px;
+
+}
+
+
+
+.attendance-header p {
+
+  color:#6b7280;
+
+  margin-top:8px;
+
+}
+
+
+
+.attendance-grid {
+
+  display:grid;
+
+  grid-template-columns:repeat(
+    auto-fit,
+    minmax(300px,1fr)
+  );
+
+  gap:25px;
+
+}
+
+
+
+.attendance-card {
+
+  background:white;
+
+  border-radius:14px;
+
+  padding:20px;
+
+  border:1px solid #e5e7eb;
+
+}
+
+
+
+.attendance-card-header {
+
+  display:flex;
+
+  align-items:center;
+
+  gap:15px;
+
+  margin-bottom:20px;
+
+}
+
+
+
+.attendance-icon {
+
+  width:45px;
+
+  height:45px;
+
+  border-radius:10px;
+
+  background:#059669;
+
+  color:white;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+}
+
+
+
+.attendance-card-header h3 {
+
+  margin:0;
+
+  font-size:17px;
+
+}
+
+
+
+.attendance-statistics {
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:12px;
+
+}
+
+
+
+.attendance-stat {
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  color:#4b5563;
+
+}
+
+
+
+.attendance-progress {
+
+  margin-top:20px;
+
+  height:10px;
+
+  background:#e5e7eb;
+
+  border-radius:10px;
+
+  overflow:hidden;
+
+}
+
+
+
+.attendance-progress-bar {
+
+  height:100%;
+
+  background:#2563eb;
+
+}
+
+
+
+.empty-attendance {
+
+  background:white;
+
+  padding:40px;
+
+  text-align:center;
+
+  border-radius:12px;
+
+}
+
+
+
+@media(max-width:768px){
+
+  .attendance-page{
+
+    flex-direction:column;
+
+  }
+
+
+  .attendance-content{
+
+    padding:20px;
+
+  }
+
+}
