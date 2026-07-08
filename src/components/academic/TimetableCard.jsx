@@ -1,66 +1,95 @@
 import React from "react";
+import "./TimetableCard.css";
+
 import {
   FaClock,
   FaMapMarkerAlt,
   FaUserTie,
-  FaBook
+  FaBook,
+  FaCalendarDay,
 } from "react-icons/fa";
-import "./TimetableCard.css";
 
-const TimetableCard = ({ timetable }) => {
-  if (!timetable) return null;
+
+const TimetableCard = ({
+  day,
+  date,
+  unit,
+  lecturer,
+  room,
+  startTime,
+  endTime,
+  type = "Lecture",
+  onClick,
+}) => {
 
 
   return (
-    <div className="timetable-card">
+    <div
+      className="timetable-card"
+      onClick={() => onClick && onClick()}
+    >
+
 
       <div className="timetable-header">
 
-        <div className="timetable-icon">
-          <FaBook />
+
+        <div className="day-section">
+
+          <FaCalendarDay />
+
+          <div>
+            <h3>
+              {day || "Unknown Day"}
+            </h3>
+
+            {
+              date &&
+              (
+                <span>
+                  {date}
+                </span>
+              )
+            }
+
+          </div>
+
         </div>
 
 
-        <div className="timetable-title">
 
-          <h3>
-            {timetable.unit || "Unknown Unit"}
-          </h3>
+        <span className="class-type">
+          {type}
+        </span>
 
-          <span>
-            {timetable.code || "No Unit Code"}
-          </span>
-
-        </div>
 
       </div>
 
 
 
-      <div className="timetable-information">
+
+
+      <div className="timetable-content">
 
 
         <div className="timetable-item">
 
-          <FaClock />
+          <FaBook />
 
-          <span>
-            {timetable.time || "No Time Assigned"}
-          </span>
+          <div>
 
-        </div>
+            <label>
+              Unit
+            </label>
 
+            <p>
+              {unit || "No unit assigned"}
+            </p>
 
-
-        <div className="timetable-item">
-
-          <FaMapMarkerAlt />
-
-          <span>
-            {timetable.room || "No Room Assigned"}
-          </span>
+          </div>
 
         </div>
+
+
 
 
 
@@ -68,25 +97,72 @@ const TimetableCard = ({ timetable }) => {
 
           <FaUserTie />
 
-          <span>
-            {timetable.lecturer || "No Lecturer Assigned"}
-          </span>
+          <div>
+
+            <label>
+              Lecturer
+            </label>
+
+            <p>
+              {lecturer || "Not assigned"}
+            </p>
+
+          </div>
 
         </div>
 
 
-      </div>
 
 
-      <div className="timetable-day">
 
-        {timetable.day || "Day Not Assigned"}
+        <div className="timetable-item">
+
+          <FaClock />
+
+          <div>
+
+            <label>
+              Time
+            </label>
+
+            <p>
+              {startTime || "--"} - {endTime || "--"}
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+
+
+        <div className="timetable-item">
+
+          <FaMapMarkerAlt />
+
+          <div>
+
+            <label>
+              Venue
+            </label>
+
+            <p>
+              {room || "Online"}
+            </p>
+
+          </div>
+
+        </div>
+
+
 
       </div>
 
 
     </div>
   );
+
 };
 
 
