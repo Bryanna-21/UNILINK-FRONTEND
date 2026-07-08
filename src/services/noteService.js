@@ -1,261 +1,426 @@
 import api from "./api";
 
-/* ===========================================
-   NOTES API SERVICE
-=========================================== */
 
 /**
- * Get all notes
+ * Note Service
+ *
+ * Handles:
+ * - Fetching notes
+ * - Uploading learning materials
+ * - Downloading notes
+ * - Searching notes
+ * - Lecturer note management
  */
-export const getAllNotes = async (params = {}) => {
-    const response = await api.get("/notes", {
-        params,
-    });
 
-    return response.data;
-};
 
-/**
- * Get note by ID
- */
-export const getNoteById = async (noteId) => {
-    const response = await api.get(`/notes/${noteId}`);
+const noteService = {
 
-    return response.data;
-};
 
-/**
- * Get my uploaded notes
- */
-export const getMyNotes = async () => {
-    const response = await api.get("/notes/my");
 
-    return response.data;
-};
 
-/**
- * Upload new note
- */
-export const uploadNote = async (formData) => {
-    const response = await api.post(
-        "/notes",
-        formData,
-        {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        }
-    );
+  /**
+   * Get all notes
+   */
+  getNotes: async () => {
 
-    return response.data;
-};
+    try {
 
-/**
- * Update note
- */
-export const updateNote = async (
-    noteId,
-    formData
-) => {
-    const response = await api.put(
-        `/notes/${noteId}`,
-        formData,
-        {
-            headers: {
-                "Content-Type":
-                    "multipart/form-data",
-            },
-        }
-    );
 
-    return response.data;
-};
+      const response = await api.get(
+        "/notes"
+      );
 
-/**
- * Delete note
- */
-export const deleteNote = async (noteId) => {
-    const response = await api.delete(
+
+      return response.data;
+
+
+
+    } catch(error) {
+
+
+      console.error(
+        "Failed to fetch notes:",
+        error
+      );
+
+
+      throw error;
+
+
+    }
+
+  },
+
+
+
+
+
+
+
+
+  /**
+   * Get note by ID
+   */
+  getNoteById: async (noteId) => {
+
+    try {
+
+
+      const response = await api.get(
+
         `/notes/${noteId}`
-    );
 
-    return response.data;
-};
+      );
 
-/**
- * Download note
- */
-export const downloadNote = async (
-    noteId
-) => {
-    const response = await api.get(
+
+      return response.data;
+
+
+
+    } catch(error) {
+
+
+      console.error(
+        "Failed to fetch note:",
+        error
+      );
+
+
+      throw error;
+
+
+    }
+
+  },
+
+
+
+
+
+
+
+
+
+  /**
+   * Get notes for a specific unit
+   */
+  getUnitNotes: async (unitId) => {
+
+    try {
+
+
+      const response = await api.get(
+
+        `/units/${unitId}/notes`
+
+      );
+
+
+      return response.data;
+
+
+
+    } catch(error) {
+
+
+      console.error(
+        "Failed to fetch unit notes:",
+        error
+      );
+
+
+      throw error;
+
+
+    }
+
+  },
+
+
+
+
+
+
+
+
+
+  /**
+   * Get notes uploaded by lecturer
+   */
+  getLecturerNotes: async () => {
+
+    try {
+
+
+      const response = await api.get(
+
+        "/notes/lecturer"
+
+      );
+
+
+      return response.data;
+
+
+
+    } catch(error) {
+
+
+      console.error(
+        "Failed to fetch lecturer notes:",
+        error
+      );
+
+
+      throw error;
+
+
+    }
+
+  },
+
+
+
+
+
+
+
+
+
+  /**
+   * Upload notes
+   *
+   * Uses FormData because files are included
+   */
+  uploadNote: async (noteData) => {
+
+
+    try {
+
+
+      const formData = new FormData();
+
+
+
+      formData.append(
+        "title",
+        noteData.title
+      );
+
+
+      formData.append(
+        "unit",
+        noteData.unit
+      );
+
+
+      formData.append(
+        "description",
+        noteData.description
+      );
+
+
+
+      if(noteData.file){
+
+        formData.append(
+          "file",
+          noteData.file
+        );
+
+      }
+
+
+
+
+
+      const response = await api.post(
+
+        "/notes/upload",
+
+        formData,
+
+        {
+
+          headers:{
+
+            "Content-Type":
+              "multipart/form-data"
+
+          }
+
+        }
+
+      );
+
+
+
+      return response.data;
+
+
+
+    } catch(error){
+
+
+      console.error(
+        "Failed to upload note:",
+        error
+      );
+
+
+      throw error;
+
+
+    }
+
+
+  },
+
+
+
+
+
+
+
+
+
+  /**
+   * Download note
+   */
+  downloadNote: async (noteId) => {
+
+
+    try {
+
+
+      const response = await api.get(
+
         `/notes/${noteId}/download`,
+
         {
-            responseType: "blob",
+
+          responseType:"blob"
+
         }
-    );
 
-    return response.data;
+      );
+
+
+      return response.data;
+
+
+
+    } catch(error){
+
+
+      console.error(
+        "Failed to download note:",
+        error
+      );
+
+
+      throw error;
+
+
+    }
+
+
+  },
+
+
+
+
+
+
+
+
+
+  /**
+   * Search notes
+   */
+  searchNotes: async (query) => {
+
+
+    try {
+
+
+      const response = await api.get(
+
+        `/notes/search?q=${query}`
+
+      );
+
+
+      return response.data;
+
+
+
+    } catch(error){
+
+
+      console.error(
+        "Failed to search notes:",
+        error
+      );
+
+
+      throw error;
+
+
+    }
+
+
+  },
+
+
+
+
+
+
+
+
+
+  /**
+   * Delete note
+   */
+  deleteNote: async (noteId) => {
+
+
+    try {
+
+
+      const response = await api.delete(
+
+        `/notes/${noteId}`
+
+      );
+
+
+      return response.data;
+
+
+
+    } catch(error){
+
+
+      console.error(
+        "Failed to delete note:",
+        error
+      );
+
+
+      throw error;
+
+
+    }
+
+
+  }
+
+
+
 };
 
-/**
- * Favourite / Unfavourite
- */
-export const toggleFavourite = async (
-    noteId
-) => {
-    const response = await api.patch(
-        `/notes/${noteId}/favourite`
-    );
 
-    return response.data;
-};
 
-/**
- * Like note
- */
-export const likeNote = async (
-    noteId
-) => {
-    const response = await api.patch(
-        `/notes/${noteId}/like`
-    );
-
-    return response.data;
-};
-
-/**
- * Rate note
- */
-export const rateNote = async (
-    noteId,
-    rating
-) => {
-    const response = await api.post(
-        `/notes/${noteId}/rating`,
-        {
-            rating,
-        }
-    );
-
-    return response.data;
-};
-
-/**
- * Report note
- */
-export const reportNote = async (
-    noteId,
-    reason
-) => {
-    const response = await api.post(
-        `/notes/${noteId}/report`,
-        {
-            reason,
-        }
-    );
-
-    return response.data;
-};
-
-/**
- * Search notes
- */
-export const searchNotes = async (
-    query
-) => {
-    const response = await api.get(
-        "/notes/search",
-        {
-            params: {
-                q: query,
-            },
-        }
-    );
-
-    return response.data;
-};
-
-/**
- * Recent notes
- */
-export const getRecentNotes =
-    async () => {
-        const response = await api.get(
-            "/notes/recent"
-        );
-
-        return response.data;
-    };
-
-/**
- * Popular notes
- */
-export const getPopularNotes =
-    async () => {
-        const response = await api.get(
-            "/notes/popular"
-        );
-
-        return response.data;
-    };
-
-/**
- * Notes by Course
- */
-export const getCourseNotes =
-    async (courseId) => {
-        const response = await api.get(
-            `/notes/course/${courseId}`
-        );
-
-        return response.data;
-    };
-
-/**
- * Notes by Unit
- */
-export const getUnitNotes =
-    async (unitId) => {
-        const response = await api.get(
-            `/notes/unit/${unitId}`
-        );
-
-        return response.data;
-    };
-
-/**
- * Favourite Notes
- */
-export const getFavouriteNotes =
-    async () => {
-        const response = await api.get(
-            "/notes/favourites"
-        );
-
-        return response.data;
-    };
-
-/**
- * Bookmark Note
- */
-export const bookmarkNote =
-    async (noteId) => {
-        const response = await api.patch(
-            `/notes/${noteId}/bookmark`
-        );
-
-        return response.data;
-    };
-
-/**
- * My Bookmarks
- */
-export const getBookmarks =
-    async () => {
-        const response = await api.get(
-            "/notes/bookmarks"
-        );
-
-        return response.data;
-    };
+export default noteService;
