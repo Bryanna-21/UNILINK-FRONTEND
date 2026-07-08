@@ -1,31 +1,49 @@
 import React from "react";
+import "./AssignmentCard.css";
+
 import {
   FaClipboardList,
   FaCalendarAlt,
+  FaClock,
   FaUser,
   FaCheckCircle,
-  FaClock,
-  FaArrowRight
+  FaExclamationCircle,
+  FaUpload,
 } from "react-icons/fa";
-import "./AssignmentCard.css";
 
-const AssignmentCard = ({ assignment, onClick }) => {
-  if (!assignment) return null;
 
-  const getStatus = () => {
-    if (assignment.status) {
-      return assignment.status;
+const AssignmentCard = ({
+  title,
+  description,
+  unit,
+  lecturer,
+  deadline,
+  submitted = false,
+  submissionStatus = "Pending",
+  marks,
+  totalMarks,
+  onSubmit,
+  onView,
+}) => {
+
+
+  const getStatusClass = () => {
+
+    if (submitted && submissionStatus === "Graded") {
+      return "graded";
     }
 
-    return "Pending";
+    if (submitted) {
+      return "submitted";
+    }
+
+    return "pending";
   };
-
-
-  const status = getStatus();
 
 
   return (
     <div className="assignment-card">
+
 
       <div className="assignment-header">
 
@@ -34,14 +52,14 @@ const AssignmentCard = ({ assignment, onClick }) => {
         </div>
 
 
-        <div className="assignment-info">
+        <div className="assignment-title">
 
           <h3>
-            {assignment.title || "Untitled Assignment"}
+            {title || "Untitled Assignment"}
           </h3>
 
           <span>
-            {assignment.unit || "Unknown Unit"}
+            {unit || "Unknown Unit"}
           </span>
 
         </div>
@@ -53,52 +71,48 @@ const AssignmentCard = ({ assignment, onClick }) => {
       <div className="assignment-description">
 
         <p>
-          {assignment.description ||
-            "Complete this assignment and submit before the deadline."}
+          {description || 
+          "No assignment description provided."}
         </p>
 
       </div>
 
 
 
+
       <div className="assignment-details">
 
 
-        <div className="assignment-detail">
+        <div className="detail-item">
 
           <FaUser />
 
           <span>
-            {assignment.createdBy || "Unknown Lecturer"}
+            {lecturer || "Unknown Lecturer"}
           </span>
 
         </div>
 
 
 
-        <div className="assignment-detail">
+        <div className="detail-item">
 
           <FaCalendarAlt />
 
           <span>
-            Due: {assignment.deadline || "No deadline"}
+            Due: {deadline || "No deadline"}
           </span>
 
         </div>
 
 
 
-        <div className="assignment-detail">
+        <div className="detail-item">
 
-          {
-            status === "Completed" ?
-            <FaCheckCircle /> :
-            <FaClock />
-          }
-
+          <FaClock />
 
           <span>
-            {status}
+            Submission deadline applies
           </span>
 
         </div>
@@ -108,20 +122,93 @@ const AssignmentCard = ({ assignment, onClick }) => {
 
 
 
-      <button
-        className="assignment-button"
-        onClick={() => onClick && onClick(assignment)}
-      >
 
-        View Assignment
 
-        <FaArrowRight />
+      <div className={`assignment-status ${getStatusClass()}`}>
 
-      </button>
+
+        {submitted ? (
+          <>
+            <FaCheckCircle />
+
+            <span>
+              {submissionStatus}
+            </span>
+          </>
+        ) : (
+          <>
+            <FaExclamationCircle />
+
+            <span>
+              Not Submitted
+            </span>
+          </>
+        )}
+
+
+      </div>
+
+
+
+
+
+
+      {
+        marks !== undefined &&
+        (
+          <div className="assignment-marks">
+
+            Marks:
+
+            <strong>
+              {marks}/{totalMarks}
+            </strong>
+
+          </div>
+        )
+      }
+
+
+
+
+
+
+      <div className="assignment-actions">
+
+
+        <button
+          className="view-assignment-btn"
+          onClick={() => onView && onView()}
+        >
+          View Details
+        </button>
+
+
+
+        {
+          !submitted &&
+          (
+            <button
+              className="submit-assignment-btn"
+              onClick={() => onSubmit && onSubmit()}
+            >
+
+              <FaUpload />
+
+              Submit
+
+            </button>
+          )
+        }
+
+
+      </div>
+
 
 
     </div>
   );
+
 };
 
 
