@@ -125,4 +125,212 @@ const handleSave = async () => {
   }
 
 };
-  
+  if (loading) {
+    return (
+      <div className="loading-page">
+        <h2>Loading submission...</h2>
+      </div>
+    );
+  }
+
+  if (!submission) {
+    return (
+      <div className="empty-page">
+        <h2>Submission not found.</h2>
+      </div>
+    );
+  }
+
+  return (
+    <div className="view-submission-page">
+
+      <div className="page-header">
+
+        <div>
+
+          <h1>Submission Review</h1>
+
+          <p>
+            Review student answers and assign marks.
+          </p>
+
+        </div>
+
+      </div>
+
+      <div className="student-card">
+
+        <div className="student-info">
+
+          <h2>{submission.student?.name}</h2>
+
+          <p>
+            Admission No:
+            {" "}
+            {submission.student?.admissionNumber}
+          </p>
+
+          <p>
+            Email:
+            {" "}
+            {submission.student?.email}
+          </p>
+
+          <p>
+            Course:
+            {" "}
+            {submission.student?.course}
+          </p>
+
+        </div>
+
+        <div className="exam-info">
+
+          <h3>{submission.exam?.title}</h3>
+
+          <p>
+            Duration:
+            {" "}
+            {submission.exam?.duration}
+            {" "}Minutes
+          </p>
+
+          <p>
+            Submitted:
+            {" "}
+            {new Date(
+              submission.submittedAt
+            ).toLocaleString()}
+          </p>
+
+        </div>
+
+      </div>
+
+      <div className="answers-section">
+
+        {submission.answers.map((answer, index) => (
+
+          <div
+            className="answer-card"
+            key={answer.questionId}
+          >
+
+            <div className="question-header">
+
+              <h3>
+                Question {index + 1}
+              </h3>
+
+              <span>
+                Max Marks:
+                {" "}
+                {answer.maxMarks}
+              </span>
+
+            </div>
+
+            <div className="question-text">
+
+              {answer.question}
+
+            </div>
+
+            <div className="student-answer">
+
+              <strong>
+                Student Answer
+              </strong>
+
+              <p>
+                {answer.response || "No Answer"}
+              </p>
+
+            </div>
+
+            <div className="grading-section">
+
+              <label>
+                Award Marks
+              </label>
+
+              <input
+                type="number"
+                min={0}
+                max={answer.maxMarks}
+                className="form-control"
+                value={
+                  marks[answer.questionId] || 0
+                }
+                onChange={(e) =>
+                  updateMark(
+                    answer.questionId,
+                    e.target.value
+                  )
+                }
+              />
+
+            </div>
+
+          </div>
+
+        ))}
+
+      </div>
+
+      <div className="feedback-section">
+
+        <h3>Lecturer Feedback</h3>
+
+        <textarea
+          rows={6}
+          className="form-control"
+          placeholder="Write feedback..."
+          value={feedback}
+          onChange={(e) =>
+            setFeedback(e.target.value)
+          }
+        />
+
+      </div>
+
+      <div className="summary-card">
+
+        <h2>
+          Final Score
+        </h2>
+
+        <h1>
+          {totalMarks()}
+        </h1>
+
+      </div>
+
+      <div className="page-actions">
+
+        <button
+          className="btn btn-secondary"
+          onClick={() => navigate(-1)}
+        >
+          Back
+        </button>
+
+        <button
+          className="btn btn-success"
+          disabled={saving}
+          onClick={handleSave}
+        >
+          {saving
+            ? "Saving..."
+            : "Save Grade"}
+        </button>
+
+      </div>
+
+    </div>
+  );
+
+};
+
+export default ViewSubmission;
+
