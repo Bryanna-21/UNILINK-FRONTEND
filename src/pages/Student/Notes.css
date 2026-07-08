@@ -1,0 +1,95 @@
+.notes-page {
+
+  display:flex;
+
+  min-height:100vh;
+
+  background:var(--background-color,#f9fafb);
+
+}
+
+
+
+.notes-content {
+
+  flex:1;
+
+  padding:30px;
+
+}
+
+
+
+.notes-header {
+
+  margin-bottom:30px;
+
+}
+
+
+
+.notes-header h1 {
+
+  margin:0;
+
+  font-size:32px;
+
+}
+
+
+
+.notes-header p {
+
+  margin-top:8px;
+
+  color:#6b7280;
+
+}
+
+
+
+.notes-grid {
+
+  display:grid;
+
+  grid-template-columns:repeat(
+    auto-fit,
+    minmax(300px,1fr)
+  );
+
+  gap:25px;
+
+}
+
+
+
+.empty-notes {
+
+  background:white;
+
+  padding:40px;
+
+  text-align:center;
+
+  border-radius:12px;
+
+}
+
+
+
+@media(max-width:768px){
+
+  .notes-page{
+
+    flex-direction:column;
+
+  }
+
+
+  .notes-content{
+
+    padding:20px;
+
+  }
+
+}
