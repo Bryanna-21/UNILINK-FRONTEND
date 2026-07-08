@@ -1,185 +1,245 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+  return (
+    <div className="create-exam-page">
 
-import QuestionBuilder from "../../components/exams/QuestionBuilder";
+      <div className="page-header">
+        <div>
+          <h1>Create Exam</h1>
+          <p>Create and publish exams for your students.</p>
+        </div>
+      </div>
 
-import {
-  createExam,
-  publishExam,
-} from "../../services/examService";
+      <div className="exam-form">
 
-import "../../styles/exams.css";
+        <div className="form-section">
 
-const CreateExam = () => {
+          <label>Exam Title</label>
 
-  const navigate = useNavigate();
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Introduction to Programming CAT 1"
+            value={exam.title}
+            onChange={(e) =>
+              updateField("title", e.target.value)
+            }
+          />
 
-  const [loading, setLoading] = useState(false);
+        </div>
 
-  const [exam, setExam] = useState({
+        <div className="form-section">
 
-    title: "",
+          <label>Description</label>
 
-    description: "",
+          <textarea
+            className="form-control"
+            rows={4}
+            placeholder="Exam description..."
+            value={exam.description}
+            onChange={(e) =>
+              updateField("description", e.target.value)
+            }
+          />
 
-    course: "",
+        </div>
 
-    unit: "",
+        <div className="form-row">
 
-    duration: 60,
+          <div className="form-group">
 
-    instructions: "",
+            <label>Course</label>
 
-    startTime: "",
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Computer Science"
+              value={exam.course}
+              onChange={(e) =>
+                updateField("course", e.target.value)
+              }
+            />
 
-    endTime: "",
+          </div>
 
-    allowRetake: false,
+          <div className="form-group">
 
-    shuffleQuestions: false,
+            <label>Unit</label>
 
-    showResultsImmediately: false,
+            <input
+              type="text"
+              className="form-control"
+              placeholder="CSC 210"
+              value={exam.unit}
+              onChange={(e) =>
+                updateField("unit", e.target.value)
+              }
+            />
 
-    questions: [],
+          </div>
 
-    attachments: []
+        </div>
 
-  });
+        <div className="form-row">
 
-  const updateField = (field, value) => {
+          <div className="form-group">
 
-    setExam((prev) => ({
+            <label>Duration (Minutes)</label>
 
-      ...prev,
+            <input
+              type="number"
+              className="form-control"
+              value={exam.duration}
+              onChange={(e) =>
+                updateField(
+                  "duration",
+                  Number(e.target.value)
+                )
+              }
+            />
 
-      [field]: value,
+          </div>
 
-    }));
+          <div className="form-group">
 
-  };
-  const validateExam = () => {
+            <label>Start Time</label>
 
-  if (!exam.title.trim()) {
+            <input
+              type="datetime-local"
+              className="form-control"
+              value={exam.startTime}
+              onChange={(e) =>
+                updateField("startTime", e.target.value)
+              }
+            />
 
-    toast.error("Exam title is required");
+          </div>
 
-    return false;
+          <div className="form-group">
 
-  }
+            <label>End Time</label>
 
-  if (!exam.course.trim()) {
+            <input
+              type="datetime-local"
+              className="form-control"
+              value={exam.endTime}
+              onChange={(e) =>
+                updateField("endTime", e.target.value)
+              }
+            />
 
-    toast.error("Course is required");
+          </div>
 
-    return false;
+        </div>
 
-  }
+        <div className="form-section">
 
-  if (!exam.unit.trim()) {
+          <label>Instructions</label>
 
-    toast.error("Unit is required");
+          <textarea
+            rows={5}
+            className="form-control"
+            placeholder="Enter exam instructions..."
+            value={exam.instructions}
+            onChange={(e) =>
+              updateField(
+                "instructions",
+                e.target.value
+              )
+            }
+          />
 
-    return false;
+        </div>
 
-  }
+        <div className="checkbox-grid">
 
-  if (exam.questions.length === 0) {
+          <label>
 
-    toast.error("Add at least one question");
+            <input
+              type="checkbox"
+              checked={exam.allowRetake}
+              onChange={(e) =>
+                updateField(
+                  "allowRetake",
+                  e.target.checked
+                )
+              }
+            />
 
-    return false;
+            Allow Retake
 
-  }
+          </label>
 
-  for (const question of exam.questions) {
+          <label>
 
-    if (!question.text.trim()) {
+            <input
+              type="checkbox"
+              checked={exam.shuffleQuestions}
+              onChange={(e) =>
+                updateField(
+                  "shuffleQuestions",
+                  e.target.checked
+                )
+              }
+            />
 
-      toast.error("Every question needs text");
+            Shuffle Questions
 
-      return false;
+          </label>
 
-    }
+          <label>
 
-  }
+            <input
+              type="checkbox"
+              checked={
+                exam.showResultsImmediately
+              }
+              onChange={(e) =>
+                updateField(
+                  "showResultsImmediately",
+                  e.target.checked
+                )
+              }
+            />
 
-  return true;
+            Show Results Immediately
+
+          </label>
+
+        </div>
+
+        <QuestionBuilder
+          questions={exam.questions}
+          setQuestions={(questions) =>
+            updateField("questions", questions)
+          }
+        />
+
+        <div className="exam-actions">
+
+          <button
+            className="btn btn-secondary"
+            disabled={loading}
+            onClick={handleSaveDraft}
+          >
+            Save Draft
+          </button>
+
+          <button
+            className="btn btn-success"
+            disabled={loading}
+            onClick={handlePublish}
+          >
+            {loading
+              ? "Publishing..."
+              : "Publish Exam"}
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+  );
 
 };
-  const handleSaveDraft = async () => {
 
-  if (!validateExam()) return;
-
-  try {
-
-    setLoading(true);
-
-    await createExam({
-
-      ...exam,
-
-      status: "Draft",
-
-    });
-
-    toast.success("Draft saved successfully");
-
-    navigate("/lecturer/exams");
-
-  } catch (error) {
-
-    toast.error(
-
-      error.response?.data?.message ||
-
-      "Failed to save exam"
-
-    );
-
-  } finally {
-
-    setLoading(false);
-
-  }
-
-};
-  const handlePublish = async () => {
-
-  if (!validateExam()) return;
-
-  try {
-
-    setLoading(true);
-
-    const createdExam = await createExam({
-
-      ...exam,
-
-      status: "Draft",
-
-    });
-
-    await publishExam(createdExam._id);
-
-    toast.success("Exam published");
-
-    navigate("/lecturer/exams");
-
-  } catch (error) {
-
-    toast.error(
-
-      error.response?.data?.message ||
-
-      "Failed to publish exam"
-
-    );
-
-  } finally {
-
-    setLoading(false);
-
-  }
-
-};
+export default CreateExam;
