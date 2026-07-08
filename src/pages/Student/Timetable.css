@@ -1,0 +1,95 @@
+.timetable-page {
+
+  display:flex;
+
+  min-height:100vh;
+
+  background:var(--background-color,#f9fafb);
+
+}
+
+
+
+.timetable-content {
+
+  flex:1;
+
+  padding:30px;
+
+}
+
+
+
+.timetable-header {
+
+  margin-bottom:30px;
+
+}
+
+
+
+.timetable-header h1 {
+
+  margin:0;
+
+  font-size:32px;
+
+}
+
+
+
+.timetable-header p {
+
+  margin-top:8px;
+
+  color:#6b7280;
+
+}
+
+
+
+.timetable-grid {
+
+  display:grid;
+
+  grid-template-columns:repeat(
+    auto-fit,
+    minmax(280px,1fr)
+  );
+
+  gap:25px;
+
+}
+
+
+
+.empty-timetable {
+
+  background:white;
+
+  padding:40px;
+
+  border-radius:12px;
+
+  text-align:center;
+
+}
+
+
+
+@media(max-width:768px){
+
+  .timetable-page{
+
+    flex-direction:column;
+
+  }
+
+
+  .timetable-content{
+
+    padding:20px;
+
+  }
+
+}
