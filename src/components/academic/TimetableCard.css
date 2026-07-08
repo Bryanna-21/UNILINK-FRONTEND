@@ -1,0 +1,125 @@
+.timetable-card {
+
+  background: var(--card-background, #ffffff);
+
+  border: 1px solid var(--border-color, #e5e7eb);
+
+  border-radius: 14px;
+
+  padding: 20px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 16px;
+
+  transition: 0.3s ease;
+
+}
+
+
+
+.timetable-card:hover {
+
+  transform: translateY(-4px);
+
+}
+
+
+
+.timetable-header {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+}
+
+
+
+.timetable-icon {
+
+  width: 45px;
+
+  height: 45px;
+
+  border-radius: 10px;
+
+  background: #7c3aed;
+
+  color: white;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+}
+
+
+
+.timetable-title h3 {
+
+  margin: 0;
+
+  font-size: 18px;
+
+}
+
+
+
+.timetable-title span {
+
+  font-size: 13px;
+
+  color: #6b7280;
+
+}
+
+
+
+.timetable-information {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+}
+
+
+
+.timetable-item {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  color: #4b5563;
+
+  font-size: 14px;
+
+}
+
+
+
+.timetable-day {
+
+  padding: 10px;
+
+  border-radius: 8px;
+
+  background: #f3f4f6;
+
+  text-align: center;
+
+  font-weight: 600;
+
+}
