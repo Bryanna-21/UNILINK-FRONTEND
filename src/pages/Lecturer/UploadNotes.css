@@ -1,0 +1,176 @@
+.upload-notes-page {
+
+  display:flex;
+
+  min-height:100vh;
+
+  background:var(--background-color,#f9fafb);
+
+}
+
+
+
+.upload-notes-content {
+
+  flex:1;
+
+  padding:30px;
+
+}
+
+
+
+.upload-header {
+
+  margin-bottom:30px;
+
+}
+
+
+
+.upload-header h1 {
+
+  margin:0;
+
+  font-size:32px;
+
+}
+
+
+
+.upload-header p {
+
+  color:#6b7280;
+
+  margin-top:8px;
+
+}
+
+
+
+.upload-form {
+
+  background:white;
+
+  padding:30px;
+
+  border-radius:14px;
+
+  max-width:700px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:20px;
+
+}
+
+
+
+.form-group {
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:8px;
+
+}
+
+
+
+.form-group label,
+.file-upload label {
+
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  font-weight:600;
+
+}
+
+
+
+.form-group input,
+.form-group textarea {
+
+  padding:12px;
+
+  border-radius:8px;
+
+  border:1px solid #d1d5db;
+
+  font-size:15px;
+
+}
+
+
+
+.file-upload {
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:10px;
+
+}
+
+
+
+.file-upload input {
+
+  padding:10px;
+
+}
+
+
+
+.upload-button {
+
+  padding:13px;
+
+  border:none;
+
+  border-radius:10px;
+
+  background:#2563eb;
+
+  color:white;
+
+  cursor:pointer;
+
+  font-size:16px;
+
+}
+
+
+
+.upload-button:hover {
+
+  opacity:0.9;
+
+}
+
+
+
+@media(max-width:768px){
+
+  .upload-notes-page{
+
+    flex-direction:column;
+
+  }
+
+
+  .upload-notes-content{
+
+    padding:20px;
+
+  }
+
+}
