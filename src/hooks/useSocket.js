@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import socket from "../services/Socket";
+import socket from "../services/socket";
 
 const useSocket = () => {
   const [connected, setConnected] = useState(socket.connected);
