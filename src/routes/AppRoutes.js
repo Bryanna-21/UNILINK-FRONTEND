@@ -1,105 +1,171 @@
-<Route
-    path="/login"
-    element={
-        <PublicRoute>
-            <Login />
-        </PublicRoute>
-    }
-/>
+import { Routes, Route, Navigate } from "react-router-dom";
 
-<Route
-    path="/register"
-    element={
-        <PublicRoute>
-            <Register />
-        </PublicRoute>
-    }
-/>
-<Route
-    path="/student/dashboard"
-    element={
-        <ProtectedRoute>
+import ProtectedRoute from "./ProtectedRoute";
+import PublicRoute from "./PublicRoute";
+import RoleGuard from "./RoleGuard";
+
+/* Auth pages */
+import Login from "../pages/auth/Login";
+import Register from "../pages/auth/Register";
+
+/* Student pages */
+import StudentDashboard from "../pages/Student/Dashboard";
+import Courses from "../pages/Student/Courses";
+import Assignments from "../pages/Student/Assignments";
+import Exams from "../pages/Student/Exams";
+import TakeExam from "../pages/Student/TakeExam";
+import Results from "../pages/Student/Results";
+
+/* Lecturer pages */
+import LecturerDashboard from "../pages/Lecturer/Dashboard";
+import ExamList from "../pages/Lecturer/ExamList";
+import UploadNotes from "../pages/Lecturer/UploadNotes";
+import CreateExam from "../pages/Lecturer/CreateExam";
+import GradeSubmissions from "../pages/Lecturer/GradeSubmissions";
+import ViewSubmission from "../pages/Lecturer/ViewSubmission";
+
+/* Admin pages */
+import Dashboard from "../pages/Admin/Dashboard";
+import ManageUsers from "../pages/Admin/Users";
+
+/* Error pages */
+import Unauthorized from "../pages/Unauthorized";
+import NotFound from "../pages/NotFound";
+
+export default function AppRoutes() {
+  return (
+    <Routes>
+      {/* ===== Public routes ===== */}
+      <Route element={<PublicRoute />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Route>
+
+      {/* ===== Protected routes ===== */}
+      <Route element={<ProtectedRoute />}>
+        {/* Student */}
+        <Route
+          path="/student/dashboard"
+          element={
             <RoleGuard roles={["student"]}>
-                <StudentDashboard />
+              <StudentDashboard />
             </RoleGuard>
-        </ProtectedRoute>
-    }
-/>
-
-<Route
-    path="/student/courses"
-    element={
-        <ProtectedRoute>
+          }
+        />
+        <Route
+          path="/student/courses"
+          element={
             <RoleGuard roles={["student"]}>
-                <Courses />
+              <Courses />
             </RoleGuard>
-        </ProtectedRoute>
-    }
-/>
-
-<Route
-    path="/student/assignments"
-    element={
-        <ProtectedRoute>
+          }
+        />
+        <Route
+          path="/student/assignments"
+          element={
             <RoleGuard roles={["student"]}>
-                <Assignments />
+              <Assignments />
             </RoleGuard>
-        </ProtectedRoute>
-    }
-/>
-<Route
-    path="/lecturer/dashboard"
-    element={
-        <ProtectedRoute>
-            <RoleGuard roles={["lecturer"]}>
-                <LecturerDashboard />
+          }
+        />
+        <Route
+          path="/student/exams"
+          element={
+            <RoleGuard roles={["student"]}>
+              <Exams />
             </RoleGuard>
-        </ProtectedRoute>
-    }
-/>
+          }
+        />
+        <Route
+          path="/student/exams/:examId"
+          element={
+            <RoleGuard roles={["student"]}>
+              <TakeExam />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/student/results"
+          element={
+            <RoleGuard roles={["student"]}>
+              <Results />
+            </RoleGuard>
+          }
+        />
 
-<Route
-    path="/lecturer/exams"
-    element={
-        <ProtectedRoute>
+        {/* Lecturer */}
+        <Route
+          path="/lecturer/dashboard"
+          element={
             <RoleGuard roles={["lecturer"]}>
-                <ExamList />
+              <LecturerDashboard />
             </RoleGuard>
-        </ProtectedRoute>
-    }
-/>
+          }
+        />
+        <Route
+          path="/lecturer/exams"
+          element={
+            <RoleGuard roles={["lecturer", "admin"]}>
+              <ExamList />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/lecturer/exams/create"
+          element={
+            <RoleGuard roles={["lecturer", "admin"]}>
+              <CreateExam />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/lecturer/upload-notes"
+          element={
+            <RoleGuard roles={["lecturer"]}>
+              <UploadNotes />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/lecturer/submissions"
+          element={
+            <RoleGuard roles={["lecturer", "admin"]}>
+              <GradeSubmissions />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/lecturer/submissions/:submissionId"
+          element={
+            <RoleGuard roles={["lecturer", "admin"]}>
+              <ViewSubmission />
+            </RoleGuard>
+          }
+        />
 
-<Route
-    path="/lecturer/upload-notes"
-    element={
-        <ProtectedRoute>
-            <RoleGuard roles={["lecturer"]}>
-                <UploadNotes />
-            </RoleGuard>
-        </ProtectedRoute>
-    }
-/>
-<Route
-    path="/admin/dashboard"
-    element={
-        <ProtectedRoute>
+        {/* Admin */}
+        <Route
+          path="/admin/dashboard"
+          element={
             <RoleGuard roles={["admin"]}>
-                <Dashboard />
+              <Dashboard />
             </RoleGuard>
-        </ProtectedRoute>
-    }
-/>
-
-<Route
-    path="/admin/users"
-    element={
-        <ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
             <RoleGuard roles={["admin"]}>
-                <ManageUsers />
+              <ManageUsers />
             </RoleGuard>
-        </ProtectedRoute>
-    }
-/>
-<Route path="/unauthorized" element={<Unauthorized />} />
+          }
+        />
+      </Route>
 
-<Route path="*" element={<NotFound />} />
+      {/* ===== Misc ===== */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+}
