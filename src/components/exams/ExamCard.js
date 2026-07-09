@@ -4,7 +4,8 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import "./ExamCard.css";
+// Styles for .exam-card live in ../../styles/exams.css, already loaded
+// globally by the pages that render this component.
 
 const formatDate = (date) => {
   if (!date) return "N/A";
