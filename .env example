@@ -1,2 +1,4 @@
-REACT_APP_BACKEND_URL=http://localhost:5000/api
-REACT_APP_ENV=development
+REACT_APP_API_URL=https://your-backend-domain.com/api
+REACT_APP_SOCKET_URL=https://your-backend-domain.com
+REACT_APP_URL=https://your-vercel-app.vercel.app
+REACT_APP_ENV=production
