@@ -1,0 +1,164 @@
+.datatable-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  background: var(--card-background, #ffffff);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.datatable {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+.datatable thead {
+  background: #f8fafc;
+}
+
+.datatable thead th {
+  padding: 16px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-color, #111827);
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.datatable tbody td {
+  padding: 16px;
+  font-size: 14px;
+  color: var(--text-color, #374151);
+  border-bottom: 1px solid var(--border-color, #f1f5f9);
+  vertical-align: middle;
+}
+
+.datatable tbody tr {
+  transition: background 0.2s ease;
+}
+
+.datatable tbody tr:hover {
+  background: #f8fafc;
+}
+
+.datatable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.datatable-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.datatable-actions button {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.datatable-actions .primary {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.datatable-actions .primary:hover {
+  background: #1d4ed8;
+}
+
+.datatable-actions .success {
+  background: #16a34a;
+  color: white;
+}
+
+.datatable-actions .success:hover {
+  background: #15803d;
+}
+
+.datatable-actions .warning {
+  background: #f59e0b;
+  color: white;
+}
+
+.datatable-actions .warning:hover {
+  background: #d97706;
+}
+
+.datatable-actions .danger {
+  background: #dc2626;
+  color: white;
+}
+
+.datatable-actions .danger:hover {
+  background: #b91c1c;
+}
+
+.datatable-empty {
+  text-align: center;
+  padding: 40px;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+.datatable-loading {
+  padding: 50px;
+  text-align: center;
+  font-size: 16px;
+  color: #6b7280;
+}
+
+/* Dark Mode */
+
+[data-theme="dark"] .datatable-wrapper {
+  background: #111827;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .datatable thead {
+  background: #1f2937;
+}
+
+[data-theme="dark"] .datatable thead th {
+  color: #f9fafb;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .datatable tbody td {
+  color: #d1d5db;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .datatable tbody tr:hover {
+  background: #1f2937;
+}
+
+[data-theme="dark"] .datatable-empty,
+[data-theme="dark"] .datatable-loading {
+  color: #9ca3af;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .datatable {
+    min-width: 650px;
+  }
+
+  .datatable thead th,
+  .datatable tbody td {
+    padding: 12px;
+    font-size: 13px;
+  }
+
+  .datatable-actions {
+    flex-wrap: wrap;
+  }
+}
