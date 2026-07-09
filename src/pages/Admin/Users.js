@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import AdminSidebar from "../../components/layout/AdminSidebar";
+import Sidebar from "../../components/layout/Sidebar";
 import {
   FaUsers,
   FaUserGraduate,
@@ -120,7 +120,7 @@ const Users = () => {
     <div className="admin-users-page">
 
 
-      <AdminSidebar />
+      <Sidebar />
 
 
 
