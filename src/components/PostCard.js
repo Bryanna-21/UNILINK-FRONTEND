@@ -1,6 +1,6 @@
 import { useState } from "react";
 import API from "../services/api";
-import "../styles/PostCard.css";
+import "../styles/Postcard.css";
 
 export default function PostCard({ post, refresh }) {
   const [loading, setLoading] = useState(false);
