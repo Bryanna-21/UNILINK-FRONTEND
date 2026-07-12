@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FaHome, FaArrowLeft, FaSearch } from "react-icons/fa";
-import "./Error.css";
+import "../Errors.css";
 
 const NotFound = () => {
   const navigate = useNavigate();
