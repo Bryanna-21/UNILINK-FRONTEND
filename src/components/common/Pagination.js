@@ -55,4 +55,26 @@ const Pagination = ({
         Previous
       </button>
 
-      {getPages().map((
+      {getPages().map((page) => (
+        <button
+          key={page}
+          className={`pagination-btn ${page === currentPage ? "active" : ""}`}
+          onClick={() => changePage(page)}
+        >
+          {page}
+        </button>
+      ))}
+
+      <button
+        className="pagination-btn"
+        disabled={currentPage === totalPages}
+        onClick={() => changePage(currentPage + 1)}
+      >
+        Next
+      </button>
+
+    </div>
+  );
+};
+
+export default Pagination;
