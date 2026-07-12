@@ -5,25 +5,33 @@ export default class ErrorBoundary extends React.Component {
     super(props);
 
     this.state = {
-      hasError: false
+      hasError: false,
+      error: null,
     };
   }
 
-  static getDerivedStateFromError() {
+  static getDerivedStateFromError(error) {
     return {
-      hasError: true
+      hasError: true,
+      error,
     };
   }
 
-  componentDidCatch(error) {
-    console.error(error);
+  componentDidCatch(error, info) {
+    console.error("ErrorBoundary caught:", error, info?.componentStack);
   }
 
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{ padding: 40 }}>
-          Something went wrong.
+        <div style={{ padding: 40, fontFamily: "monospace" }}>
+          <h2>Something went wrong.</h2>
+          <p style={{ color: "#991b1b", whiteSpace: "pre-wrap" }}>
+            {this.state.error?.message || String(this.state.error)}
+          </p>
+          <p style={{ color: "#64748b" }}>
+            Full stack trace is in the browser console (F12).
+          </p>
         </div>
       );
     }
