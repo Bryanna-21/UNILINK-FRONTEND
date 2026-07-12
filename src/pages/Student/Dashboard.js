@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import SearchBar from "../../components/common/SearchBar";
 import Skeleton from "../../components/common/Skeleton";
 
-import "./StudentDashboard.css";
+import "./Dashboard.css";
 
 const StudentDashboard = () => {
   const [loading, setLoading] = useState(true);
