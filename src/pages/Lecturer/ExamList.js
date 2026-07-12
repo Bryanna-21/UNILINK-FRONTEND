@@ -1,3 +1,122 @@
+import React, { useEffect, useMemo, useState } from "react";
+import { toast } from "react-hot-toast";
+
+import ExamCard from "../../components/exams/ExamCard";
+
+import {
+  getLecturerExams,
+  deleteExam,
+  publishExam,
+  closeExam,
+  duplicateExam,
+} from "../../services/examService";
+
+import "../../styles/exams.css";
+
+const ExamList = () => {
+  const [exams, setExams] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("All");
+
+  useEffect(() => {
+    fetchExams();
+  }, []);
+
+  const fetchExams = async () => {
+    try {
+      setLoading(true);
+      const data = await getLecturerExams();
+      setExams(data?.exams || data || []);
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Failed to load exams."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filteredExams = useMemo(() => {
+    return exams.filter((exam) => {
+      const matchesSearch =
+        !search ||
+        exam.title?.toLowerCase().includes(search.toLowerCase()) ||
+        exam.course?.toLowerCase().includes(search.toLowerCase());
+
+      const matchesStatus =
+        status === "All" ||
+        (exam.status || "Draft").toLowerCase() === status.toLowerCase();
+
+      return matchesSearch && matchesStatus;
+    });
+  }, [exams, search, status]);
+
+  const statistics = useMemo(() => {
+    return {
+      total: exams.length,
+      drafts: exams.filter(
+        (e) => (e.status || "Draft").toLowerCase() === "draft"
+      ).length,
+      published: exams.filter(
+        (e) => (e.status || "").toLowerCase() === "published"
+      ).length,
+      closed: exams.filter(
+        (e) => (e.status || "").toLowerCase() === "closed"
+      ).length,
+    };
+  }, [exams]);
+
+  const handleDelete = async (examId) => {
+    if (!window.confirm("Delete this exam? This cannot be undone.")) return;
+
+    try {
+      await deleteExam(examId);
+      toast.success("Exam deleted.");
+      fetchExams();
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Failed to delete exam."
+      );
+    }
+  };
+
+  const handlePublish = async (examId) => {
+    try {
+      await publishExam(examId);
+      toast.success("Exam published.");
+      fetchExams();
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Failed to publish exam."
+      );
+    }
+  };
+
+  const handleClose = async (examId) => {
+    try {
+      await closeExam(examId);
+      toast.success("Exam closed.");
+      fetchExams();
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Failed to close exam."
+      );
+    }
+  };
+
+  const handleDuplicate = async (examId) => {
+    try {
+      await duplicateExam(examId);
+      toast.success("Exam duplicated.");
+      fetchExams();
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Failed to duplicate exam."
+      );
+    }
+  };
+
   return (
     <div className="exam-list-page">
 
