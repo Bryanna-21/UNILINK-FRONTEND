@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 
 import App from "./App";
 import Toast from "./components/ui/Toast";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 import { AuthProvider } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -19,7 +20,9 @@ root.render(
       <ThemeProvider>
         <AuthProvider>
           <NotificationProvider>
-            <App />
+            <ErrorBoundary>
+              <App />
+            </ErrorBoundary>
             <Toast />
           </NotificationProvider>
         </AuthProvider>
