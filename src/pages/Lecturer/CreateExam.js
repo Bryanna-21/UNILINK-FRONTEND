@@ -1,3 +1,98 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+
+import QuestionBuilder from "../../components/exams/QuestionBuilder";
+
+import { createExam, publishExam } from "../../services/examService";
+
+import "../../styles/exams.css";
+
+const initialExam = {
+  title: "",
+  description: "",
+  course: "",
+  unit: "",
+  duration: 60,
+  startTime: "",
+  endTime: "",
+  instructions: "",
+  allowRetake: false,
+  shuffleQuestions: false,
+  showResultsImmediately: false,
+  questions: [],
+};
+
+const CreateExam = () => {
+  const navigate = useNavigate();
+
+  const [exam, setExam] = useState(initialExam);
+  const [loading, setLoading] = useState(false);
+
+  const updateField = (field, value) => {
+    setExam((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const validate = () => {
+    if (!exam.title.trim()) {
+      toast.error("Exam title is required.");
+      return false;
+    }
+    if (!exam.course.trim()) {
+      toast.error("Course is required.");
+      return false;
+    }
+    if (!exam.questions.length) {
+      toast.error("Add at least one question.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSaveDraft = async () => {
+    if (!exam.title.trim()) {
+      toast.error("Exam title is required.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await createExam(exam);
+      toast.success("Exam saved as draft.");
+      navigate("/lecturer/exams");
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Failed to save exam."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePublish = async () => {
+    if (!validate()) return;
+
+    try {
+      setLoading(true);
+      const created = await createExam(exam);
+      const examId = created?.exam?._id || created?._id;
+      if (examId) {
+        await publishExam(examId);
+      }
+      toast.success("Exam published.");
+      navigate("/lecturer/exams");
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Failed to publish exam."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="create-exam-page">
 
