@@ -381,6 +381,44 @@ const noteService = {
 
 
   /**
+   * Toggle favourite status on a note
+   */
+  toggleFavourite: async (noteId) => {
+
+    try {
+
+
+      const response = await api.put(
+
+        `/notes/${noteId}/favourite`
+
+      );
+
+
+      return response.data;
+
+
+
+    } catch(error){
+
+
+      console.error(
+        "Failed to toggle favourite:",
+        error
+      );
+
+
+      throw error;
+
+
+    }
+
+
+  },
+
+
+
+  /**
    * Delete note
    */
   deleteNote: async (noteId) => {
