@@ -39,6 +39,7 @@ const Courses = () => {
 
   useEffect(() => {
     filterCourses();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, courses]);
 
   const fetchCourses = async () => {
