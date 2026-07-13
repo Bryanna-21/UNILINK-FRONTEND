@@ -97,7 +97,7 @@ const TakeExam = () => {
 
     return () => clearInterval(timer);
 
-  }, [timeRemaining, submitting]);
+  }, [timeRemaining, submitting, handleSubmit]);
     const enterFullscreen = async () => {
 
     try {
@@ -245,6 +245,8 @@ const TakeExam = () => {
         "Exam submitted successfully."
 
       );
+
+      exitFullscreen();
 
       navigate("/student/results");
 
@@ -477,6 +479,7 @@ answered
 
         );
 
+      // eslint-disable-next-line no-fallthrough
       case "essay":
 
       case "short":
