@@ -210,7 +210,7 @@ const TakeExam = () => {
 
     if (
 
-      currentQuestion <
+      currentQuestion 
 
       exam.questions.length - 1
 
