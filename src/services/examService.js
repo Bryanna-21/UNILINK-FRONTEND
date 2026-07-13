@@ -217,7 +217,7 @@ export const exportResults = async (examId) => {
   return response.data;
 };
 
-export default {
+const examService = {
   createExam,
   updateExam,
   deleteExam,
@@ -240,3 +240,5 @@ export default {
   restoreExam,
   exportResults,
 };
+
+export default examService;
