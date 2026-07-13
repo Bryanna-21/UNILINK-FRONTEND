@@ -70,35 +70,9 @@ const TakeExam = () => {
 
     loadExam();
 
-  }, [loadExam]);  
-    useEffect(() => {
+  }, [loadExam]);
 
-    if (!timeRemaining || submitting) return;
-
-    const timer = setInterval(() => {
-
-      setTimeRemaining((previous) => {
-
-        if (previous <= 1) {
-
-          clearInterval(timer);
-
-          handleSubmit();
-
-          return 0;
-
-        }
-
-        return previous - 1;
-
-      });
-
-    }, 1000);
-
-    return () => clearInterval(timer);
-
-  }, [timeRemaining, submitting, handleSubmit]);
-    const enterFullscreen = async () => {
+  const enterFullscreen = async () => {
 
     try {
 
@@ -129,6 +103,97 @@ const TakeExam = () => {
     setIsFullscreen(false);
 
   };
+
+  const handleSubmit = useCallback(async () => {
+
+    if (!exam) return;
+
+    try {
+
+      setSubmitting(true);
+
+      const formattedAnswers = Object.keys(answers).map(
+
+        (questionId) => ({
+
+          questionId,
+
+          answer: answers[questionId],
+
+        })
+
+      );
+
+      await submitExam(
+
+        exam._id,
+
+        formattedAnswers
+
+      );
+
+      localStorage.removeItem(
+
+        `exam_${exam._id}`
+
+      );
+
+      toast.success(
+
+        "Exam submitted successfully."
+
+      );
+
+      exitFullscreen();
+
+      navigate("/student/results");
+
+    } catch (error) {
+
+      toast.error(
+
+        error.response?.data?.message ||
+
+        "Failed to submit exam."
+
+      );
+
+    } finally {
+
+      setSubmitting(false);
+
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [exam, answers, navigate]);
+
+    useEffect(() => {
+
+    if (!timeRemaining || submitting) return;
+
+    const timer = setInterval(() => {
+
+      setTimeRemaining((previous) => {
+
+        if (previous <= 1) {
+
+          clearInterval(timer);
+
+          handleSubmit();
+
+          return 0;
+
+        }
+
+        return previous - 1;
+
+      });
+
+    }, 1000);
+
+    return () => clearInterval(timer);
+
+  }, [timeRemaining, submitting, handleSubmit]);
     const updateAnswer = (questionId, value) => {
 
     setAnswers((previous) => ({
@@ -202,72 +267,7 @@ const TakeExam = () => {
 
   }, [exam]);
 
-  // ==========================================
-  // Submit Exam
-  // ==========================================
-
-  const handleSubmit = async () => {
-
-    if (!exam) return;
-
-    try {
-
-      setSubmitting(true);
-
-      const formattedAnswers = Object.keys(answers).map(
-
-        (questionId) => ({
-
-          questionId,
-
-          answer: answers[questionId],
-
-        })
-
-      );
-
-      await submitExam(
-
-        exam._id,
-
-        formattedAnswers
-
-      );
-
-      localStorage.removeItem(
-
-        `exam_${exam._id}`
-
-      );
-
-      toast.success(
-
-        "Exam submitted successfully."
-
-      );
-
-      exitFullscreen();
-
-      navigate("/student/results");
-
-    } catch (error) {
-
-      toast.error(
-
-        error.response?.data?.message ||
-
-        "Failed to submit exam."
-
-      );
-
-    } finally {
-
-      setSubmitting(false);
-
-    }
-
-  };
-    if (loading) {
+  if (loading) {
 
     return (
 
