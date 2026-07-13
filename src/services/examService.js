@@ -100,6 +100,14 @@ export const getExamSubmissions = async (examId) => {
 };
 
 /**
+ * Get Single Submission
+ */
+export const getExamSubmission = async (submissionId) => {
+  const { data } = await api.get(`/submissions/${submissionId}`);
+  return data;
+};
+
+/**
  * Grade Submission
  */
 export const gradeSubmission = async (
@@ -221,6 +229,7 @@ export default {
   getExamById,
   submitExam,
   getExamSubmissions,
+  getExamSubmission,
   gradeSubmission,
   getStudentResults,
   getResult,
