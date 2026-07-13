@@ -1,12 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 
-import {
-    getAllNotes,
-    deleteNote,
-    toggleFavourite,
-    downloadNote,
-} from "../services/noteService";
+import noteService from "../services/noteService";
 
 const useNotes = () => {
 
@@ -26,7 +21,7 @@ const useNotes = () => {
 
             setLoading(true);
 
-            const response = await getAllNotes();
+            const response = await noteService.getNotes();
 
             setNotes(response || []);
 
@@ -52,7 +47,7 @@ const useNotes = () => {
 
         try {
 
-            await deleteNote(id);
+            await noteService.deleteNote(id);
 
             toast.success("Note deleted.");
 
@@ -70,7 +65,7 @@ const useNotes = () => {
 
         try {
 
-            await toggleFavourite(id);
+            await noteService.toggleFavourite(id);
 
             loadNotes();
 
@@ -86,7 +81,7 @@ const useNotes = () => {
 
         try {
 
-            await downloadNote(id);
+            await noteService.downloadNote(id);
 
         } catch {
 
