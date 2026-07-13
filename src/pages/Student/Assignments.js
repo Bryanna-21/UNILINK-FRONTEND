@@ -40,6 +40,7 @@ const Assignments = () => {
 
   useEffect(() => {
     filterAssignments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, assignments]);
 
   const fetchAssignments = async () => {
