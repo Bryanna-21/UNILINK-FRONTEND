@@ -63,6 +63,7 @@ const ViewSubmission = () => {
 
     loadSubmission();
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submissionId]);
   const updateMark = (questionId, value) => {
 
