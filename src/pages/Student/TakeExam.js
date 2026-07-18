@@ -210,7 +210,7 @@ const TakeExam = () => {
 
     if (
 
-      currentQuestion 
+      currentQuestion <
 
       exam.questions.length - 1
 
@@ -479,9 +479,8 @@ answered
 
         );
 
-      // eslint-disable-next-line no-fallthrough
       case "essay":
-
+      // eslint-disable-next-line no-fallthrough
       case "short":
 
         return (
