@@ -86,6 +86,7 @@ export function AuthProvider({ children }) {
 
       return {
         success: true,
+        user: data.user,
       };
     } catch (error) {
       return {
@@ -121,6 +122,7 @@ export function AuthProvider({ children }) {
 
       return {
         success: true,
+        user: data.user,
       };
     } catch (error) {
       return {
