@@ -10,12 +10,12 @@ export default function PublicRoute() {
 
   switch (user.role) {
     case "admin":
-      return <Navigate to="/admin" replace />;
+      return <Navigate to="/admin/dashboard" replace />;
 
     case "lecturer":
-      return <Navigate to="/lecturer" replace />;
+      return <Navigate to="/lecturer/dashboard" replace />;
 
     default:
-      return <Navigate to="/student" replace />;
+      return <Navigate to="/student/dashboard" replace />;
   }
 }
