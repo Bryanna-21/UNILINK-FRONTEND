@@ -67,15 +67,15 @@ export default function Login() {
 
     switch (result.user.role) {
       case "admin":
-        navigate("/admin", { replace: true });
+        navigate("/admin/dashboard", { replace: true });
         break;
 
       case "lecturer":
-        navigate("/lecturer", { replace: true });
+        navigate("/lecturer/dashboard", { replace: true });
         break;
 
       default:
-        navigate("/student", { replace: true });
+        navigate("/student/dashboard", { replace: true });
     }
   };
 
