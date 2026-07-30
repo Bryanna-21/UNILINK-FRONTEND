@@ -3,59 +3,46 @@ import {
   FaBook,
   FaClipboardList,
   FaCalendarAlt,
-  FaMoneyBillWave,
   FaBookReader,
-  FaBed,
   FaComments,
   FaBell,
   FaCog,
   FaUsers,
   FaUserGraduate,
   FaChartBar,
-  FaRobot,
 } from "react-icons/fa";
 
 export const navigation = {
   student: [
     {
       title: "Dashboard",
-      path: "/student",
+      path: "/student/dashboard",
       icon: FaHome,
     },
     {
       title: "Courses",
-      path: "/courses",
+      path: "/student/courses",
       icon: FaBook,
     },
     {
       title: "Assignments",
-      path: "/assignments",
+      path: "/student/assignments",
       icon: FaClipboardList,
     },
     {
       title: "Timetable",
-      path: "/timetable",
+      path: "/student/timetable",
       icon: FaCalendarAlt,
     },
     {
       title: "Results",
-      path: "/results",
+      path: "/student/results",
       icon: FaChartBar,
     },
     {
-      title: "Finance",
-      path: "/finance",
-      icon: FaMoneyBillWave,
-    },
-    {
-      title: "Library",
-      path: "/library",
+      title: "Feed",
+      path: "/feed",
       icon: FaBookReader,
-    },
-    {
-      title: "Hostel",
-      path: "/hostel",
-      icon: FaBed,
     },
     {
       title: "Messages",
@@ -77,23 +64,28 @@ export const navigation = {
   lecturer: [
     {
       title: "Dashboard",
-      path: "/lecturer",
+      path: "/lecturer/dashboard",
       icon: FaHome,
     },
     {
       title: "My Courses",
-      path: "/courses",
+      path: "/lecturer/courses",
       icon: FaBook,
     },
     {
-      title: "Assignments",
-      path: "/assignments",
+      title: "Exams",
+      path: "/lecturer/exams",
       icon: FaClipboardList,
     },
     {
-      title: "Students",
-      path: "/students",
+      title: "Submissions",
+      path: "/lecturer/submissions",
       icon: FaUserGraduate,
+    },
+    {
+      title: "Analytics",
+      path: "/lecturer/analytics",
+      icon: FaChartBar,
     },
     {
       title: "Messages",
@@ -115,28 +107,18 @@ export const navigation = {
   admin: [
     {
       title: "Dashboard",
-      path: "/admin",
+      path: "/admin/dashboard",
       icon: FaHome,
     },
     {
       title: "Users",
-      path: "/users",
+      path: "/admin/users",
       icon: FaUsers,
     },
     {
-      title: "Courses",
-      path: "/courses",
-      icon: FaBook,
-    },
-    {
       title: "Analytics",
-      path: "/analytics",
+      path: "/lecturer/analytics",
       icon: FaChartBar,
-    },
-    {
-      title: "AI Center",
-      path: "/ai",
-      icon: FaRobot,
     },
     {
       title: "Settings",
