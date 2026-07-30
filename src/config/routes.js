@@ -8,7 +8,7 @@ const ROUTES = {
 
   FEED: "/feed",
 
-  PROFILE: "/profile/:id",
+  PROFILE: "/profile",
 
   EDIT_PROFILE: "/profile/edit",
 
@@ -24,51 +24,53 @@ const ROUTES = {
 
   MESSAGES: "/messages",
 
-  CHATROOM: "/chat/:id",
+  CHATROOM: "/chat/:roomId",
 
   NOTIFICATIONS: "/notifications",
 
   SETTINGS: "/settings",
 
-  EMERGENCY: "/emergency",
+  STUDENT_DASHBOARD: "/student/dashboard",
 
-  NOTES: "/notes",
+  STUDENT_COURSES: "/student/courses",
 
-  ASSIGNMENTS: "/assignments",
+  STUDENT_ASSIGNMENTS: "/student/assignments",
 
-  EXAMS: "/exams",
+  STUDENT_EXAMS: "/student/exams",
 
-  TIMETABLE: "/timetable",
+  STUDENT_TAKE_EXAM: "/student/exams/:examId",
 
-  COURSES: "/courses",
+  STUDENT_RESULTS: "/student/results",
 
-  FACULTY: "/faculty",
+  STUDENT_TIMETABLE: "/student/timetable",
 
-  UNITS: "/units",
+  STUDENT_NOTES: "/student/notes",
 
-  SAVED_POSTS: "/saved-posts",
+  STUDENT_ATTENDANCE: "/student/attendance",
 
-  STUDENT_DASHBOARD: "/student",
+  STUDENT_UNITS: "/student/units",
 
-  LECTURER_DASHBOARD: "/lecturer",
+  LECTURER_DASHBOARD: "/lecturer/dashboard",
 
-  ADMIN_DASHBOARD: "/admin",
+  LECTURER_COURSES: "/lecturer/courses",
+
+  LECTURER_EXAMS: "/lecturer/exams",
+
+  LECTURER_CREATE_EXAM: "/lecturer/exams/create",
+
+  LECTURER_UPLOAD_NOTES: "/lecturer/upload-notes",
+
+  LECTURER_SUBMISSIONS: "/lecturer/submissions",
+
+  LECTURER_VIEW_SUBMISSION: "/lecturer/submissions/:submissionId",
+
+  LECTURER_ANALYTICS: "/lecturer/analytics",
+
+  LECTURER_ANNOUNCEMENTS: "/lecturer/announcements",
+
+  ADMIN_DASHBOARD: "/admin/dashboard",
 
   ADMIN_USERS: "/admin/users",
-
-  ADMIN_POSTS: "/admin/posts",
-
-  ADMIN_REPORTS: "/admin/reports",
-
-  ADMIN_ANALYTICS: "/admin/analytics",
-
-  ADMIN_UNIVERSITIES: "/admin/universities",
-
-  ADMIN_SETTINGS: "/admin/settings",
-
-  ADMIN_EMERGENCIES: "/admin/emergencies",
-
-  ADMIN_AUDIT_LOGS: "/admin/audit-logs",
 
   UNAUTHORIZED: "/unauthorized",
 
