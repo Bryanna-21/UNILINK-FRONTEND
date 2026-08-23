@@ -62,6 +62,15 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const completeAuth = (data) => {
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    setToken(data.token);
+    setUser(data.user);
+    setIsAuthenticated(true);
+  };
+
   const login = async (email, password) => {
     try {
       const response = await api.post("/auth/login", {
@@ -71,63 +80,169 @@ export function AuthProvider({ children }) {
 
       const data = response.data;
 
-      localStorage.setItem("token", data.token);
+      if (data.requiresTwoFactor) {
+        return {
+          success: false,
+          reason: "requiresTwoFactor",
+          userId: data.userId,
+          message: data.message,
+        };
+      }
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify(data.user)
-      );
-
-      setToken(data.token);
-
-      setUser(data.user);
-
-      setIsAuthenticated(true);
+      completeAuth(data);
 
       return {
         success: true,
+        user: data.user,
       };
     } catch (error) {
+      const data = error.response?.data;
+
+      if (data?.requiresVerification) {
+        return {
+          success: false,
+          reason: "requiresVerification",
+          userId: data.userId,
+          message: data.message,
+        };
+      }
+
       return {
         success: false,
-        message:
-          error.response?.data?.message ||
-          "Login failed.",
+        reason: "error",
+        message: data?.message || "Login failed.",
       };
     }
   };
 
   const register = async (payload) => {
     try {
-      const response = await api.post(
-        "/auth/register",
-        payload
-      );
+      const response = await api.post("/auth/register", payload);
 
       const data = response.data;
 
-      localStorage.setItem("token", data.token);
+      return {
+        success: true,
+        userId: data.userId,
+        email: data.email,
+        message: data.message,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error.response?.data?.message || "Registration failed.",
+      };
+    }
+  };
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify(data.user)
-      );
+  const verifyOtp = async (userId, code) => {
+    try {
+      const response = await api.post("/auth/verify-otp", {
+        userId,
+        code,
+      });
 
-      setToken(data.token);
+      const data = response.data;
 
-      setUser(data.user);
-
-      setIsAuthenticated(true);
+      completeAuth(data);
 
       return {
         success: true,
+        user: data.user,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error.response?.data?.message || "Verification failed.",
+      };
+    }
+  };
+
+  const verifyLoginOtp = async (userId, code) => {
+    try {
+      const response = await api.post("/auth/verify-login-otp", {
+        userId,
+        code,
+      });
+
+      const data = response.data;
+
+      completeAuth(data);
+
+      return {
+        success: true,
+        user: data.user,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error.response?.data?.message || "Verification failed.",
+      };
+    }
+  };
+
+  const resendOtp = async (userId) => {
+    try {
+      const response = await api.post("/auth/resend-otp", { userId });
+
+      return {
+        success: true,
+        message: response.data.message,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error.response?.data?.message || "Could not resend the code.",
+      };
+    }
+  };
+
+  const requestPasswordChange = async (
+    currentPassword,
+    newPassword,
+    confirmNewPassword
+  ) => {
+    try {
+      const response = await api.post("/auth/request-password-change", {
+        currentPassword,
+        newPassword,
+        confirmNewPassword,
+      });
+
+      return {
+        success: true,
+        message: response.data.message,
       };
     } catch (error) {
       return {
         success: false,
         message:
           error.response?.data?.message ||
-          "Registration failed.",
+          "Could not start the password change.",
+      };
+    }
+  };
+
+  const confirmPasswordChange = async (code) => {
+    try {
+      const response = await api.post("/auth/confirm-password-change", {
+        code,
+      });
+
+      return {
+        success: true,
+        message: response.data.message,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error.response?.data?.message ||
+          "Could not confirm the password change.",
       };
     }
   };
@@ -195,6 +310,16 @@ export function AuthProvider({ children }) {
       logout,
 
       register,
+
+      verifyOtp,
+
+      verifyLoginOtp,
+
+      resendOtp,
+
+      requestPasswordChange,
+
+      confirmPasswordChange,
 
       refreshUser,
 
