@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import API from "../../services/api";
 import toast from "react-hot-toast";
+
+import { useAuth } from "../../context/AuthContext";
+
 import "../../styles/Auth.css";
 
 export default function Register() {
   const navigate = useNavigate();
+  const { register } = useAuth();
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [form, setForm] = useState({
@@ -63,32 +67,31 @@ export default function Register() {
       return;
     }
 
-    try {
-      setLoading(true);
-      const response = await API.post("/auth/register", {
-        name: form.name.trim(),
-        email: form.email.trim(),
-        password: form.password,
-        confirmPassword: form.confirmPassword,
-      });
+    setLoading(true);
 
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
-      }
+    const result = await register({
+      name: form.name.trim(),
+      email: form.email.trim(),
+      password: form.password,
+      confirmPassword: form.confirmPassword,
+    });
 
-      toast.success("Registered successfully! Redirecting to login...");
-      navigate("/login");
-    } catch (err) {
-      console.error("Registration error:", err);
-      const errorMessage =
-        err.response?.data?.message ||
-        err.response?.data?.error ||
-        err.message ||
-        "Registration failed.";
-      setError(errorMessage);
-    } finally {
-      setLoading(false);
+    setLoading(false);
+
+    if (!result.success) {
+      setError(result.message);
+      return;
     }
+
+    // Registration never returns a token - the account exists but is
+    // unverified. Route to the OTP screen with the userId the backend
+    // just gave us, instead of discarding it and sending the user to
+    // /login where they'd only hit "please verify your email" anyway.
+    toast.success(result.message || "Account created! Check your email for a code.");
+
+    navigate("/verify-otp", {
+      state: { userId: result.userId },
+    });
   };
 
   return (

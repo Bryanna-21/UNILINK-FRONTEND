@@ -52,6 +52,25 @@ export default function Login() {
     setLoading(false);
 
     if (!result.success) {
+      // Two of the three failure shapes aren't really failures - they're
+      // mid-flow states that need to route somewhere with context, not
+      // just show an error toast and go nowhere.
+      if (result.reason === "requiresVerification") {
+        toast(result.message || "Please verify your email first.");
+        navigate("/verify-otp", {
+          state: { userId: result.userId },
+        });
+        return;
+      }
+
+      if (result.reason === "requiresTwoFactor") {
+        toast(result.message || "A login code has been sent to your email.");
+        navigate("/verify-login-otp", {
+          state: { userId: result.userId },
+        });
+        return;
+      }
+
       toast.error(result.message);
       return;
     }
