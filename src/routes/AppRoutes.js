@@ -8,6 +8,8 @@ import MainLayout from "../layouts/MainLayout";
 /* Auth pages */
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
+import VerifyOtp from "../pages/auth/VerifyOtp";
+import VerifyLoginOtp from "../pages/auth/VerifyLoginOtp";
 
 /* Student pages */
 import StudentDashboard from "../pages/Student/Dashboard";
@@ -61,6 +63,12 @@ export default function AppRoutes() {
       <Route element={<PublicRoute />}>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        {/* Not gated by PublicRoute's isAuthenticated check in the
+            usual sense - a user here has no token yet either way -
+            but they belong in the public group since ProtectedRoute
+            would bounce them for lacking auth entirely. */}
+        <Route path="/verify-otp" element={<VerifyOtp />} />
+        <Route path="/verify-login-otp" element={<VerifyLoginOtp />} />
       </Route>
 
       {/* ===== Protected routes (wrapped in MainLayout for sidebar/topbar) ===== */}
