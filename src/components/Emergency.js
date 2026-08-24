@@ -17,13 +17,20 @@ export default function EmergencyMenu() {
     window.location.href = "/";
   };
 
-  // 🔹 Load contacts from backend
+  // Load contacts from backend. NOTE: /api/emergency/contacts does not
+  // currently exist on the backend (only POST /api/emergency/report is
+  // implemented) - this call will fail every time until that route is
+  // built. contacts stays [] on any failure or unexpected response
+  // shape so this can never crash the render tree with
+  // "contacts.map is not a function" again, regardless of what (if
+  // anything) the backend eventually returns here.
   const loadContacts = async () => {
     try {
       const res = await API.get("/emergency/contacts");
-      setContacts(res.data);
-    } catch {
-      console.log("Failed to load contacts");
+      setContacts(Array.isArray(res.data) ? res.data : []);
+    } catch (err) {
+      console.warn("Failed to load emergency contacts (endpoint may not exist yet):", err.message);
+      setContacts([]);
     }
   };
 
@@ -31,24 +38,34 @@ export default function EmergencyMenu() {
     loadContacts();
   }, []);
 
-  // 🔹 Send emergency report
+  // Send emergency report - this endpoint DOES exist on the backend.
   const reportIssue = async () => {
     const message = prompt("Describe the issue:");
     if (!message) return;
 
-    await API.post("/emergency/report", {
-      type: "general",
-      message,
-      location: "unknown"
-    });
-
-    alert("Report sent.");
+    try {
+      await API.post("/emergency/report", {
+        type: "general",
+        message,
+        location: "unknown"
+      });
+      alert("Report sent.");
+    } catch (err) {
+      console.error("Failed to send emergency report:", err.message);
+      alert("Could not send the report right now. Please try again.");
+    }
   };
 
-  // 🔹 Request help
+  // Request help. NOTE: /api/emergency/help does not currently exist
+  // on the backend either - this will fail until that route is built.
   const requestHelp = async () => {
-    await API.post("/emergency/help");
-    alert("Help request sent.");
+    try {
+      await API.post("/emergency/help");
+      alert("Help request sent.");
+    } catch (err) {
+      console.warn("Failed to request help (endpoint may not exist yet):", err.message);
+      alert("Help requests aren't available yet. Please contact emergency services directly if needed.");
+    }
   };
 
   return (
@@ -64,29 +81,29 @@ export default function EmergencyMenu() {
       {/* Menu */}
       {open && (
         <div style={menu}>
-          {/* CONTACTS FROM BACKEND */}
           <h4>Emergency Contacts</h4>
-          {contacts.map((c, i) => (
-            <p key={i} style={item}>
-              <FaPhone /> {c.name}:{" "}
-              <a href={`tel:${c.phone}`}>{c.phone}</a>
-            </p>
-          ))}
+
+          {contacts.length === 0 ? (
+            <p style={item}>No emergency contacts available yet.</p>
+          ) : (
+            contacts.map((c, i) => (
+              <p key={i} style={item}>
+                <FaPhone /> {c.name}:{" "}
+                <a href={`tel:${c.phone}`}>{c.phone}</a>
+              </p>
+            ))
+          )}
 
           <p style={item} onClick={() => window.open("https://www.google.com/maps/search/hospital+near+me")}>
             <FaHospital /> Nearby Hospitals
           </p>
-
           <p style={item} onClick={requestHelp}>
             <FaHeartbeat /> Request Help
           </p>
-
           <hr />
-
           <p style={item} onClick={reportIssue}>
             <FaExclamationTriangle /> Report Issue
           </p>
-
           <p style={item} onClick={logout}>
             <FaSignOutAlt /> Logout
           </p>
