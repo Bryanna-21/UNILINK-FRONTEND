@@ -4,9 +4,7 @@ import { toast } from "react-hot-toast";
 
 import ExamResult from "../../components/exams/ExamResult";
 
-import {
-  getStudentResults,
-} from "../../services/examService";
+import examService from "../../services/examService";
 
 import "../../styles/exams.css";
 
@@ -26,7 +24,7 @@ const Results = () => {
 
       setLoading(true);
 
-      const data = await getStudentResults();
+      const data = await examService.getStudentResults();
 
       setResults(data || []);
 

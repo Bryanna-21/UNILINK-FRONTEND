@@ -2,10 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
-import {
-  getExamById,
-  submitExam,
-} from "../../services/examService";
+import examService from "../../services/examService";
 
 import "../../styles/exams.css";
 
@@ -36,7 +33,7 @@ const TakeExam = () => {
 
       setLoading(true);
 
-      const data = await getExamById(examId);
+      const data = await examService.getExamById(examId);
 
       setExam(data);
 
@@ -124,7 +121,7 @@ const TakeExam = () => {
 
       );
 
-      await submitExam(
+      await examService.submitExam(
 
         exam._id,
 
