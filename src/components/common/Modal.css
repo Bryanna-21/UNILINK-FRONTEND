@@ -1,0 +1,261 @@
+/* ===========================
+   Modal Overlay
+=========================== */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 9999;
+  animation: fadeIn 0.25s ease;
+}
+
+/* ===========================
+   Modal Container
+=========================== */
+
+.modal-container {
+  width: 100%;
+  background: var(--card-background, #ffffff);
+  border-radius: 16px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: slideUp 0.3s ease;
+}
+
+.modal-container.small {
+  max-width: 420px;
+}
+
+.modal-container.medium {
+  max-width: 650px;
+}
+
+.modal-container.large {
+  max-width: 900px;
+}
+
+/* ===========================
+   Header
+=========================== */
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-color, #111827);
+}
+
+/* ===========================
+   Close Button
+=========================== */
+
+.modal-close-btn {
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  background: #f3f4f6;
+  color: #ef4444;
+}
+
+/* ===========================
+   Body
+=========================== */
+
+.modal-body {
+  padding: 24px;
+  color: var(--text-color, #374151);
+  line-height: 1.7;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* ===========================
+   Footer
+=========================== */
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 18px 24px;
+  border-top: 1px solid var(--border-color, #e5e7eb);
+}
+
+.modal-footer button {
+  border: none;
+  border-radius: 10px;
+  padding: 11px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.modal-footer .primary {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.modal-footer .primary:hover {
+  background: #1d4ed8;
+}
+
+.modal-footer .secondary {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.modal-footer .secondary:hover {
+  background: #d1d5db;
+}
+
+.modal-footer .danger {
+  background: #dc2626;
+  color: white;
+}
+
+.modal-footer .danger:hover {
+  background: #b91c1c;
+}
+
+.modal-footer .success {
+  background: #16a34a;
+  color: white;
+}
+
+.modal-footer .success:hover {
+  background: #15803d;
+}
+
+/* ===========================
+   Dark Theme
+=========================== */
+
+[data-theme="dark"] .modal-container {
+  background: #111827;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .modal-header {
+  border-color: #374151;
+}
+
+[data-theme="dark"] .modal-header h2 {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .modal-body {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .modal-footer {
+  border-color: #374151;
+}
+
+[data-theme="dark"] .modal-close-btn {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .modal-close-btn:hover {
+  background: #374151;
+}
+
+[data-theme="dark"] .modal-footer .secondary {
+  background: #374151;
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .modal-footer .secondary:hover {
+  background: #4b5563;
+}
+
+/* ===========================
+   Animations
+=========================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width: 768px) {
+  .modal-overlay {
+    padding: 16px;
+  }
+
+  .modal-container {
+    max-width: 100%;
+  }
+
+  .modal-header {
+    padding: 18px;
+  }
+
+  .modal-header h2 {
+    font-size: 20px;
+  }
+
+  .modal-body {
+    padding: 18px;
+    max-height: 60vh;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+    padding: 18px;
+  }
+
+  .modal-footer button {
+    width: 100%;
+  }
+}

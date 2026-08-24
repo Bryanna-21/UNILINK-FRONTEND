@@ -1,0 +1,199 @@
+.note-card {
+  background: var(--card-background, #ffffff);
+  border-radius: 16px;
+  padding: 20px;
+  width: 100%;
+  border: 1px solid var(--border-color, #e5e7eb);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+
+.note-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Header */
+
+.note-card-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+
+.note-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ef4444;
+  color: white;
+  font-size: 22px;
+}
+
+
+.note-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+
+.note-info h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-color, #111827);
+}
+
+
+.note-type {
+  width: fit-content;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+
+
+/* Description */
+
+.note-description p {
+  margin: 0;
+  color: var(--secondary-text, #6b7280);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+
+
+/* Metadata */
+
+.note-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--secondary-text, #6b7280);
+  font-size: 13px;
+}
+
+
+.meta-item svg {
+  color: #2563eb;
+}
+
+
+
+/* Stats */
+
+.note-stats {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-top: 1px solid var(--border-color, #e5e7eb);
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  font-size: 13px;
+  color: var(--secondary-text, #6b7280);
+}
+
+
+
+/* Buttons */
+
+.note-actions {
+  display: flex;
+  gap: 12px;
+}
+
+
+.note-actions button {
+  flex: 1;
+  border: none;
+  padding: 11px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: 0.2s ease;
+}
+
+
+.view-note-btn {
+  background: #2563eb;
+  color: white;
+}
+
+
+.view-note-btn:hover {
+  background: #1d4ed8;
+}
+
+
+.download-note-btn {
+  background: #16a34a;
+  color: white;
+}
+
+
+.download-note-btn:hover {
+  background: #15803d;
+}
+
+
+
+/* Dark Mode */
+
+[data-theme="dark"] .note-card {
+  background: #111827;
+  border-color: #374151;
+}
+
+
+[data-theme="dark"] .note-info h3 {
+  color: #f9fafb;
+}
+
+
+[data-theme="dark"] .note-description p,
+[data-theme="dark"] .meta-item,
+[data-theme="dark"] .note-stats {
+  color: #9ca3af;
+}
+
+
+
+/* Responsive */
+
+@media (max-width: 600px) {
+
+  .note-card {
+    padding: 16px;
+  }
+
+
+  .note-actions {
+    flex-direction: column;
+  }
+
+}

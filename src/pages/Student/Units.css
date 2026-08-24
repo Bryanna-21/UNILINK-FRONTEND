@@ -1,0 +1,81 @@
+.units-page { display:block; background:transparent; }
+
+
+
+.units-content { padding:0; overflow:visible; }
+
+
+
+.units-header {
+
+  margin-bottom:30px;
+
+}
+
+
+
+.units-header h1 {
+
+  margin:0;
+
+  font-size:32px;
+
+}
+
+
+
+.units-header p {
+
+  color:#6b7280;
+
+  margin-top:8px;
+
+}
+
+
+
+.units-grid {
+
+  display:grid;
+
+  grid-template-columns:repeat(
+    auto-fit,
+    minmax(280px,1fr)
+  );
+
+  gap:25px;
+
+}
+
+
+
+.empty-units {
+
+  background:white;
+
+  padding:40px;
+
+  text-align:center;
+
+  border-radius:12px;
+
+}
+
+
+
+@media(max-width:768px){
+
+  .units-page{
+
+    flex-direction:column;
+
+  }
+
+
+  .units-content{
+
+    padding:20px;
+
+  }
+
+}

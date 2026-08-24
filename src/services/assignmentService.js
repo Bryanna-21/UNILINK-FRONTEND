@@ -1,0 +1,2 @@
+import api from "./api";
+const assignmentService={getAssignments:async()=>{const {data}=await api.get("/assignments");return data?.data||data?.assignments||data||[];},getAssignmentById:async id=>{const {data}=await api.get(`/assignments/${id}`);return data?.data||data;},submitAssignment:async(id,payload)=>{const {data}=await api.post(`/assignments/${id}/submit`,payload);return data;}};export default assignmentService;

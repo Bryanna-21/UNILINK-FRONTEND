@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "./styles/base/reset.css";
+@import "./styles/base/variables.css";
+@import "./styles/layout/sidebar.css";
+@import "./styles/layout/topbar.css";
+@import "./styles/layout/layout.css";
+@import "./styles/index.css";
+.search-page{max-width:900px;margin:0 auto}.search-page h1{font-size:32px;letter-spacing:-.04em;margin:0 0 5px}.search-page>p{color:var(--text-muted)}.search-page>input{width:100%;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:13px;padding:14px;margin:15px 0;outline:none}.search-page .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:15px;margin:9px 0}.search-page .card p{color:var(--text-muted);margin:5px 0 0}

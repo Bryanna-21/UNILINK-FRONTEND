@@ -1,0 +1,6 @@
+import { NavLink } from "react-router-dom";
+import { FaSignOutAlt, FaTimes } from "react-icons/fa";
+import { navigation } from "../../constants/navigation";
+import { useAuth } from "../../context/AuthContext";
+import "../../styles/layout/sidebar.css";
+export default function Sidebar({mobileOpen=false,onClose=()=>{}}){ const {user,logout}=useAuth(); return <aside className={`sidebar ${mobileOpen?"sidebar-open":""}`}><div className="sidebar-header"><div><strong>UniLink</strong><span>Connect · Learn · Grow</span></div><button className="sidebar-close" onClick={onClose} aria-label="Close navigation"><FaTimes/></button></div><div className="sidebar-user"><div className="avatar">{(user?.name||"U").slice(0,1).toUpperCase()}</div><div className="sidebar-user-copy"><strong>{user?.name||"Student"}</strong><span>Student</span></div></div><nav className="sidebar-menu" aria-label="Primary navigation">{navigation.map(item=>{const Icon=item.icon;return <NavLink key={item.path} to={item.path} onClick={onClose} className={({isActive})=>`sidebar-link ${isActive?"active":""} ${item.emphasis?"emphasis":""}`}><Icon size={17}/><span>{item.title}</span></NavLink>})}</nav><div className="sidebar-footer"><button onClick={logout} className="logout-btn"><FaSignOutAlt/> Sign out</button></div></aside>; }
