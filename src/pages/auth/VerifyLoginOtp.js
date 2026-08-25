@@ -6,20 +6,16 @@ import { useAuth } from "../../context/AuthContext";
 
 import "../../styles/Auth.css";
 
-const RESEND_COOLDOWN_SECONDS = 30;
-
 export default function VerifyLoginOtp() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { verifyLoginOtp, resendOtp } = useAuth();
+  const { verifyLoginOtp } = useAuth();
 
   const userId = location.state?.userId;
 
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
-  const [resending, setResending] = useState(false);
-  const [cooldown, setCooldown] = useState(0);
   const [error, setError] = useState("");
 
   const inputRef = useRef(null);
@@ -35,13 +31,6 @@ export default function VerifyLoginOtp() {
 
     inputRef.current?.focus();
   }, [userId, navigate]);
-
-  useEffect(() => {
-    if (cooldown <= 0) return;
-
-    const timer = setTimeout(() => setCooldown((c) => c - 1), 1000);
-    return () => clearTimeout(timer);
-  }, [cooldown]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -80,12 +69,12 @@ export default function VerifyLoginOtp() {
   };
 
   // resendOtp only knows the "verify_signup" purpose on the backend -
-  // there is no dedicated 2FA-login resend endpoint. This is a real
-  // gap: clicking resend here would issue a NEW signup-verification
-  // code, not a new login code, which is the wrong purpose entirely
-  // for an already-verified account mid-login. Disabled rather than
-  // wired to the wrong endpoint until a proper /resend-login-otp
-  // route exists on the backend.
+  // there is no dedicated 2FA-login resend endpoint. Clicking resend
+  // here would issue a NEW signup-verification code, not a new login
+  // code - the wrong purpose entirely for an already-verified account
+  // mid-login. Disabled with an honest message rather than wired to
+  // the wrong endpoint, until a proper /resend-login-otp route exists
+  // on the backend.
   const handleResend = () => {
     toast(
       "Resend isn't available for login codes yet - please try logging in again if your code expired.",
