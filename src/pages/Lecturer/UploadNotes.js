@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import AcademicSidebar from "../../components/academic/AcademicSidebar";
 import {
   FaCloudUploadAlt,
   FaFileAlt,
@@ -78,7 +77,6 @@ const UploadNotes = () => {
     <div className="upload-notes-page">
 
 
-      <AcademicSidebar />
 
 
       <main className="upload-notes-content">

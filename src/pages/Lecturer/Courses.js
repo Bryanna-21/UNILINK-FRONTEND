@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import AcademicSidebar from "../../components/academic/AcademicSidebar";
 import CourseCard from "../../components/academic/CourseCard";
 import "./Courses.css";
 
@@ -76,7 +75,6 @@ const Courses = () => {
     <div className="lecturer-courses-page">
 
 
-      <AcademicSidebar />
 
 
       <main className="lecturer-courses-content">

@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 
-import AcademicSidebar from "../../components/academic/AcademicSidebar";
 import AssignmentCard from "../../components/academic/AssignmentCard";
 
 import SearchBar from "../../components/common/SearchBar";
@@ -223,7 +222,6 @@ const Assignments = () => {
 
     <div className="assignments-page">
 
-      <AcademicSidebar />
 
       <main className="assignments-content">
 

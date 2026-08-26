@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import AcademicSidebar from "../../components/academic/AcademicSidebar";
 import {
   FaClipboardList,
   FaBook,
@@ -83,7 +82,6 @@ const CreateAssignment = () => {
     <div className="create-assignment-page">
 
 
-      <AcademicSidebar />
 
 
       <main className="create-assignment-content">

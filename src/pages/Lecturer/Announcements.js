@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import AcademicSidebar from "../../components/academic/AcademicSidebar";
 import {
   FaBullhorn,
   FaCalendarAlt,
@@ -148,7 +147,6 @@ const Announcements = () => {
     <div className="announcements-page">
 
 
-      <AcademicSidebar />
 
 
       <main className="announcements-content">

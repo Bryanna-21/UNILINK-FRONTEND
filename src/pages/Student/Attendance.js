@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import AcademicSidebar from "../../components/academic/AcademicSidebar";
 import {
   FaCheckCircle,
   FaTimesCircle,
@@ -68,7 +67,6 @@ const Attendance = () => {
     <div className="attendance-page">
 
 
-      <AcademicSidebar />
 
 
       <main className="attendance-content">

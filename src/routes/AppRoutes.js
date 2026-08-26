@@ -10,6 +10,7 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import VerifyOtp from "../pages/auth/VerifyOtp";
 import VerifyLoginOtp from "../pages/auth/VerifyLoginOtp";
+import ForgotPassword from "../pages/auth/ForgotPassword";
 
 /* Student pages */
 import StudentDashboard from "../pages/Student/Dashboard";
@@ -69,6 +70,7 @@ export default function AppRoutes() {
             would bounce them for lacking auth entirely. */}
         <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="/verify-login-otp" element={<VerifyLoginOtp />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Route>
 
       {/* ===== Protected routes (wrapped in MainLayout for sidebar/topbar) ===== */}

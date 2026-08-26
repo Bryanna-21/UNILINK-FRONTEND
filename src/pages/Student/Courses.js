@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "./Courses.css";
 
-import AcademicSidebar from "../../components/academic/AcademicSidebar";
 import CourseCard from "../../components/academic/CourseCard";
 
 import SearchBar from "../../components/common/SearchBar";
@@ -204,7 +203,6 @@ const Courses = () => {
   return (
     <div className="courses-layout">
 
-      <AcademicSidebar />
 
       <main className="courses-content">
 

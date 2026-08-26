@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import NoteCard from "../../components/academic/NoteCard";
-import AcademicSidebar from "../../components/academic/AcademicSidebar";
 import "./Notes.css";
 
 
@@ -106,7 +105,6 @@ const Notes = () => {
     <div className="notes-page">
 
 
-      <AcademicSidebar />
 
 
       <main className="notes-content">

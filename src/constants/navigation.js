@@ -10,120 +10,44 @@ import {
   FaUsers,
   FaUserGraduate,
   FaChartBar,
+  FaLayerGroup,
+  FaFileAlt,
+  FaCheckCircle,
+  FaBullhorn,
+  FaUpload,
 } from "react-icons/fa";
 
 export const navigation = {
   student: [
-    {
-      title: "Dashboard",
-      path: "/student/dashboard",
-      icon: FaHome,
-    },
-    {
-      title: "Courses",
-      path: "/student/courses",
-      icon: FaBook,
-    },
-    {
-      title: "Assignments",
-      path: "/student/assignments",
-      icon: FaClipboardList,
-    },
-    {
-      title: "Timetable",
-      path: "/student/timetable",
-      icon: FaCalendarAlt,
-    },
-    {
-      title: "Results",
-      path: "/student/results",
-      icon: FaChartBar,
-    },
-    {
-      title: "Feed",
-      path: "/feed",
-      icon: FaBookReader,
-    },
-    {
-      title: "Messages",
-      path: "/messages",
-      icon: FaComments,
-    },
-    {
-      title: "Notifications",
-      path: "/notifications",
-      icon: FaBell,
-    },
-    {
-      title: "Settings",
-      path: "/settings",
-      icon: FaCog,
-    },
+    { title: "Dashboard", path: "/student/dashboard", icon: FaHome },
+    { title: "Courses", path: "/student/courses", icon: FaBook },
+    { title: "Units", path: "/student/units", icon: FaLayerGroup },
+    { title: "Notes", path: "/student/notes", icon: FaFileAlt },
+    { title: "Assignments", path: "/student/assignments", icon: FaClipboardList },
+    { title: "Timetable", path: "/student/timetable", icon: FaCalendarAlt },
+    { title: "Attendance", path: "/student/attendance", icon: FaCheckCircle },
+    { title: "Results", path: "/student/results", icon: FaChartBar },
+    { title: "Feed", path: "/feed", icon: FaBookReader },
+    { title: "Messages", path: "/messages", icon: FaComments },
+    { title: "Notifications", path: "/notifications", icon: FaBell },
+    { title: "Settings", path: "/settings", icon: FaCog },
   ],
-
   lecturer: [
-    {
-      title: "Dashboard",
-      path: "/lecturer/dashboard",
-      icon: FaHome,
-    },
-    {
-      title: "My Courses",
-      path: "/lecturer/courses",
-      icon: FaBook,
-    },
-    {
-      title: "Exams",
-      path: "/lecturer/exams",
-      icon: FaClipboardList,
-    },
-    {
-      title: "Submissions",
-      path: "/lecturer/submissions",
-      icon: FaUserGraduate,
-    },
-    {
-      title: "Analytics",
-      path: "/lecturer/analytics",
-      icon: FaChartBar,
-    },
-    {
-      title: "Messages",
-      path: "/messages",
-      icon: FaComments,
-    },
-    {
-      title: "Notifications",
-      path: "/notifications",
-      icon: FaBell,
-    },
-    {
-      title: "Settings",
-      path: "/settings",
-      icon: FaCog,
-    },
+    { title: "Dashboard", path: "/lecturer/dashboard", icon: FaHome },
+    { title: "My Courses", path: "/lecturer/courses", icon: FaBook },
+    { title: "Upload Notes", path: "/lecturer/upload-notes", icon: FaUpload },
+    { title: "Exams", path: "/lecturer/exams", icon: FaClipboardList },
+    { title: "Submissions", path: "/lecturer/submissions", icon: FaUserGraduate },
+    { title: "Announcements", path: "/lecturer/announcements", icon: FaBullhorn },
+    { title: "Analytics", path: "/lecturer/analytics", icon: FaChartBar },
+    { title: "Messages", path: "/messages", icon: FaComments },
+    { title: "Notifications", path: "/notifications", icon: FaBell },
+    { title: "Settings", path: "/settings", icon: FaCog },
   ],
-
   admin: [
-    {
-      title: "Dashboard",
-      path: "/admin/dashboard",
-      icon: FaHome,
-    },
-    {
-      title: "Users",
-      path: "/admin/users",
-      icon: FaUsers,
-    },
-    {
-      title: "Analytics",
-      path: "/lecturer/analytics",
-      icon: FaChartBar,
-    },
-    {
-      title: "Settings",
-      path: "/settings",
-      icon: FaCog,
-    },
+    { title: "Dashboard", path: "/admin/dashboard", icon: FaHome },
+    { title: "Users", path: "/admin/users", icon: FaUsers },
+    { title: "Analytics", path: "/lecturer/analytics", icon: FaChartBar },
+    { title: "Settings", path: "/settings", icon: FaCog },
   ],
 };

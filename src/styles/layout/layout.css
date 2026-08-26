@@ -10,9 +10,7 @@ background:#f5f7fb;
 
 .main{
 
-margin-left:270px;
-
-width:calc(100% - 270px);
+width:100%;
 
 display:flex;
 
@@ -22,10 +20,28 @@ flex-direction:column;
 
 .content{
 
-padding:30px;
+padding:20px;
 
 flex:1;
 
 overflow:auto;
+
+}
+
+@media (min-width: 1024px) {
+
+  .main{
+
+  margin-left:270px;
+
+  width:calc(100% - 270px);
+
+  }
+
+  .content{
+
+  padding:30px;
+
+  }
 
 }

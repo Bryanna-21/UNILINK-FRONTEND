@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import AcademicSidebar from "../../components/academic/AcademicSidebar";
 import {
   FaUsers,
   FaClipboardCheck,
@@ -91,7 +90,6 @@ const Analytics = () => {
     <div className="analytics-page">
 
 
-      <AcademicSidebar />
 
 
       <main className="analytics-content">

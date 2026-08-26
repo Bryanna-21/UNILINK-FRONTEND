@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import UnitCard from "../../components/academic/UnitCard";
-import AcademicSidebar from "../../components/academic/AcademicSidebar";
 import "./Units.css";
 
 
@@ -89,7 +88,6 @@ const Units = () => {
     <div className="units-page">
 
 
-      <AcademicSidebar />
 
 
       <main className="units-content">

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import TimetableCard from "../../components/academic/TimetableCard";
-import AcademicSidebar from "../../components/academic/AcademicSidebar";
 import "./Timetable.css";
 
 
@@ -77,7 +76,6 @@ const Timetable = () => {
     <div className="timetable-page">
 
 
-      <AcademicSidebar />
 
 
       <main className="timetable-content">
