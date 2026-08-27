@@ -54,6 +54,8 @@ import Search from "../pages/Search";
 import Marketplace from "../pages/Marketplace";
 import LostAndFound from "../pages/LostAndFound";
 import Library from "../pages/Library";
+import StudyGroups from "../pages/StudyGroups";
+import Polls from "../pages/Polls";
 import Settings from "../pages/Settings";
 
 /* Error pages */
@@ -268,6 +270,8 @@ export default function AppRoutes() {
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/lost-and-found" element={<LostAndFound />} />
           <Route path="/library" element={<Library />} />
+          <Route path="/study-groups" element={<StudyGroups />} />
+          <Route path="/polls" element={<Polls />} />
           <Route path="/settings" element={<Settings />} />
         </Route>
       </Route>
