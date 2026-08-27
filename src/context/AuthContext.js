@@ -247,6 +247,52 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const forgotPassword = async (email) => {
+    try {
+      const response = await api.post("/auth/forgot-password", { email });
+
+      return {
+        success: true,
+        message: response.data.message,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error.response?.data?.message ||
+          "Could not process the request.",
+      };
+    }
+  };
+
+  const resetPassword = async (
+    email,
+    code,
+    newPassword,
+    confirmNewPassword
+  ) => {
+    try {
+      const response = await api.post("/auth/reset-password", {
+        email,
+        code,
+        newPassword,
+        confirmNewPassword,
+      });
+
+      return {
+        success: true,
+        message: response.data.message,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error.response?.data?.message || "Could not reset the password.",
+      };
+    }
+  };
+
+
   const logout = () => {
     localStorage.removeItem("token");
 
@@ -320,6 +366,10 @@ export function AuthProvider({ children }) {
       requestPasswordChange,
 
       confirmPasswordChange,
+
+      forgotPassword,
+
+      resetPassword,
 
       refreshUser,
 
