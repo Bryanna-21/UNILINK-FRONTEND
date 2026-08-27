@@ -51,6 +51,9 @@ import Notifications from "../pages/Notifications";
 import Profile from "../pages/Profile";
 import EditProfile from "../pages/EditProfile";
 import Search from "../pages/Search";
+import Marketplace from "../pages/Marketplace";
+import LostAndFound from "../pages/LostAndFound";
+import Library from "../pages/Library";
 import Settings from "../pages/Settings";
 
 /* Error pages */
@@ -262,6 +265,9 @@ export default function AppRoutes() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/edit" element={<EditProfile />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/marketplace" element={<Marketplace />} />
+          <Route path="/lost-and-found" element={<LostAndFound />} />
+          <Route path="/library" element={<Library />} />
           <Route path="/settings" element={<Settings />} />
         </Route>
       </Route>
