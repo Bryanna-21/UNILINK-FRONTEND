@@ -37,6 +37,7 @@ export const navigation = {
     { title: "Library", path: "/library", icon: FaBookOpen },
     { title: "Study Groups", path: "/study-groups", icon: FaUsers },
     { title: "Polls", path: "/polls", icon: FaPoll },
+    { title: "Clubs", path: "/clubs", icon: FaUsers },
     { title: "Messages", path: "/messages", icon: FaComments },
     { title: "Notifications", path: "/notifications", icon: FaBell },
     { title: "Settings", path: "/settings", icon: FaCog },
