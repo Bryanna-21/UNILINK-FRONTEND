@@ -15,6 +15,7 @@ import ForgotPassword from "../pages/auth/ForgotPassword";
 /* Student pages */
 import StudentDashboard from "../pages/Student/Dashboard";
 import Courses from "../pages/Student/Courses";
+import CourseDetail from "../pages/Student/CourseDetail";
 import Assignments from "../pages/Student/Assignments";
 import Exams from "../pages/Student/Exams";
 import TakeExam from "../pages/Student/TakeExam";
@@ -96,6 +97,14 @@ export default function AppRoutes() {
             element={
               <RoleGuard roles={["student"]}>
                 <Courses />
+              </RoleGuard>
+            }
+          />
+          <Route
+            path="/student/courses/:courseId"
+            element={
+              <RoleGuard roles={["student"]}>
+                <CourseDetail />
               </RoleGuard>
             }
           />

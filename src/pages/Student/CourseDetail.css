@@ -1,0 +1,191 @@
+.course-detail-page {
+  padding: 20px;
+  max-width: 720px;
+}
+
+.course-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.course-detail-header h1 {
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.course-detail-code {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #2563eb;
+  background: #dbeafe;
+  padding: 2px 10px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.course-detail-description {
+  font-size: 14px;
+  color: #475569;
+  margin-bottom: 10px;
+  max-width: 480px;
+}
+
+.course-detail-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.course-enroll-btn {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.course-enroll-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.course-enrolled-tag {
+  background: #dcfce7;
+  color: #16a34a;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.course-detail-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.course-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.course-tab.active {
+  color: #2563eb;
+  border-bottom-color: #2563eb;
+}
+
+.course-tab:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.course-tab-soon {
+  font-size: 9px;
+  font-weight: 700;
+  background: #f1f5f9;
+  color: #94a3b8;
+  padding: 1px 6px;
+  border-radius: 8px;
+  text-transform: uppercase;
+}
+
+.course-discussion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.discussion-entry {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.discussion-author {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+
+.discussion-entry p {
+  font-size: 14px;
+  color: #1e293b;
+}
+
+.course-discussion-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 30px 20px;
+  color: #94a3b8;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.course-discussion-composer {
+  display: flex;
+  gap: 8px;
+}
+
+.course-discussion-composer input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.course-discussion-composer button {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  width: 42px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.course-discussion-composer button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.course-detail-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 60px 20px;
+  color: #94a3b8;
+  text-align: center;
+}
