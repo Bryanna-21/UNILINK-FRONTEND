@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { FaBookOpen, FaUsers, FaComments, FaPaperPlane } from "react-icons/fa";
 import courseService from "../../services/courseService";
 import discussionService from "../../services/discussionService";
+import unitService from "../../services/unitService";
 import { useAuth } from "../../context/AuthContext";
 import Skeleton from "../../components/common/Skeleton";
 import Toast from "../../components/common/Toast";
@@ -10,7 +11,7 @@ import "./CourseDetail.css";
 
 const TABS = [
   { key: "discussion", label: "Discussion", available: true },
-  { key: "units", label: "Units", available: false },
+  { key: "units", label: "Units", available: true },
   { key: "assignments", label: "Assignments", available: false },
   { key: "cats", label: "CATs", available: false },
   { key: "notes", label: "Notes", available: false },
@@ -30,6 +31,8 @@ const CourseDetail = () => {
   const [discussionLoading, setDiscussionLoading] = useState(true);
   const [draft, setDraft] = useState("");
   const [posting, setPosting] = useState(false);
+  const [units, setUnits] = useState([]);
+  const [unitsLoading, setUnitsLoading] = useState(true);
 
   useEffect(() => {
     loadCourse();
@@ -39,6 +42,8 @@ const CourseDetail = () => {
   useEffect(() => {
     if (activeTab === "discussion") {
       loadDiscussion();
+    } else if (activeTab === "units") {
+      loadUnits();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, courseId]);
@@ -64,6 +69,18 @@ const CourseDetail = () => {
       setToast({ show: true, type: "error", message: "Could not load discussion." });
     } finally {
       setDiscussionLoading(false);
+    }
+  };
+
+  const loadUnits = async () => {
+    setUnitsLoading(true);
+    try {
+      const res = await unitService.getUnitsForCourse(courseId);
+      setUnits(res?.data ?? []);
+    } catch (error) {
+      setToast({ show: true, type: "error", message: "Could not load units." });
+    } finally {
+      setUnitsLoading(false);
     }
   };
 
@@ -185,6 +202,28 @@ const CourseDetail = () => {
               <FaPaperPlane />
             </button>
           </form>
+        </div>
+      )}
+
+      {activeTab === "units" && (
+        <div className="course-units">
+          {unitsLoading ? (
+            <Skeleton variant="card" count={3} />
+          ) : units.length === 0 ? (
+            <div className="course-units-empty">
+              <FaBookOpen size={32} />
+              <p>No units have been added to this course yet.</p>
+            </div>
+          ) : (
+            <div className="course-units-list">
+              {units.map((unit) => (
+                <div className="unit-entry" key={unit._id}>
+                  <h4>{unit.title}</h4>
+                  {unit.description && <p>{unit.description}</p>}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
