@@ -222,3 +222,37 @@
   color: #94a3b8;
   text-align: center;
 }
+
+.course-notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.note-entry {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: #1e293b;
+  text-decoration: none;
+}
+
+.note-entry:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.course-notes-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 30px 20px;
+  color: #94a3b8;
+  text-align: center;
+}

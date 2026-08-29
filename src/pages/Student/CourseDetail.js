@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { FaBookOpen, FaUsers, FaComments, FaPaperPlane } from "react-icons/fa";
+import { FaBookOpen, FaUsers, FaComments, FaPaperPlane, FaFileAlt } from "react-icons/fa";
 import courseService from "../../services/courseService";
 import discussionService from "../../services/discussionService";
 import unitService from "../../services/unitService";
+import noteService from "../../services/noteService";
 import { useAuth } from "../../context/AuthContext";
 import Skeleton from "../../components/common/Skeleton";
 import Toast from "../../components/common/Toast";
@@ -14,7 +15,7 @@ const TABS = [
   { key: "units", label: "Units", available: true },
   { key: "assignments", label: "Assignments", available: false },
   { key: "cats", label: "CATs", available: false },
-  { key: "notes", label: "Notes", available: false },
+  { key: "notes", label: "Notes", available: true },
 ];
 
 const CourseDetail = () => {
@@ -33,6 +34,8 @@ const CourseDetail = () => {
   const [posting, setPosting] = useState(false);
   const [units, setUnits] = useState([]);
   const [unitsLoading, setUnitsLoading] = useState(true);
+  const [notes, setNotes] = useState([]);
+  const [notesLoading, setNotesLoading] = useState(true);
 
   useEffect(() => {
     loadCourse();
@@ -44,6 +47,8 @@ const CourseDetail = () => {
       loadDiscussion();
     } else if (activeTab === "units") {
       loadUnits();
+    } else if (activeTab === "notes") {
+      loadNotes();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, courseId]);
@@ -81,6 +86,18 @@ const CourseDetail = () => {
       setToast({ show: true, type: "error", message: "Could not load units." });
     } finally {
       setUnitsLoading(false);
+    }
+  };
+
+  const loadNotes = async () => {
+    setNotesLoading(true);
+    try {
+      const res = await noteService.getNotesForCourse(courseId);
+      setNotes(res?.data ?? []);
+    } catch (error) {
+      setToast({ show: true, type: "error", message: "Could not load notes." });
+    } finally {
+      setNotesLoading(false);
     }
   };
 
@@ -221,6 +238,34 @@ const CourseDetail = () => {
                   <h4>{unit.title}</h4>
                   {unit.description && <p>{unit.description}</p>}
                 </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeTab === "notes" && (
+        <div className="course-notes">
+          {notesLoading ? (
+            <Skeleton variant="card" count={3} />
+          ) : notes.length === 0 ? (
+            <div className="course-notes-empty">
+              <FaFileAlt size={32} />
+              <p>No notes have been uploaded for this course yet.</p>
+            </div>
+          ) : (
+            <div className="course-notes-list">
+              {notes.map((note) => (
+                
+                  className="note-entry"
+                  key={note._id}
+                  href={note.fileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaFileAlt />
+                  <span>{note.title}</span>
+                </a>
               ))}
             </div>
           )}
