@@ -57,7 +57,7 @@ export const getAllExams = async () => {
  * Get Student Exams
  */
 export const getStudentExams = async () => {
-  const { data } = await api.get("/exams/student");
+  const { data } = await api.get("/exams");
   return data;
 };
 
@@ -130,7 +130,7 @@ export const gradeSubmission = async (
  * Student Results
  */
 export const getStudentResults = async () => {
-  const { data } = await api.get("/results/me");
+  const { data } = await api.get("/exams/results/me");
   return data;
 };
 
