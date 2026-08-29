@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { FaBookOpen, FaUsers, FaComments, FaPaperPlane, FaFileAlt } from "react-icons/fa";
+import { FaBookOpen, FaUsers, FaComments, FaPaperPlane, FaFileAlt, FaClipboardList } from "react-icons/fa";
 import courseService from "../../services/courseService";
 import discussionService from "../../services/discussionService";
 import unitService from "../../services/unitService";
 import noteService from "../../services/noteService";
+import catService from "../../services/catService";
 import { useAuth } from "../../context/AuthContext";
 import Skeleton from "../../components/common/Skeleton";
 import Toast from "../../components/common/Toast";
@@ -14,7 +15,7 @@ const TABS = [
   { key: "discussion", label: "Discussion", available: true },
   { key: "units", label: "Units", available: true },
   { key: "assignments", label: "Assignments", available: false },
-  { key: "cats", label: "CATs", available: false },
+  { key: "cats", label: "CATs", available: true },
   { key: "notes", label: "Notes", available: true },
 ];
 
@@ -36,6 +37,9 @@ const CourseDetail = () => {
   const [unitsLoading, setUnitsLoading] = useState(true);
   const [notes, setNotes] = useState([]);
   const [notesLoading, setNotesLoading] = useState(true);
+  const [cats, setCats] = useState([]);
+  const [catResults, setCatResults] = useState({});
+  const [catsLoading, setCatsLoading] = useState(true);
 
   useEffect(() => {
     loadCourse();
@@ -49,6 +53,8 @@ const CourseDetail = () => {
       loadUnits();
     } else if (activeTab === "notes") {
       loadNotes();
+    } else if (activeTab === "cats") {
+      loadCats();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, courseId]);
@@ -98,6 +104,31 @@ const CourseDetail = () => {
       setToast({ show: true, type: "error", message: "Could not load notes." });
     } finally {
       setNotesLoading(false);
+    }
+  };
+
+  const loadCats = async () => {
+    setCatsLoading(true);
+    try {
+      const res = await catService.getCatsForCourse(courseId);
+      const courseCats = res?.data ?? [];
+      setCats(courseCats);
+
+      const resultEntries = await Promise.all(
+        courseCats.map(async (cat) => {
+          try {
+            const resultRes = await catService.getMyResultForCat(cat._id);
+            return [cat._id, resultRes?.data ?? null];
+          } catch {
+            return [cat._id, null];
+          }
+        })
+      );
+      setCatResults(Object.fromEntries(resultEntries));
+    } catch (error) {
+      setToast({ show: true, type: "error", message: "Could not load CATs." });
+    } finally {
+      setCatsLoading(false);
     }
   };
 
@@ -268,6 +299,46 @@ const CourseDetail = () => {
                   <span>{note.title}</span>
                 </a>
               ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeTab === "cats" && (
+        <div className="course-cats">
+          {catsLoading ? (
+            <Skeleton variant="card" count={3} />
+          ) : cats.length === 0 ? (
+            <div className="course-cats-empty">
+              <FaClipboardList size={32} />
+              <p>No CATs scheduled for this course yet.</p>
+            </div>
+          ) : (
+            <div className="course-cats-list">
+              {cats.map((cat) => {
+                const result = catResults[cat._id];
+                return (
+                  <div className="cat-entry" key={cat._id}>
+                    <div className="cat-entry-header">
+                      <h4>{cat.title}</h4>
+                      {result ? (
+                        <span className="cat-score">
+                          {result.score} / {cat.maxScore}
+                        </span>
+                      ) : (
+                        <span className="cat-pending">Not graded yet</span>
+                      )}
+                    </div>
+                    {cat.date && (
+                      <span className="cat-meta">
+                        {new Date(cat.date).toLocaleDateString()}
+                      </span>
+                    )}
+                    {cat.venue && <span className="cat-meta">{cat.venue}</span>}
+                    {cat.coverage && <p className="cat-coverage">{cat.coverage}</p>}
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
