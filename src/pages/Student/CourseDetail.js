@@ -6,6 +6,7 @@ import discussionService from "../../services/discussionService";
 import unitService from "../../services/unitService";
 import noteService from "../../services/noteService";
 import catService from "../../services/catService";
+import assignmentService from "../../services/assignmentService";
 import { useAuth } from "../../context/AuthContext";
 import Skeleton from "../../components/common/Skeleton";
 import Toast from "../../components/common/Toast";
@@ -14,7 +15,7 @@ import "./CourseDetail.css";
 const TABS = [
   { key: "discussion", label: "Discussion", available: true },
   { key: "units", label: "Units", available: true },
-  { key: "assignments", label: "Assignments", available: false },
+  { key: "assignments", label: "Assignments", available: true },
   { key: "cats", label: "CATs", available: true },
   { key: "notes", label: "Notes", available: true },
 ];
@@ -40,6 +41,11 @@ const CourseDetail = () => {
   const [cats, setCats] = useState([]);
   const [catResults, setCatResults] = useState({});
   const [catsLoading, setCatsLoading] = useState(true);
+  const [assignments, setAssignments] = useState([]);
+  const [submissions, setSubmissions] = useState({});
+  const [assignmentsLoading, setAssignmentsLoading] = useState(true);
+  const [drafts, setDrafts] = useState({});
+  const [submittingId, setSubmittingId] = useState(null);
 
   useEffect(() => {
     loadCourse();
@@ -55,6 +61,8 @@ const CourseDetail = () => {
       loadNotes();
     } else if (activeTab === "cats") {
       loadCats();
+    } else if (activeTab === "assignments") {
+      loadAssignments();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, courseId]);
@@ -129,6 +137,47 @@ const CourseDetail = () => {
       setToast({ show: true, type: "error", message: "Could not load CATs." });
     } finally {
       setCatsLoading(false);
+    }
+  };
+
+  const loadAssignments = async () => {
+    setAssignmentsLoading(true);
+    try {
+      const res = await assignmentService.getAssignmentsForCourse(courseId);
+      const courseAssignments = res?.data ?? [];
+      setAssignments(courseAssignments);
+
+      const submissionEntries = await Promise.all(
+        courseAssignments.map(async (assignment) => {
+          try {
+            const subRes = await assignmentService.getMySubmission(assignment._id);
+            return [assignment._id, subRes?.data ?? null];
+          } catch {
+            return [assignment._id, null];
+          }
+        })
+      );
+      setSubmissions(Object.fromEntries(submissionEntries));
+    } catch (error) {
+      setToast({ show: true, type: "error", message: "Could not load assignments." });
+    } finally {
+      setAssignmentsLoading(false);
+    }
+  };
+
+  const handleSubmitAssignment = async (assignmentId) => {
+    const textAnswer = drafts[assignmentId]?.trim();
+    if (!textAnswer) return;
+
+    setSubmittingId(assignmentId);
+    try {
+      const res = await assignmentService.submitAssignment(assignmentId, textAnswer);
+      setSubmissions((prev) => ({ ...prev, [assignmentId]: res.data }));
+      setToast({ show: true, type: "success", message: "Submitted." });
+    } catch (error) {
+      setToast({ show: true, type: "error", message: "Could not submit." });
+    } finally {
+      setSubmittingId(null);
     }
   };
 
@@ -336,6 +385,79 @@ const CourseDetail = () => {
                     )}
                     {cat.venue && <span className="cat-meta">{cat.venue}</span>}
                     {cat.coverage && <p className="cat-coverage">{cat.coverage}</p>}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeTab === "assignments" && (
+        <div className="course-assignments">
+          {assignmentsLoading ? (
+            <Skeleton variant="card" count={3} />
+          ) : assignments.length === 0 ? (
+            <div className="course-assignments-empty">
+              <FaClipboardList size={32} />
+              <p>No assignments for this course yet.</p>
+            </div>
+          ) : (
+            <div className="course-assignments-list">
+              {assignments.map((assignment) => {
+                const submission = submissions[assignment._id];
+                const isSubmitting = submittingId === assignment._id;
+
+                return (
+                  <div className="assignment-entry" key={assignment._id}>
+                    <h4>{assignment.title}</h4>
+                    {assignment.instructions && (
+                      <p className="assignment-instructions">{assignment.instructions}</p>
+                    )}
+                    {assignment.dueDate && (
+                      <span className="assignment-meta">
+                        Due {new Date(assignment.dueDate).toLocaleDateString()}
+                      </span>
+                    )}
+
+                    {submission ? (
+                      <div className="assignment-submitted">
+                        <span className="assignment-submitted-tag">Submitted</span>
+                        <p>{submission.textAnswer}</p>
+                        <textarea
+                          className="assignment-resubmit-box"
+                          placeholder="Edit your answer to resubmit..."
+                          value={drafts[assignment._id] ?? ""}
+                          onChange={(e) =>
+                            setDrafts((prev) => ({ ...prev, [assignment._id]: e.target.value }))
+                          }
+                        />
+                        <button
+                          className="assignment-submit-btn"
+                          disabled={isSubmitting || !drafts[assignment._id]?.trim()}
+                          onClick={() => handleSubmitAssignment(assignment._id)}
+                        >
+                          {isSubmitting ? "Resubmitting..." : "Resubmit"}
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="assignment-composer">
+                        <textarea
+                          placeholder="Write your answer here..."
+                          value={drafts[assignment._id] ?? ""}
+                          onChange={(e) =>
+                            setDrafts((prev) => ({ ...prev, [assignment._id]: e.target.value }))
+                          }
+                        />
+                        <button
+                          className="assignment-submit-btn"
+                          disabled={isSubmitting || !drafts[assignment._id]?.trim()}
+                          onClick={() => handleSubmitAssignment(assignment._id)}
+                        >
+                          {isSubmitting ? "Submitting..." : "Submit"}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 );
               })}
