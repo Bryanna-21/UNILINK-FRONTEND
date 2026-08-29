@@ -257,6 +257,7 @@ const CourseDetail = () => {
             <div className="course-notes-list">
               {notes.map((note) => (
                 
+                <a
                   className="note-entry"
                   key={note._id}
                   href={note.fileUrl}
