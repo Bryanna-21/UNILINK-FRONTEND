@@ -38,13 +38,13 @@ const TakeExam = () => {
 
       const data = await getExamById(examId);
 
-      setExam(data);
+      setExam(data?.data);
 
-      setTimeRemaining(data.duration * 60);
+      setTimeRemaining(data?.data?.duration * 60);
 
       const initialAnswers = {};
 
-      data.questions.forEach((question) => {
+      data?.data?.questions.forEach((question) => {
 
         initialAnswers[question._id] = "";
 

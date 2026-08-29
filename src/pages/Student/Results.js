@@ -28,7 +28,7 @@ const Results = () => {
 
       const data = await getStudentResults();
 
-      setResults(data || []);
+      setResults(data?.data ?? []);
 
     } catch (error) {
 
