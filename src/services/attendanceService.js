@@ -1,378 +1,49 @@
 import api from "./api";
-
-
 /**
  * Attendance Service
  *
- * Handles:
- * - Student attendance records
- * - Lecturer attendance marking
- * - Attendance reports
- * - Attendance statistics
+ * Handles signing attendance for a course and viewing attendance
+ * records. Real backend routes are all nested under a course
+ * (courses/:courseId/attendance...) — no flat top-level /attendance
+ * endpoints exist despite an earlier version of this file assuming
+ * eight of them.
  */
-
-
 const attendanceService = {
-
-
-
-
   /**
-   * Get all attendance records
+   * Sign (mark) attendance for a course session
    */
-  getAttendance: async () => {
-
+  signAttendance: async (courseId) => {
     try {
-
-
-      const response = await api.get(
-
-        "/attendance"
-
-      );
-
-
+      const response = await api.post(`/courses/${courseId}/attendance`);
       return response.data;
-
-
-
-    } catch(error) {
-
-
-      console.error(
-        "Failed to fetch attendance:",
-        error
-      );
-
-
+    } catch (error) {
+      console.error("Failed to sign attendance:", error);
       throw error;
-
-
     }
-
   },
-
-
-
-
-
-
-
-
-
   /**
-   * Get current student's attendance
+   * Get the current student's own attendance record for a course
    */
-  getStudentAttendance: async () => {
-
+  getMyAttendanceForCourse: async (courseId) => {
     try {
-
-
-      const response = await api.get(
-
-        "/attendance/student"
-
-      );
-
-
+      const response = await api.get(`/courses/${courseId}/attendance/mine`);
       return response.data;
-
-
-
-    } catch(error) {
-
-
-      console.error(
-        "Failed to fetch student attendance:",
-        error
-      );
-
-
+    } catch (error) {
+      console.error("Failed to fetch attendance:", error);
       throw error;
-
-
     }
-
   },
-
-
-
-
-
-
-
-
-
   /**
-   * Get attendance by unit
+   * Get the full attendance record for a course (lecturer/admin view)
    */
-  getUnitAttendance: async (unitId) => {
-
+  getAttendanceForCourse: async (courseId) => {
     try {
-
-
-      const response = await api.get(
-
-        `/attendance/unit/${unitId}`
-
-      );
-
-
+      const response = await api.get(`/courses/${courseId}/attendance`);
       return response.data;
-
-
-
-    } catch(error) {
-
-
-      console.error(
-        "Failed to fetch unit attendance:",
-        error
-      );
-
-
+    } catch (error) {
+      console.error("Failed to fetch course attendance:", error);
       throw error;
-
-
     }
-
   },
-
-
-
-
-
-
-
-
-
-  /**
-   * Get lecturer attendance records
-   */
-  getLecturerAttendance: async () => {
-
-    try {
-
-
-      const response = await api.get(
-
-        "/attendance/lecturer"
-
-      );
-
-
-      return response.data;
-
-
-
-    } catch(error) {
-
-
-      console.error(
-        "Failed to fetch lecturer attendance:",
-        error
-      );
-
-
-      throw error;
-
-
-    }
-
-  },
-
-
-
-
-
-
-
-
-
-  /**
-   * Mark attendance
-   *
-   * Lecturer use
-   */
-  markAttendance: async (attendanceData) => {
-
-    try {
-
-
-      const response = await api.post(
-
-        "/attendance/mark",
-
-        attendanceData
-
-      );
-
-
-      return response.data;
-
-
-
-    } catch(error) {
-
-
-      console.error(
-        "Failed to mark attendance:",
-        error
-      );
-
-
-      throw error;
-
-
-    }
-
-  },
-
-
-
-
-
-
-
-
-
-  /**
-   * Update attendance record
-   */
-  updateAttendance: async (
-
-    attendanceId,
-
-    data
-
-  ) => {
-
-    try {
-
-
-      const response = await api.put(
-
-        `/attendance/${attendanceId}`,
-
-        data
-
-      );
-
-
-      return response.data;
-
-
-
-    } catch(error) {
-
-
-      console.error(
-        "Failed to update attendance:",
-        error
-      );
-
-
-      throw error;
-
-
-    }
-
-  },
-
-
-
-
-
-
-
-
-
-  /**
-   * Delete attendance record
-   */
-  deleteAttendance: async (
-
-    attendanceId
-
-  ) => {
-
-    try {
-
-
-      const response = await api.delete(
-
-        `/attendance/${attendanceId}`
-
-      );
-
-
-      return response.data;
-
-
-
-    } catch(error) {
-
-
-      console.error(
-        "Failed to delete attendance:",
-        error
-      );
-
-
-      throw error;
-
-
-    }
-
-  },
-
-
-
-
-
-
-
-
-
-  /**
-   * Get attendance statistics
-   */
-  getAttendanceStats: async () => {
-
-    try {
-
-
-      const response = await api.get(
-
-        "/attendance/statistics"
-
-      );
-
-
-      return response.data;
-
-
-
-    } catch(error) {
-
-
-      console.error(
-        "Failed to fetch attendance statistics:",
-        error
-      );
-
-
-      throw error;
-
-
-    }
-
-  }
-
-
-
 };
-
-
-
 export default attendanceService;
