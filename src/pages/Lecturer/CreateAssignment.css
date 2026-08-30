@@ -174,3 +174,53 @@
   }
 
 }
+
+.assignment-form-group select {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 15px;
+  background: white;
+}
+
+.created-assignments-section {
+  margin-top: 40px;
+  max-width: 750px;
+}
+
+.created-assignments-section h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.no-assignments-message {
+  color: #6b7280;
+}
+
+.created-assignments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.created-assignment-entry {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.created-assignment-title {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.created-assignment-course,
+.created-assignment-due {
+  font-size: 12px;
+  color: #6b7280;
+}

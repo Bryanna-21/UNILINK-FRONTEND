@@ -2,12 +2,11 @@ import api from "./api";
 /**
  * Assignment Service
  *
- * Handles browsing a course's assignments, viewing the current
- * student's own submission, and submitting/resubmitting. Submission
- * is text-only on the backend (textAnswer field) — no file upload
- * despite what an earlier version of this file assumed. Creating
- * assignments and grading submissions are lecturer/admin-only, so
- * no create/grade functions here.
+ * Handles browsing a course's assignments, submitting/resubmitting
+ * (student), and creating a new assignment (lecturer/admin only,
+ * enforced server-side). Submission is text-only on the backend
+ * (textAnswer field) — no file upload, despite what an earlier
+ * version of this file assumed for both submission and creation.
  */
 const assignmentService = {
   getAssignmentsForCourse: async (courseId) => {
@@ -34,6 +33,15 @@ const assignmentService = {
       return response.data;
     } catch (error) {
       console.error("Failed to submit assignment:", error);
+      throw error;
+    }
+  },
+  createAssignment: async (courseId, assignmentData) => {
+    try {
+      const response = await api.post(`/courses/${courseId}/assignments`, assignmentData);
+      return response.data;
+    } catch (error) {
+      console.error("Failed to create assignment:", error);
       throw error;
     }
   },
