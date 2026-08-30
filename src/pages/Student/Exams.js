@@ -242,7 +242,8 @@ const Exams = () => {
 
         <div className="empty-state">
 
-          <h2>No exams found.</h2>
+          <h2>No exams available yet</h2>
+          <p>Your lecturer hasn't published any exams for your courses yet. Check back later.</p>
 
         </div>
 
