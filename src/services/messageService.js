@@ -1,277 +1,80 @@
 import api from "./api";
 
+// Matches the actual backend surface in UNILINK-BACKEND's
+// message.controller.js / message.routes.js exactly. A previous
+// version of this file described a much larger, speculative API
+// (typing indicators, reactions, message editing, blocking, archive,
+// search) that was never built on the backend — none of those
+// functions worked, since the routes never existed. This rewrite only
+// includes endpoints that are real and have been curl-verified.
 const messageService = {
-  // ==========================================
-  // Conversations
-  // ==========================================
+  // ── Conversations ──────────────────────────────────────────────
 
-  async getConversations(page = 1, limit = 20) {
-    const response = await api.get("/messages/conversations", {
-      params: {
-        page,
-        limit,
-      },
+  // Returns every conversation (direct, course, or group) the current
+  // user is a participant in, sorted by most recent activity.
+  async getConversations() {
+    const { data } = await api.get("/messages");
+    return data;
+  },
+
+  // otherUserId -> find-or-create a direct conversation.
+  // courseId -> find-or-create a course conversation shell (does NOT
+  //   add the caller as a participant; call joinConversation after).
+  // title (alone) -> create a standalone discussion group (DOES add
+  //   the caller as the first participant/creator immediately).
+  async startConversation({ otherUserId, courseId, title } = {}) {
+    const { data } = await api.post("/messages/start", {
+      otherUserId,
+      courseId,
+      title,
     });
-
-    return response.data;
+    return data;
   },
 
-  async getConversation(conversationId) {
-    const response = await api.get(
-      `/messages/conversations/${conversationId}`
-    );
-
-    return response.data;
+  // Look up a course's conversation without requiring the caller
+  // already be a participant — used to show "Join Course Chat" vs
+  // "Open Chat" before the user has joined. Returns { data: null }
+  // if no course conversation has been created yet.
+  async getCourseConversation(courseId) {
+    const { data } = await api.get(`/messages/course/${courseId}`);
+    return data;
   },
 
-  async createConversation(data) {
-    const response = await api.post(
-      "/messages/conversations",
-      data
-    );
-
-    return response.data;
+  // Self-join. type "course" ONLY — will 400 if called on a group or
+  // direct conversation.
+  async joinConversation(conversationId) {
+    const { data } = await api.post(`/messages/${conversationId}/join`);
+    return data;
   },
 
-  async deleteConversation(conversationId) {
-    const response = await api.delete(
-      `/messages/conversations/${conversationId}`
-    );
-
-    return response.data;
+  // Add someone else to a standalone group. type "group" ONLY. Caller
+  // must already be a participant.
+  async addMember(conversationId, targetUserId) {
+    const { data } = await api.post(`/messages/${conversationId}/members`, {
+      targetUserId,
+    });
+    return data;
   },
 
-  // ==========================================
-  // Messages
-  // ==========================================
-
-  async getMessages(
-    conversationId,
-    page = 1,
-    limit = 50
-  ) {
-    const response = await api.get(
-      `/messages/conversations/${conversationId}`,
-      {
-        params: {
-          page,
-          limit,
-        },
-      }
-    );
-
-    return response.data;
+  // Voluntary leave. Valid for "course" and "group", NOT "direct".
+  async leaveConversation(conversationId) {
+    const { data } = await api.post(`/messages/${conversationId}/leave`);
+    return data;
   },
 
-  async sendMessage(conversationId, message) {
-    const response = await api.post(
-      `/messages/conversations/${conversationId}`,
-      message
-    );
+  // ── Messages ───────────────────────────────────────────────────
 
-    return response.data;
+  async getMessages(conversationId) {
+    const { data } = await api.get(`/messages/${conversationId}/messages`);
+    return data;
   },
 
-  async editMessage(messageId, data) {
-    const response = await api.put(
-      `/messages/${messageId}`,
-      data
-    );
-
-    return response.data;
+  async sendMessage(conversationId, text) {
+    const { data } = await api.post(`/messages/${conversationId}/messages`, {
+      text,
+    });
+    return data;
   },
-
-  async deleteMessage(messageId) {
-    const response = await api.delete(
-      `/messages/${messageId}`
-    );
-
-    return response.data;
-  },
-
-  // ==========================================
-  // Media
-  // ==========================================
-
-  async uploadMedia(formData) {
-    const response = await api.post(
-      "/messages/upload",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-
-    return response.data;
-  },
-
-  // ==========================================
-  // Read Receipts
-  // ==========================================
-
-  async markAsRead(conversationId) {
-    const response = await api.patch(
-      `/messages/conversations/${conversationId}/read`
-    );
-
-    return response.data;
-  },
-
-  async markDelivered(messageId) {
-    const response = await api.patch(
-      `/messages/${messageId}/delivered`
-    );
-
-    return response.data;
-  },
-
-  // ==========================================
-  // Reactions
-  // ==========================================
-
-  async reactToMessage(messageId, emoji) {
-    const response = await api.post(
-      `/messages/${messageId}/reaction`,
-      {
-        emoji,
-      }
-    );
-
-    return response.data;
-  },
-
-  async removeReaction(messageId) {
-    const response = await api.delete(
-      `/messages/${messageId}/reaction`
-    );
-
-    return response.data;
-  },
-
-  // ==========================================
-  // Search
-  // ==========================================
-
-  async searchMessages(query) {
-    const response = await api.get(
-      "/messages/search",
-      {
-        params: {
-          q: query,
-        },
-      }
-    );
-
-    return response.data;
-  },
-
-  // ==========================================
-  // Groups
-  // ==========================================
-
-  async createGroup(data) {
-    const response = await api.post(
-      "/messages/groups",
-      data
-    );
-
-    return response.data;
-  },
-
-  async updateGroup(groupId, data) {
-    const response = await api.put(
-      `/messages/groups/${groupId}`,
-      data
-    );
-
-    return response.data;
-  },
-
-  async joinGroup(groupId) {
-    const response = await api.post(
-      `/messages/groups/${groupId}/join`
-    );
-
-    return response.data;
-  },
-
-  async leaveGroup(groupId) {
-    const response = await api.post(
-      `/messages/groups/${groupId}/leave`
-    );
-
-    return response.data;
-  },
-
-  async deleteGroup(groupId) {
-    const response = await api.delete(
-      `/messages/groups/${groupId}`
-    );
-
-    return response.data;
-  },
-
-  // ==========================================
-  // Typing Indicator
-  // ==========================================
-
-  async typing(conversationId) {
-    const response = await api.post(
-      `/messages/conversations/${conversationId}/typing`
-    );
-
-    return response.data;
-  },
-
-  async stopTyping(conversationId) {
-    const response = await api.post(
-      `/messages/conversations/${conversationId}/stop-typing`
-    );
-
-    return response.data;
-  },
-
-  // ==========================================
-  // Archive
-  // ==========================================
-
-  async archiveConversation(conversationId) {
-    const response = await api.patch(
-      `/messages/conversations/${conversationId}/archive`
-    );
-
-    return response.data;
-  },
-
-  async unarchiveConversation(conversationId) {
-    const response = await api.patch(
-      `/messages/conversations/${conversationId}/unarchive`
-    );
-
-    return response.data;
-  },
-
-  // ==========================================
-  // Block User
-  // ==========================================
-
-  async blockUser(userId) {
-    const response = await api.post(
-      `/messages/block/${userId}`
-    );
-
-    return response.data;
-  },
-
-  async unblockUser(userId) {
-    const response = await api.delete(
-      `/messages/block/${userId}`
-    );
-
-    return response.data;
-  }
 };
 
 export default messageService;

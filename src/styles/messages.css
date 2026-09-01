@@ -1,0 +1,136 @@
+.messages-page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.messages-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  border-bottom: 1px solid #333;
+}
+
+.messages-tab {
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #999;
+  border-bottom: 2px solid transparent;
+}
+
+.messages-tab.active {
+  color: #fff;
+  border-bottom-color: #3b82f6;
+}
+
+.conversation-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  background: #1a1a1a;
+}
+
+.conversation-list-item:hover {
+  background: #232323;
+}
+
+.conversation-type-badge {
+  font-size: 0.75rem;
+  text-transform: capitalize;
+  color: #999;
+  background: #2a2a2a;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.conversation-list-empty {
+  color: #888;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.message-thread-page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  height: 85vh;
+}
+
+.thread-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.thread-messages {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.thread-message {
+  max-width: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+.thread-message.mine {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.thread-message.theirs {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+.message-sender {
+  font-size: 0.75rem;
+  color: #999;
+  margin-bottom: 0.15rem;
+}
+
+.message-bubble {
+  padding: 0.6rem 0.9rem;
+  border-radius: 12px;
+  background: #2a2a2a;
+}
+
+.thread-message.mine .message-bubble {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.thread-empty {
+  text-align: center;
+  color: #888;
+  margin-top: 2rem;
+}
+
+.thread-input {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.thread-input textarea {
+  flex: 1;
+  resize: none;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background: #1a1a1a;
+  color: #fff;
+}
