@@ -176,12 +176,12 @@ const UploadNotes = () => {
           <div className="file-upload">
             <label>
               <FaCloudUploadAlt />
-              Upload PDF / Image
+              Upload PDF, Image, or Word Document
             </label>
             <input
               type="file"
               name="file"
-              accept=".pdf,image/*"
+              accept=".pdf,image/*,.doc,.docx"
               onChange={handleChange}
               required
             />
