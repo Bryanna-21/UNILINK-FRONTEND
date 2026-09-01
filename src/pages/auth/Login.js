@@ -77,25 +77,26 @@ export default function Login() {
 
     toast.success("Welcome back!");
 
+    // Role-based home route is the source of truth. A `from` redirect
+    // (set by ProtectedRoute when an unauthenticated user hits a guarded
+    // URL) is only honored if it actually falls under that role's section
+    // of the app - otherwise a lecturer bounced from /admin/dashboard
+    // would get sent right back into a route their role can't access,
+    // producing a 403 that only "clears" on refresh once state settles
+    // against a route that's still wrong for them.
+    const roleHome = {
+      admin: "/admin/dashboard",
+      lecturer: "/lecturer/dashboard",
+      student: "/student/dashboard",
+    };
+
+    const homePath = roleHome[result.user.role] || "/student/dashboard";
+    const roleSection = homePath.split("/dashboard")[0]; // e.g. "/admin"
+
     const from = location.state?.from?.pathname;
+    const target = from && from.startsWith(roleSection) ? from : homePath;
 
-    if (from) {
-      navigate(from, { replace: true });
-      return;
-    }
-
-    switch (result.user.role) {
-      case "admin":
-        navigate("/admin/dashboard", { replace: true });
-        break;
-
-      case "lecturer":
-        navigate("/lecturer/dashboard", { replace: true });
-        break;
-
-      default:
-        navigate("/student/dashboard", { replace: true });
-    }
+    navigate(target, { replace: true });
   };
 
   return (
