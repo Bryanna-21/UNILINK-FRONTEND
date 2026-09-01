@@ -27,7 +27,7 @@ const ExamList = () => {
     try {
       setLoading(true);
       const data = await getLecturerExams();
-      setExams(data?.exams || data || []);
+      setExams(data?.data || []);
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Failed to load exams."
@@ -42,7 +42,7 @@ const ExamList = () => {
       const matchesSearch =
         !search ||
         exam.title?.toLowerCase().includes(search.toLowerCase()) ||
-        exam.course?.toLowerCase().includes(search.toLowerCase());
+        exam.courseId?.toLowerCase().includes(search.toLowerCase());
 
       const matchesStatus =
         status === "All" ||

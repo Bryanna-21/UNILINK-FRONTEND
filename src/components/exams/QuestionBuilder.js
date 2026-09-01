@@ -22,7 +22,7 @@ const QuestionBuilder = ({
           "",
           "",
         ],
-        answer: "",
+        correctAnswer: "",
       },
     ]);
   };

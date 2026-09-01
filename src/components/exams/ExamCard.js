@@ -58,7 +58,7 @@ const ExamCard = ({
 
           <h2>{exam.title}</h2>
 
-          <p>{exam.course}</p>
+          <p>{exam.courseId}</p>
 
         </div>
 
@@ -166,12 +166,14 @@ const ExamCard = ({
               Duplicate
             </button>
 
-            <button
-              className="btn btn-danger"
-              onClick={() => onDelete?.(exam._id)}
-            >
-              Delete
-            </button>
+            {exam.status === "Draft" && (
+              <button
+                className="btn btn-danger"
+                onClick={() => onDelete?.(exam._id)}
+              >
+                Delete
+              </button>
+            )}
           </>
         )}
 

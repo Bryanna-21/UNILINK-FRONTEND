@@ -31,6 +31,8 @@ import LecturerCourses from "../pages/Lecturer/Courses";
 import ExamList from "../pages/Lecturer/ExamList";
 import UploadNotes from "../pages/Lecturer/UploadNotes";
 import CreateExam from "../pages/Lecturer/CreateExam";
+import ViewExam from "../pages/Lecturer/ViewExam";
+import EditExam from "../pages/Lecturer/EditExam";
 import GradeSubmissions from "../pages/Lecturer/GradeSubmissions";
 import ViewSubmission from "../pages/Lecturer/ViewSubmission";
 import Analytics from "../pages/Lecturer/Analytics";
@@ -203,6 +205,22 @@ export default function AppRoutes() {
             element={
               <RoleGuard roles={["lecturer", "admin"]}>
                 <CreateExam />
+              </RoleGuard>
+            }
+          />
+          <Route
+            path="/lecturer/exams/:id"
+            element={
+              <RoleGuard roles={["lecturer", "admin"]}>
+                <ViewExam />
+              </RoleGuard>
+            }
+          />
+          <Route
+            path="/lecturer/exams/edit/:id"
+            element={
+              <RoleGuard roles={["lecturer", "admin"]}>
+                <EditExam />
               </RoleGuard>
             }
           />

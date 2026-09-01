@@ -13,6 +13,30 @@ const QuestionItem = ({
     });
   };
 
+  // Changing question type must also reset options/correctAnswer to
+  // match the new type's shape, or a question can end up in an
+  // inconsistent state — e.g. switching from mcq to truefalse while
+  // keeping four empty option blanks and a stale correctAnswer that
+  // no longer matches anything. Each type gets its own fresh, correct
+  // default shape here rather than inheriting whatever the previous
+  // type left behind.
+  const handleTypeChange = (newType) => {
+    let options = [];
+    if (newType === "mcq") {
+      options = ["", "", "", ""];
+    } else if (newType === "truefalse") {
+      options = ["True", "False"];
+    }
+    // essay/short: no options, no correctAnswer — always manually graded.
+
+    updateQuestion(index, {
+      ...question,
+      type: newType,
+      options,
+      correctAnswer: "",
+    });
+  };
+
   return (
     <div className="question-item">
 
@@ -47,7 +71,7 @@ const QuestionItem = ({
           className="form-control"
           value={question.type}
           onChange={(e) =>
-            handleChange("type", e.target.value)
+            handleTypeChange(e.target.value)
           }
         >
           <option value="mcq">
