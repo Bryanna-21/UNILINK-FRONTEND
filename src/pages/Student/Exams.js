@@ -59,7 +59,7 @@ const Exams = () => {
 
       const courseMatch =
 
-        exam.course
+        exam.courseId
           ?.toLowerCase()
           .includes(search.toLowerCase());
 

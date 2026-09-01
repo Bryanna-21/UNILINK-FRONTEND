@@ -523,7 +523,7 @@ answered
 
             <h2>{exam.title}</h2>
 
-            <p>{exam.course}</p>
+            <p>{exam.courseId}</p>
 
           </div>
 
