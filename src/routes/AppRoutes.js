@@ -50,7 +50,6 @@ import Events from "../pages/Events";
 import CreateEvent from "../pages/CreateEvent";
 import Messages from "../pages/Messages";
 import MessageThread from "../pages/MessageThread";
-import ChatRoom from "../pages/ChatRoom";
 import Notifications from "../pages/Notifications";
 import Profile from "../pages/Profile";
 import EditProfile from "../pages/EditProfile";
@@ -292,7 +291,6 @@ export default function AppRoutes() {
           <Route path="/events/create" element={<CreateEvent />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/messages/:conversationId" element={<MessageThread />} />
-          <Route path="/chat/:roomId" element={<ChatRoom />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/edit" element={<EditProfile />} />

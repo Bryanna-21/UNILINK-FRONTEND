@@ -24,7 +24,6 @@ const ROUTES = {
 
   MESSAGES: "/messages",
 
-  CHATROOM: "/chat/:roomId",
 
   NOTIFICATIONS: "/notifications",
 
