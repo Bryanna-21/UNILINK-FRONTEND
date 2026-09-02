@@ -1,152 +1,29 @@
 import api from "./api";
 
+// Matches the actual backend surface exactly. A previous version of
+// this file described a much larger, general-purpose notification
+// system (per-user preferences, push device registration, admin
+// broadcast-to-university/global, mark-all-as-read) that was never
+// built and, per Notification.js's own top-of-file comment, was never
+// intended to be — this is deliberately an ADMIN-ONLY, event-driven
+// system. Notifications are created server-side via
+// middleware/notifyAdmins.middleware.js when specific events occur
+// (a new emergency report, a new university registration) — there is
+// no client-facing "create notification" endpoint, and no
+// student/lecturer-facing notifications exist at all.
 const notificationService = {
-  // ==========================================
-  // Notifications
-  // ==========================================
-
-  async getNotifications(page = 1, limit = 20) {
-    const response = await api.get("/notifications", {
-      params: {
-        page,
-        limit,
-      },
-    });
-
-    return response.data;
+  // Returns this admin's own notifications (max 50, newest first)
+  // plus their current unread count.
+  async getNotifications() {
+    const { data } = await api.get("/admin/notifications");
+    return data;
   },
 
-  async getUnreadNotifications() {
-    const response = await api.get("/notifications/unread");
-    return response.data;
-  },
-
-  async getUnreadCount() {
-    const response = await api.get("/notifications/unread/count");
-    return response.data;
-  },
-
-  // ==========================================
-  // Read Status
-  // ==========================================
-
-  async markAsRead(notificationId) {
-    const response = await api.patch(
-      `/notifications/${notificationId}/read`
+  async markNotificationRead(notificationId) {
+    const { data } = await api.patch(
+      `/admin/notifications/${notificationId}/read`
     );
-
-    return response.data;
-  },
-
-  async markAllAsRead() {
-    const response = await api.patch(
-      "/notifications/read-all"
-    );
-
-    return response.data;
-  },
-
-  // ==========================================
-  // Delete
-  // ==========================================
-
-  async deleteNotification(notificationId) {
-    const response = await api.delete(
-      `/notifications/${notificationId}`
-    );
-
-    return response.data;
-  },
-
-  async clearNotifications() {
-    const response = await api.delete(
-      "/notifications"
-    );
-
-    return response.data;
-  },
-
-  // ==========================================
-  // Preferences
-  // ==========================================
-
-  async getPreferences() {
-    const response = await api.get(
-      "/notifications/preferences"
-    );
-
-    return response.data;
-  },
-
-  async updatePreferences(preferences) {
-    const response = await api.put(
-      "/notifications/preferences",
-      preferences
-    );
-
-    return response.data;
-  },
-
-  // ==========================================
-  // Push Notification Token
-  // ==========================================
-
-  async registerDevice(deviceToken) {
-    const response = await api.post(
-      "/notifications/device",
-      {
-        deviceToken,
-      }
-    );
-
-    return response.data;
-  },
-
-  async unregisterDevice(deviceToken) {
-    const response = await api.delete(
-      "/notifications/device",
-      {
-        data: {
-          deviceToken,
-        },
-      }
-    );
-
-    return response.data;
-  },
-
-  // ==========================================
-  // Admin
-  // ==========================================
-
-  async sendGlobalNotification(data) {
-    const response = await api.post(
-      "/admin/notifications/global",
-      data
-    );
-
-    return response.data;
-  },
-
-  async sendUniversityNotification(
-    universityId,
-    data
-  ) {
-    const response = await api.post(
-      `/admin/notifications/university/${universityId}`,
-      data
-    );
-
-    return response.data;
-  },
-
-  async sendEmergencyNotification(data) {
-    const response = await api.post(
-      "/admin/notifications/emergency",
-      data
-    );
-
-    return response.data;
+    return data;
   },
 };
 

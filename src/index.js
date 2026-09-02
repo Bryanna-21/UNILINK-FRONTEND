@@ -8,7 +8,6 @@ import ErrorBoundary from "./components/ErrorBoundary";
 
 import { AuthProvider } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
-import { NotificationProvider } from "./context/NotificationContext";
 
 import "./index.css";
 
@@ -19,12 +18,10 @@ root.render(
     <BrowserRouter>
       <ThemeProvider>
         <AuthProvider>
-          <NotificationProvider>
-            <ErrorBoundary>
-              <App />
-            </ErrorBoundary>
-            <Toast />
-          </NotificationProvider>
+          <ErrorBoundary>
+            <App />
+          </ErrorBoundary>
+          <Toast />
         </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>

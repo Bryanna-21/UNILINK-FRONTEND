@@ -291,7 +291,14 @@ export default function AppRoutes() {
           <Route path="/events/create" element={<CreateEvent />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/messages/:conversationId" element={<MessageThread />} />
-          <Route path="/notifications" element={<Notifications />} />
+          <Route
+            path="/notifications"
+            element={
+              <RoleGuard roles={["admin"]}>
+                <Notifications />
+              </RoleGuard>
+            }
+          />
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/edit" element={<EditProfile />} />
           <Route path="/search" element={<Search />} />
