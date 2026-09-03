@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { FaBookOpen, FaUsers, FaComments, FaPaperPlane, FaFileAlt, FaClipboardList } from "react-icons/fa";
 import courseService from "../../services/courseService";
 import discussionService from "../../services/discussionService";
@@ -7,6 +7,7 @@ import unitService from "../../services/unitService";
 import noteService from "../../services/noteService";
 import catService from "../../services/catService";
 import assignmentService from "../../services/assignmentService";
+import messageService from "../../services/messageService";
 import { useAuth } from "../../context/AuthContext";
 import Skeleton from "../../components/common/Skeleton";
 import Toast from "../../components/common/Toast";
@@ -23,6 +24,7 @@ const TABS = [
 const CourseDetail = () => {
   const { courseId } = useParams();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -47,8 +49,20 @@ const CourseDetail = () => {
   const [drafts, setDrafts] = useState({});
   const [submittingId, setSubmittingId] = useState(null);
 
+  // Course chat: null while loading, then either null (no course
+  // conversation has ever been created) or an object with
+  // isParticipant telling us whether THIS student has joined it yet.
+  // See messageService.js / message.controller.js's getCourseConversation
+  // - deliberately does not require the requester to already be a
+  // participant, since a student needs to discover the chat exists
+  // before they can join it (course chat is opt-in, not auto-joined).
+  const [courseChat, setCourseChat] = useState(null);
+  const [courseChatLoading, setCourseChatLoading] = useState(true);
+  const [courseChatActionLoading, setCourseChatActionLoading] = useState(false);
+
   useEffect(() => {
     loadCourse();
+    loadCourseChat();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseId]);
 
@@ -76,6 +90,20 @@ const CourseDetail = () => {
       setToast({ show: true, type: "error", message: "Could not load this course." });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadCourseChat = async () => {
+    setCourseChatLoading(true);
+    try {
+      const res = await messageService.getCourseConversation(courseId);
+      setCourseChat(res?.data ?? null);
+    } catch (error) {
+      // Non-fatal - the chat button just won't render correctly if
+      // this fails, but the rest of the page should still work.
+      setCourseChat(null);
+    } finally {
+      setCourseChatLoading(false);
     }
   };
 
@@ -214,6 +242,56 @@ const CourseDetail = () => {
     }
   };
 
+  // Three states, matching messageService.js's getCourseConversation
+  // shape:
+  //  - courseChat is null -> nobody has started this course's chat yet
+  //  - courseChat.isParticipant is false -> exists, this student hasn't joined
+  //  - courseChat.isParticipant is true -> exists and this student is in it
+  // Shown regardless of enrollment status - the backend enforces the
+  // enrollment check on start/join and returns a clear error if it fails.
+  const handleCourseChatAction = async () => {
+    setCourseChatActionLoading(true);
+    try {
+      if (!courseChat) {
+        // Nobody has created this course's conversation yet. Create
+        // it, then join immediately - a student clicking "Start
+        // Course Chat" clearly intends to be in it, unlike
+        // startConversation's general opt-in design where creating
+        // and joining are deliberately separate actions.
+        const startRes = await messageService.startConversation({ courseId });
+        const conversationId = startRes?.data?._id;
+        if (conversationId) {
+          await messageService.joinConversation(conversationId);
+          navigate(`/messages/${conversationId}`);
+        }
+        return;
+      }
+
+      if (!courseChat.isParticipant) {
+        await messageService.joinConversation(courseChat._id);
+        navigate(`/messages/${courseChat._id}`);
+        return;
+      }
+
+      navigate(`/messages/${courseChat._id}`);
+    } catch (error) {
+      setToast({
+        show: true,
+        type: "error",
+        message: error.response?.data?.message || "Could not open course chat.",
+      });
+    } finally {
+      setCourseChatActionLoading(false);
+    }
+  };
+
+  const courseChatButtonLabel = () => {
+    if (courseChatActionLoading) return "...";
+    if (!courseChat) return "Start Course Chat";
+    if (!courseChat.isParticipant) return "Join Course Chat";
+    return "Open Course Chat";
+  };
+
   if (loading) {
     return <Skeleton variant="card" count={1} />;
   }
@@ -241,13 +319,25 @@ const CourseDetail = () => {
           </span>
         </div>
 
-        {isEnrolled ? (
-          <span className="course-enrolled-tag">Enrolled</span>
-        ) : (
-          <button className="course-enroll-btn" onClick={handleEnroll} disabled={enrolling}>
-            {enrolling ? "Enrolling..." : "Enroll"}
-          </button>
-        )}
+        <div className="course-detail-header-actions">
+          {!courseChatLoading && (
+            <button
+              className="course-chat-btn"
+              onClick={handleCourseChatAction}
+              disabled={courseChatActionLoading}
+            >
+              <FaComments /> {courseChatButtonLabel()}
+            </button>
+          )}
+
+          {isEnrolled ? (
+            <span className="course-enrolled-tag">Enrolled</span>
+          ) : (
+            <button className="course-enroll-btn" onClick={handleEnroll} disabled={enrolling}>
+              {enrolling ? "Enrolling..." : "Enroll"}
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="course-detail-tabs">
@@ -336,6 +426,7 @@ const CourseDetail = () => {
           ) : (
             <div className="course-notes-list">
               {notes.map((note) => (
+
                 
                 <a
                   className="note-entry"
