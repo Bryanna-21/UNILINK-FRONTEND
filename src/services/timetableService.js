@@ -1,376 +1,66 @@
 import api from "./api";
 
-
-/**
- * Timetable Service
- *
- * Handles:
- * - Student timetable
- * - Lecturer timetable
- * - Class schedules
- * - Timetable management
- */
-
-
+// Matches the actual backend surface exactly, confirmed against
+// src/controllers/timetable.controller.js and src/routes/course.routes.js
+// (timetable endpoints are nested under /courses, not a standalone
+// /timetable prefix). A previous version of this file assumed a flat,
+// non-course-scoped model (getTimetable, getStudentTimetable, getByDay,
+// searchTimetable) with none of the real per-student override system —
+// none of those functions matched any real route.
+//
+// Every real endpoint is scoped to a specific course. There is no
+// "get my full timetable across all courses" endpoint — a student's
+// complete schedule is the union of getMyScheduleForCourse called once
+// per enrolled course, assembled client-side if/when that view is built.
 const timetableService = {
+  // ---------- Canonical timetable (lecturer/admin write, anyone read) ----------
 
-
-
-
-  /**
-   * Get complete timetable
-   */
-  getTimetable: async () => {
-
-    try {
-
-
-      const response = await api.get(
-        "/timetable"
-      );
-
-
-      return response.data;
-
-
-
-    } catch(error) {
-
-
-      console.error(
-        "Failed to fetch timetable:",
-        error
-      );
-
-
-      throw error;
-
-
-    }
-
+  getTimetableForCourse: async (courseId) => {
+    const { data } = await api.get(`/courses/${courseId}/timetable`);
+    return data;
   },
 
-
-
-
-
-
-
-
-
-  /**
-   * Get current student's timetable
-   */
-  getStudentTimetable: async () => {
-
-    try {
-
-
-      const response = await api.get(
-
-        "/timetable/student"
-
-      );
-
-
-      return response.data;
-
-
-
-    } catch(error) {
-
-
-      console.error(
-        "Failed to fetch student timetable:",
-        error
-      );
-
-
-      throw error;
-
-
-    }
-
+  // dayOfWeek, startTime, endTime required; location optional.
+  // Lecturer/admin only - backend enforces this.
+  createTimetableEntry: async (courseId, entryData) => {
+    const { data } = await api.post(`/courses/${courseId}/timetable`, entryData);
+    return data;
   },
 
-
-
-
-
-
-
-
-
-  /**
-   * Get lecturer timetable
-   */
-  getLecturerTimetable: async () => {
-
-    try {
-
-
-      const response = await api.get(
-
-        "/timetable/lecturer"
-
-      );
-
-
-      return response.data;
-
-
-
-    } catch(error) {
-
-
-      console.error(
-        "Failed to fetch lecturer timetable:",
-        error
-      );
-
-
-      throw error;
-
-
-    }
-
+  // Lecturer/admin only - backend enforces this.
+  deleteTimetableEntry: async (timetableId) => {
+    const { data } = await api.delete(`/courses/timetable/${timetableId}`);
+    return data;
   },
 
+  // ---------- Student's personal merged view ----------
 
-
-
-
-
-
-
-
-  /**
-   * Get timetable by day
-   */
-  getByDay: async (day) => {
-
-    try {
-
-
-      const response = await api.get(
-
-        `/timetable/day/${day}`
-
-      );
-
-
-      return response.data;
-
-
-
-    } catch(error) {
-
-
-      console.error(
-        "Failed to fetch daily timetable:",
-        error
-      );
-
-
-      throw error;
-
-
-    }
-
+  // Canonical entries for the course, with this student's own
+  // overrides swapped in. Each entry in the response carries
+  // isOverridden so the UI can visually distinguish a personalized
+  // slot from the default one.
+  getMyScheduleForCourse: async (courseId) => {
+    const { data } = await api.get(`/courses/${courseId}/timetable/mine`);
+    return data;
   },
 
-
-
-
-
-
-
-
-
-  /**
-   * Create timetable entry
-   *
-   * Admin use
-   */
-  createTimetableEntry: async (data) => {
-
-    try {
-
-
-      const response = await api.post(
-
-        "/timetable",
-
-        data
-
-      );
-
-
-      return response.data;
-
-
-
-    } catch(error) {
-
-
-      console.error(
-        "Failed to create timetable entry:",
-        error
-      );
-
-
-      throw error;
-
-
-    }
-
+  // Upsert - calling this again for the same timetableId updates the
+  // existing override rather than creating a duplicate.
+  setMyOverride: async (timetableId, overrideData) => {
+    const { data } = await api.put(
+      `/courses/timetable/${timetableId}/override`,
+      overrideData
+    );
+    return data;
   },
 
-
-
-
-
-
-
-
-
-  /**
-   * Update timetable entry
-   */
-  updateTimetableEntry: async (
-
-    timetableId,
-
-    data
-
-  ) => {
-
-    try {
-
-
-      const response = await api.put(
-
-        `/timetable/${timetableId}`,
-
-        data
-
-      );
-
-
-      return response.data;
-
-
-
-    } catch(error) {
-
-
-      console.error(
-        "Failed to update timetable:",
-        error
-      );
-
-
-      throw error;
-
-
-    }
-
+  // Reverts this student back to the canonical entry for this slot.
+  deleteMyOverride: async (timetableId) => {
+    const { data } = await api.delete(
+      `/courses/timetable/${timetableId}/override`
+    );
+    return data;
   },
-
-
-
-
-
-
-
-
-
-  /**
-   * Delete timetable entry
-   */
-  deleteTimetableEntry: async (
-
-    timetableId
-
-  ) => {
-
-    try {
-
-
-      const response = await api.delete(
-
-        `/timetable/${timetableId}`
-
-      );
-
-
-      return response.data;
-
-
-
-    } catch(error) {
-
-
-      console.error(
-        "Failed to delete timetable:",
-        error
-      );
-
-
-      throw error;
-
-
-    }
-
-  },
-
-
-
-
-
-
-
-
-
-  /**
-   * Search timetable
-   */
-  searchTimetable: async (query) => {
-
-    try {
-
-
-      const response = await api.get(
-
-        `/timetable/search?q=${query}`
-
-      );
-
-
-      return response.data;
-
-
-
-    } catch(error) {
-
-
-      console.error(
-        "Failed to search timetable:",
-        error
-      );
-
-
-      throw error;
-
-
-    }
-
-  }
-
-
-
 };
-
-
 
 export default timetableService;
