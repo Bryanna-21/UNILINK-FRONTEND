@@ -23,6 +23,7 @@ import Results from "../pages/Student/Results";
 import Timetable from "../pages/Student/Timetable";
 import MyReports from "../pages/Student/MyReports";
 import EmergencyReports from "../pages/Lecturer/EmergencyReports";
+import AiAssistant from "../pages/AiAssistant";
 import Notes from "../pages/Student/Notes";
 import Attendance from "../pages/Student/Attendance";
 import Units from "../pages/Student/Units";
@@ -149,6 +150,14 @@ export default function AppRoutes() {
             element={
               <RoleGuard roles={["student"]}>
                 <Timetable />
+              </RoleGuard>
+            }
+          />
+          <Route
+            path="/ai-assistant"
+            element={
+              <RoleGuard roles={["student", "lecturer"]}>
+                <AiAssistant />
               </RoleGuard>
             }
           />

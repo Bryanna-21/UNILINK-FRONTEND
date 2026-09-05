@@ -20,6 +20,7 @@ import {
   FaBullhorn,
   FaUpload,
   FaExclamationTriangle,
+  FaRobot,
 } from "react-icons/fa";
 
 export const navigation = {
@@ -33,6 +34,7 @@ export const navigation = {
     { title: "Attendance", path: "/student/attendance", icon: FaCheckCircle },
     { title: "Results", path: "/student/results", icon: FaChartBar },
     { title: "My Reports", path: "/student/my-reports", icon: FaExclamationTriangle },
+    { title: "AI Assistant", path: "/ai-assistant", icon: FaRobot },
     { title: "Feed", path: "/feed", icon: FaBookReader },
     { title: "Marketplace", path: "/marketplace", icon: FaStore },
     { title: "Lost & Found", path: "/lost-and-found", icon: FaSearchLocation },
@@ -50,6 +52,7 @@ export const navigation = {
     { title: "Exams", path: "/lecturer/exams", icon: FaClipboardList },
     { title: "Submissions", path: "/lecturer/submissions", icon: FaUserGraduate },
     { title: "Emergency Reports", path: "/lecturer/emergency-reports", icon: FaExclamationTriangle },
+    { title: "AI Assistant", path: "/ai-assistant", icon: FaRobot },
     { title: "Announcements", path: "/lecturer/announcements", icon: FaBullhorn },
     { title: "Analytics", path: "/lecturer/analytics", icon: FaChartBar },
     { title: "Messages", path: "/messages", icon: FaComments },
