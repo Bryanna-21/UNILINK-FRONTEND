@@ -1,192 +1,81 @@
 import api from "./api";
 
+// Matches the actual backend surface exactly (src/controllers/emergency.controller.js).
+// A previous version of this file used a plural /emergencies namespace
+// with a much larger, speculative feature set (live location tracking,
+// nearby responder dispatch, evidence upload, cancel/update) - none of
+// it real. The actual backend is singular /emergency, three roles
+// (student/lecturer/admin), with server-side authorization computed
+// from real relationships (Course.lecturerId, universityId) - see
+// message.controller.js's getAuthorizedReports for how visibility is
+// actually determined; it is never controlled by a client-supplied
+// filter param.
 const emergencyService = {
-  // ==========================================
-  // Emergency Requests
-  // ==========================================
-
-  async createEmergency(data) {
-    const response = await api.post("/emergencies", data);
-    return response.data;
-  },
-
-  async getMyEmergencies(page = 1, limit = 20) {
-    const response = await api.get("/emergencies/me", {
-      params: {
-        page,
-        limit,
-      },
+  // Student: file a report. courseId is optional - if supplied, the
+  // backend independently verifies real enrollment in that course
+  // before trusting it (a client can't just tag an arbitrary courseId
+  // to influence who sees the report).
+  async reportEmergency({ type, message, location, courseId }) {
+    const { data } = await api.post("/emergency/report", {
+      type,
+      message,
+      location,
+      courseId,
     });
-
-    return response.data;
+    return data;
   },
 
-  async getEmergency(emergencyId) {
-    const response = await api.get(
-      `/emergencies/${emergencyId}`
-    );
-
-    return response.data;
+  // Student: their own reports only, full detail (message visible).
+  async getMyReports() {
+    const { data } = await api.get("/emergency/my-reports");
+    return data;
   },
 
-  async updateEmergency(emergencyId, data) {
-    const response = await api.put(
-      `/emergencies/${emergencyId}`,
-      data
-    );
-
-    return response.data;
+  // Lecturer/admin: authorization-scoped list. Lecturer gets a
+  // stripped preview (no reporter identity); admin gets full detail.
+  // Restricted types (abuse) are server-side excluded from a
+  // lecturer's results entirely, not just hidden client-side.
+  async getAuthorizedReports() {
+    const { data } = await api.get("/emergency/reports");
+    return data;
   },
 
-  async cancelEmergency(emergencyId) {
-    const response = await api.delete(
-      `/emergencies/${emergencyId}`
-    );
-
-    return response.data;
+  // Lecturer/admin: first-touch action on a report they're authorized
+  // to see.
+  async acknowledgeReport(reportId) {
+    const { data } = await api.patch(`/emergency/reports/${reportId}/acknowledge`);
+    return data;
   },
 
-  // ==========================================
-  // Emergency Evidence
-  // ==========================================
-
-  async uploadEvidence(formData) {
-    const response = await api.post(
-      "/emergencies/upload",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-
-    return response.data;
+  // Lecturer/admin: add a staff-only internal note, never shown to
+  // the reporting student.
+  async respondToReport(reportId, note) {
+    const { data } = await api.post(`/emergency/reports/${reportId}/respond`, { note });
+    return data;
   },
 
-  // ==========================================
-  // Live Location
-  // ==========================================
-
-  async updateLocation(emergencyId, location) {
-    const response = await api.patch(
-      `/emergencies/${emergencyId}/location`,
-      location
-    );
-
-    return response.data;
+  // Lecturer/admin: hand off to admin. This is the highest action a
+  // lecturer can take - they cannot resolve or dismiss (enforced
+  // server-side, not just absent from the UI).
+  async escalateReport(reportId) {
+    const { data } = await api.patch(`/emergency/reports/${reportId}/escalate`);
+    return data;
   },
 
-  // ==========================================
-  // Responders
-  // ==========================================
-
-  async getNearbyResponders(latitude, longitude) {
-    const response = await api.get(
-      "/emergencies/responders",
-      {
-        params: {
-          latitude,
-          longitude,
-        },
-      }
-    );
-
-    return response.data;
+  // Admin only (enforced server-side).
+  async updateReportStatus(reportId, status) {
+    const { data } = await api.patch(`/emergency/reports/${reportId}/status`, { status });
+    return data;
   },
 
-  async dispatchResponder(emergencyId, responderId) {
-    const response = await api.post(
-      `/emergencies/${emergencyId}/dispatch`,
-      {
-        responderId,
-      }
-    );
-
-    return response.data;
+  async getContacts() {
+    const { data } = await api.get("/emergency/contacts");
+    return data;
   },
 
-  // ==========================================
-  // Status
-  // ==========================================
-
-  async acceptEmergency(emergencyId) {
-    const response = await api.patch(
-      `/emergencies/${emergencyId}/accept`
-    );
-
-    return response.data;
-  },
-
-  async arriveAtScene(emergencyId) {
-    const response = await api.patch(
-      `/emergencies/${emergencyId}/arrived`
-    );
-
-    return response.data;
-  },
-
-  async resolveEmergency(emergencyId) {
-    const response = await api.patch(
-      `/emergencies/${emergencyId}/resolved`
-    );
-
-    return response.data;
-  },
-
-  // ==========================================
-  // Emergency Contacts
-  // ==========================================
-
-  async getEmergencyContacts() {
-    const response = await api.get(
-      "/emergencies/contacts"
-    );
-
-    return response.data;
-  },
-
-  async addEmergencyContact(data) {
-    const response = await api.post(
-      "/emergencies/contacts",
-      data
-    );
-
-    return response.data;
-  },
-
-  async deleteEmergencyContact(contactId) {
-    const response = await api.delete(
-      `/emergencies/contacts/${contactId}`
-    );
-
-    return response.data;
-  },
-
-  // ==========================================
-  // Admin
-  // ==========================================
-
-  async getAllEmergencies(page = 1, limit = 20) {
-    const response = await api.get(
-      "/admin/emergencies",
-      {
-        params: {
-          page,
-          limit,
-        },
-      }
-    );
-
-    return response.data;
-  },
-
-  async getEmergencyStatistics() {
-    const response = await api.get(
-      "/admin/emergencies/statistics"
-    );
-
-    return response.data;
+  async requestHelp() {
+    const { data } = await api.post("/emergency/help");
+    return data;
   },
 };
 

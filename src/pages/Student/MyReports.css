@@ -1,0 +1,54 @@
+.my-reports-page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.my-reports-empty {
+  color: #888;
+  text-align: center;
+  padding: 2rem;
+}
+
+.report-card {
+  background: #1a1a1a;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.report-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.report-type {
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.report-status {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+.status-open { background: #7f1d1d; color: #fff; }
+.status-active { background: #78350f; color: #fff; }
+.status-escalated { background: #7c2d12; color: #fff; }
+.status-resolved { background: #14532d; color: #fff; }
+.status-dismissed { background: #374151; color: #fff; }
+
+.report-message {
+  margin: 0.5rem 0;
+}
+
+.report-location,
+.report-date {
+  font-size: 0.85rem;
+  color: #999;
+  margin: 0.15rem 0;
+}

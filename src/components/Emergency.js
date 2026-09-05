@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import API from "../services/api";
+import emergencyService from "../services/emergencyService";
 import {
   FaPhone,
   FaHospital,
   FaHeartbeat,
   FaSignOutAlt,
-  FaExclamationTriangle
+  FaExclamationTriangle,
+  FaUserShield,
 } from "react-icons/fa";
 
 export default function EmergencyMenu() {
@@ -17,19 +18,18 @@ export default function EmergencyMenu() {
     window.location.href = "/";
   };
 
-  // Load contacts from backend. NOTE: /api/emergency/contacts does not
-  // currently exist on the backend (only POST /api/emergency/report is
-  // implemented) - this call will fail every time until that route is
-  // built. contacts stays [] on any failure or unexpected response
-  // shape so this can never crash the render tree with
-  // "contacts.map is not a function" again, regardless of what (if
-  // anything) the backend eventually returns here.
+  // /emergency/contacts is real and has always existed - currently
+  // returns a fixed static list (no per-university contact
+  // management yet). contacts stays [] on any failure or unexpected
+  // response shape so this can never crash the render with
+  // "contacts.map is not a function", regardless of what the backend
+  // returns.
   const loadContacts = async () => {
     try {
-      const res = await API.get("/emergency/contacts");
-      setContacts(Array.isArray(res.data) ? res.data : []);
+      const res = await emergencyService.getContacts();
+      setContacts(Array.isArray(res?.data) ? res.data : []);
     } catch (err) {
-      console.warn("Failed to load emergency contacts (endpoint may not exist yet):", err.message);
+      console.warn("Failed to load emergency contacts:", err.message);
       setContacts([]);
     }
   };
@@ -38,47 +38,44 @@ export default function EmergencyMenu() {
     loadContacts();
   }, []);
 
-  // Send emergency report - this endpoint DOES exist on the backend.
-  const reportIssue = async () => {
-    const message = prompt("Describe the issue:");
+  // type must be one of the three the backend actually accepts
+  // (medical/safety/abuse) - see EmergencyReport.VALID_TYPES. A prior
+  // version of this sent type: "general", which the backend has never
+  // accepted; every report filed through this widget silently 400'd
+  // and only ever showed a generic failure alert.
+  const reportIssue = async (type) => {
+    const message = prompt("Describe what's happening:");
     if (!message) return;
 
     try {
-      await API.post("/emergency/report", {
-        type: "general",
-        message,
-        location: "unknown"
-      });
-      alert("Report sent.");
+      await emergencyService.reportEmergency({ type, message, location: "unknown" });
+      alert("Report sent. You can track its status under Emergency > My Reports.");
+      setOpen(false);
     } catch (err) {
       console.error("Failed to send emergency report:", err.message);
-      alert("Could not send the report right now. Please try again.");
+      alert(
+        err.response?.data?.message ||
+          "Could not send the report right now. Please try again."
+      );
     }
   };
 
-  // Request help. NOTE: /api/emergency/help does not currently exist
-  // on the backend either - this will fail until that route is built.
   const requestHelp = async () => {
     try {
-      await API.post("/emergency/help");
+      await emergencyService.requestHelp();
       alert("Help request sent.");
     } catch (err) {
-      console.warn("Failed to request help (endpoint may not exist yet):", err.message);
+      console.warn("Failed to request help:", err.message);
       alert("Help requests aren't available yet. Please contact emergency services directly if needed.");
     }
   };
 
   return (
     <>
-      {/* Floating Button */}
-      <div
-        onClick={() => setOpen(!open)}
-        style={fab}
-      >
+      <div onClick={() => setOpen(!open)} style={fab}>
         ⚠️
       </div>
 
-      {/* Menu */}
       {open && (
         <div style={menu}>
           <h4>Emergency Contacts</h4>
@@ -100,10 +97,24 @@ export default function EmergencyMenu() {
           <p style={item} onClick={requestHelp}>
             <FaHeartbeat /> Request Help
           </p>
+
           <hr />
-          <p style={item} onClick={reportIssue}>
-            <FaExclamationTriangle /> Report Issue
+
+          <p style={{ ...item, fontWeight: 600, cursor: "default" }}>
+            <FaExclamationTriangle /> Report an Issue
           </p>
+          <p style={{ ...item, paddingLeft: "28px" }} onClick={() => reportIssue("medical")}>
+            Medical
+          </p>
+          <p style={{ ...item, paddingLeft: "28px" }} onClick={() => reportIssue("safety")}>
+            Safety
+          </p>
+          <p style={{ ...item, paddingLeft: "28px" }} onClick={() => reportIssue("abuse")}>
+            <FaUserShield /> Abuse / Sensitive
+          </p>
+
+          <hr />
+
           <p style={item} onClick={logout}>
             <FaSignOutAlt /> Logout
           </p>
@@ -122,7 +133,7 @@ const fab = {
   padding: "16px",
   borderRadius: "50%",
   cursor: "pointer",
-  zIndex: 999
+  zIndex: 999,
 };
 
 const menu = {
@@ -134,7 +145,7 @@ const menu = {
   borderRadius: "10px",
   boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
   padding: "10px",
-  zIndex: 999
+  zIndex: 999,
 };
 
 const item = {
@@ -142,5 +153,5 @@ const item = {
   cursor: "pointer",
   display: "flex",
   gap: "10px",
-  alignItems: "center"
+  alignItems: "center",
 };

@@ -19,6 +19,7 @@ import {
   FaCheckCircle,
   FaBullhorn,
   FaUpload,
+  FaExclamationTriangle,
 } from "react-icons/fa";
 
 export const navigation = {
@@ -31,6 +32,7 @@ export const navigation = {
     { title: "Timetable", path: "/student/timetable", icon: FaCalendarAlt },
     { title: "Attendance", path: "/student/attendance", icon: FaCheckCircle },
     { title: "Results", path: "/student/results", icon: FaChartBar },
+    { title: "My Reports", path: "/student/my-reports", icon: FaExclamationTriangle },
     { title: "Feed", path: "/feed", icon: FaBookReader },
     { title: "Marketplace", path: "/marketplace", icon: FaStore },
     { title: "Lost & Found", path: "/lost-and-found", icon: FaSearchLocation },
@@ -39,7 +41,6 @@ export const navigation = {
     { title: "Polls", path: "/polls", icon: FaPoll },
     { title: "Clubs", path: "/clubs", icon: FaUsers },
     { title: "Messages", path: "/messages", icon: FaComments },
-    { title: "Notifications", path: "/notifications", icon: FaBell },
     { title: "Settings", path: "/settings", icon: FaCog },
   ],
   lecturer: [
@@ -48,15 +49,16 @@ export const navigation = {
     { title: "Upload Notes", path: "/lecturer/upload-notes", icon: FaUpload },
     { title: "Exams", path: "/lecturer/exams", icon: FaClipboardList },
     { title: "Submissions", path: "/lecturer/submissions", icon: FaUserGraduate },
+    { title: "Emergency Reports", path: "/lecturer/emergency-reports", icon: FaExclamationTriangle },
     { title: "Announcements", path: "/lecturer/announcements", icon: FaBullhorn },
     { title: "Analytics", path: "/lecturer/analytics", icon: FaChartBar },
     { title: "Messages", path: "/messages", icon: FaComments },
-    { title: "Notifications", path: "/notifications", icon: FaBell },
     { title: "Settings", path: "/settings", icon: FaCog },
   ],
   admin: [
     { title: "Dashboard", path: "/admin/dashboard", icon: FaHome },
     { title: "Users", path: "/admin/users", icon: FaUsers },
+    { title: "Notifications", path: "/notifications", icon: FaBell },
     { title: "Analytics", path: "/lecturer/analytics", icon: FaChartBar },
     { title: "Settings", path: "/settings", icon: FaCog },
   ],

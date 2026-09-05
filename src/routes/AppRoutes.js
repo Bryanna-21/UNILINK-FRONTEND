@@ -21,6 +21,8 @@ import Exams from "../pages/Student/Exams";
 import TakeExam from "../pages/Student/TakeExam";
 import Results from "../pages/Student/Results";
 import Timetable from "../pages/Student/Timetable";
+import MyReports from "../pages/Student/MyReports";
+import EmergencyReports from "../pages/Lecturer/EmergencyReports";
 import Notes from "../pages/Student/Notes";
 import Attendance from "../pages/Student/Attendance";
 import Units from "../pages/Student/Units";
@@ -147,6 +149,22 @@ export default function AppRoutes() {
             element={
               <RoleGuard roles={["student"]}>
                 <Timetable />
+              </RoleGuard>
+            }
+          />
+          <Route
+            path="/student/my-reports"
+            element={
+              <RoleGuard roles={["student"]}>
+                <MyReports />
+              </RoleGuard>
+            }
+          />
+          <Route
+            path="/lecturer/emergency-reports"
+            element={
+              <RoleGuard roles={["lecturer", "admin"]}>
+                <EmergencyReports />
               </RoleGuard>
             }
           />
