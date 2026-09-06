@@ -24,6 +24,7 @@ import Timetable from "../pages/Student/Timetable";
 import MyReports from "../pages/Student/MyReports";
 import EmergencyReports from "../pages/Lecturer/EmergencyReports";
 import AiAssistant from "../pages/AiAssistant";
+import MyNotifications from "../pages/MyNotifications";
 import Notes from "../pages/Student/Notes";
 import Attendance from "../pages/Student/Attendance";
 import Units from "../pages/Student/Units";
@@ -158,6 +159,14 @@ export default function AppRoutes() {
             element={
               <RoleGuard roles={["student", "lecturer"]}>
                 <AiAssistant />
+              </RoleGuard>
+            }
+          />
+          <Route
+            path="/notifications-me"
+            element={
+              <RoleGuard roles={["student", "lecturer"]}>
+                <MyNotifications />
               </RoleGuard>
             }
           />

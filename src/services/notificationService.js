@@ -9,8 +9,11 @@ import api from "./api";
 // system. Notifications are created server-side via
 // middleware/notifyAdmins.middleware.js when specific events occur
 // (a new emergency report, a new university registration) — there is
-// no client-facing "create notification" endpoint, and no
-// student/lecturer-facing notifications exist at all.
+// no client-facing "create notification" endpoint for this system.
+//
+// Student/lecturer notifications DO now exist as a separate system -
+// see userNotificationService.js, which hits the top-level
+// /api/notifications rather than this file's /api/admin/notifications.
 const notificationService = {
   // Returns this admin's own notifications (max 50, newest first)
   // plus their current unread count.
@@ -18,7 +21,6 @@ const notificationService = {
     const { data } = await api.get("/admin/notifications");
     return data;
   },
-
   async markNotificationRead(notificationId) {
     const { data } = await api.patch(
       `/admin/notifications/${notificationId}/read`
@@ -26,5 +28,4 @@ const notificationService = {
     return data;
   },
 };
-
 export default notificationService;

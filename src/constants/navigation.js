@@ -43,6 +43,7 @@ export const navigation = {
     { title: "Polls", path: "/polls", icon: FaPoll },
     { title: "Clubs", path: "/clubs", icon: FaUsers },
     { title: "Messages", path: "/messages", icon: FaComments },
+    { title: "Notifications", path: "/notifications-me", icon: FaBell },
     { title: "Settings", path: "/settings", icon: FaCog },
   ],
   lecturer: [
@@ -56,6 +57,7 @@ export const navigation = {
     { title: "Announcements", path: "/lecturer/announcements", icon: FaBullhorn },
     { title: "Analytics", path: "/lecturer/analytics", icon: FaChartBar },
     { title: "Messages", path: "/messages", icon: FaComments },
+    { title: "Notifications", path: "/notifications-me", icon: FaBell },
     { title: "Settings", path: "/settings", icon: FaCog },
   ],
   admin: [
