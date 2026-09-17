@@ -6,6 +6,8 @@ import {
   FaUserShield,
   FaSearch
 } from "react-icons/fa";
+import { toast } from "react-hot-toast";
+import { getUsers } from "../../services/adminService";
 import "./Users.css";
 
 
@@ -14,6 +16,8 @@ const Users = () => {
 
   const [users, setUsers] = useState([]);
 
+  const [loading, setLoading] = useState(true);
+
   const [search, setSearch] = useState("");
 
 
@@ -21,57 +25,31 @@ const Users = () => {
 
   useEffect(() => {
 
+    const loadUsers = async () => {
 
-    /*
-      Temporary frontend data.
+      try {
 
-      Replace later with:
-      adminService.getUsers()
-    */
+        setLoading(true);
 
+        const data = await getUsers();
 
-    const demoUsers = [
+        setUsers(data || []);
 
+      } catch (error) {
 
-      {
-        id:1,
-        name:"John Kamau",
-        email:"john@student.com",
-        role:"Student",
-        university:"Kenya Highlands University",
-        status:"Verified"
-      },
+        toast.error("Unable to load users.");
 
+      } finally {
 
-      {
-        id:2,
-        name:"Dr. Mary Wanjiku",
-        email:"mary@university.ac.ke",
-        role:"Lecturer",
-        university:"Kenya Highlands University",
-        status:"Verified"
-      },
+        setLoading(false);
 
-
-      {
-        id:3,
-        name:"Admin User",
-        email:"admin@unilink.com",
-        role:"Admin",
-        university:"System",
-        status:"Active"
       }
 
+    };
 
-    ];
-
-
-    setUsers(demoUsers);
-
+    loadUsers();
 
   }, []);
-
-
 
 
 
@@ -90,17 +68,21 @@ const Users = () => {
 
 
 
-
-
+  // Real values from the backend are lowercase ("student", "active",
+  // etc); displayed capitalized to match the design this page already
+  // had, without changing what's actually stored. Used for both role
+  // and status, hence the generic name.
+  const capitalize = (value) =>
+    value ? value.charAt(0).toUpperCase() + value.slice(1) : "Unknown";
 
   const getRoleIcon = (role)=>{
 
 
-    if(role==="Student")
+    if(role==="student")
       return <FaUserGraduate />;
 
 
-    if(role==="Lecturer")
+    if(role==="lecturer")
       return <FaChalkboardTeacher />;
 
 
@@ -220,7 +202,19 @@ const Users = () => {
 
               {
 
-                filteredUsers.map((user)=>(
+                loading ? (
+
+                  <tr>
+                    <td colSpan={4}>Loading users...</td>
+                  </tr>
+
+                ) : filteredUsers.length === 0 ? (
+
+                  <tr>
+                    <td colSpan={4}>No users found.</td>
+                  </tr>
+
+                ) : filteredUsers.map((user)=>(
 
 
                   <tr key={user.id}>
@@ -268,7 +262,7 @@ const Users = () => {
                         {getRoleIcon(user.role)}
 
 
-                        {user.role}
+                        {capitalize(user.role)}
 
 
                       </span>
@@ -283,7 +277,7 @@ const Users = () => {
 
                     <td>
 
-                      {user.university}
+                      {user.university || "—"}
 
                     </td>
 
@@ -298,7 +292,7 @@ const Users = () => {
                       <span className="status">
 
 
-                        {user.status}
+                        {capitalize(user.status)}
 
 
                       </span>
