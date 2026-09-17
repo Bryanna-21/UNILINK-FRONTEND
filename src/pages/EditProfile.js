@@ -9,7 +9,8 @@ export default function EditProfile() {
   // meaning a save without retyping the name would wipe it to "".
   const [form, setForm] = useState({
     name: user?.name || "",
-    bio: user?.bio || ""
+    bio: user?.bio || "",
+    phone: user?.phone || ""
   });
 
   const handleSubmit = async e => {
@@ -53,6 +54,17 @@ export default function EditProfile() {
             setForm({
               ...form,
               bio: e.target.value
+            })
+          }
+        />
+
+        <input
+          placeholder="Phone"
+          value={form.phone}
+          onChange={e =>
+            setForm({
+              ...form,
+              phone: e.target.value
             })
           }
         />
