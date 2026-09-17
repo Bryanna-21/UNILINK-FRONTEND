@@ -93,37 +93,59 @@ export const submitExam = async (examId, answers) => {
 
 /**
  * Get Submissions
+ *
+ * No examId param: GradeSubmissions.js calls this with no argument,
+ * expecting every submission across all of this lecturer's exams in
+ * one flat list, so that's what the route (and its backend handler)
+ * actually returns. Previously requested /exams/${examId}/submissions,
+ * a route that both never existed on the backend and never matched
+ * how this function is actually called from any page.
  */
-export const getExamSubmissions = async (examId) => {
-  const { data } = await api.get(`/exams/${examId}/submissions`);
-  return data;
+export const getExamSubmissions = async () => {
+  const { data } = await api.get(`/exams/submissions`);
+  return data.data;
 };
 
 /**
  * Get Single Submission
+ *
+ * .data.data, not .data: the backend wraps its response as
+ * {status, data: {...submission}}, but ViewSubmission.js reads the
+ * result as the submission object directly (data.answers, data.student,
+ * etc.) with no wrapper - unwrapping here, once, keeps that page
+ * correct without changing how it reads the response.
  */
 export const getExamSubmission = async (submissionId) => {
-  const { data } = await api.get(`/submissions/${submissionId}`);
-  return data;
+  const { data } = await api.get(`/exams/submissions/${submissionId}`);
+  return data.data;
 };
 
 /**
  * Grade Submission
+ *
+ * Second argument is one object ({marks, feedback, total}), matching
+ * how ViewSubmission.js actually calls this - the previous three-
+ * argument (submissionId, marks, feedback) signature silently
+ * received the whole object as `marks` and undefined as `feedback`
+ * every time this was called. `total` is accepted here for shape
+ * compatibility with the caller but not sent - the backend computes
+ * score itself from `marks` as the source of truth, since trusting a
+ * client-computed total would let a stale/tampered value overwrite a
+ * correctly-summed one.
  */
 export const gradeSubmission = async (
   submissionId,
-  marks,
-  feedback
+  { marks, feedback }
 ) => {
-  const { data } = await api.put(
-    `/submissions/${submissionId}/grade`,
+  const { data } = await api.post(
+    `/exams/submissions/${submissionId}/grade`,
     {
       marks,
       feedback,
     }
   );
 
-  return data;
+  return data.data;
 };
 
 /**
@@ -136,6 +158,13 @@ export const getStudentResults = async () => {
 
 /**
  * Single Result
+ *
+ * Not called from anywhere currently (confirmed: no page imports
+ * getResult) and there is no standalone GET /results/:id route on
+ * the backend - ExamResult is only ever read as part of a submission
+ * (see getExamSubmission above) or the student's own results list.
+ * Left pointing at a route that doesn't exist since nothing exercises
+ * this path; fix properly if something starts calling it.
  */
 export const getResult = async (resultId) => {
   const { data } = await api.get(`/results/${resultId}`);

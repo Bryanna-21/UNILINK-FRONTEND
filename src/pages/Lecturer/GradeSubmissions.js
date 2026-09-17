@@ -75,6 +75,14 @@ const GradeSubmissions = () => {
 
         ? true
 
+        // "Graded" isn't a stored status - ExamResult.status is only
+        // ever Pending/Passed/Failed. A graded submission is simply
+        // one that's no longer Pending, so match on that instead of
+        // a literal string that would never appear in the data.
+        : filter === "Graded"
+
+        ? submission.status === "Passed" || submission.status === "Failed"
+
         : submission.status === filter;
 
     return searchMatch && statusMatch;
@@ -89,19 +97,13 @@ const stats = {
 
   graded: submissions.filter(
 
-    (s) => s.status === "Graded"
+    (s) => s.status === "Passed" || s.status === "Failed"
 
   ).length,
 
   pending: submissions.filter(
 
     (s) => s.status === "Pending"
-
-  ).length,
-
-  reviewed: submissions.filter(
-
-    (s) => s.status === "Reviewed"
 
   ).length,
 
@@ -155,14 +157,6 @@ Review and grade student exam submissions.
 
 </div>
 
-<div className="stat-card">
-
-<h2>{stats.reviewed}</h2>
-
-<span>Reviewed</span>
-
-</div>
-
 </div>
 
 <div className="toolbar">
@@ -191,10 +185,6 @@ Pending
 
 <option value="Graded">
 Graded
-</option>
-
-<option value="Reviewed">
-Reviewed
 </option>
 
 </select>
