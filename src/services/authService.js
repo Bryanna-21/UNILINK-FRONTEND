@@ -84,14 +84,18 @@ const authService = {
   // ==========================
 
   async getCurrentUser() {
-    const response = await api.get("/users/me");
+    // Was /users/me — never existed on the backend. Real route is
+    // /auth/me. This function isn't currently called anywhere
+    // (AuthContext fetches user state itself), fixed for correctness
+    // in case something starts using it.
+    const response = await api.get("/auth/me");
 
     return response.data;
   },
 
   async updateProfile(data) {
     const response = await api.put(
-      "/users/me",
+      "/profile/me",
       data
     );
 

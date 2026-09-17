@@ -1,6 +1,9 @@
 import { useState } from "react";
 import API from "../services/api";
+import { useAuth } from "../context/AuthContext";
+
 export default function EditProfile() {
+  const { updateUser } = useAuth();
   const [form, setForm] = useState({
     name: "",
     bio: ""
@@ -10,11 +13,16 @@ export default function EditProfile() {
     e.preventDefault();
 
     try {
-      await API.put(
-        "/users/profile",
+      // Was PUT /users/profile — that route never existed on the
+      // backend. The real route is PUT /profile/me, which returns
+      // the updated user; push that into AuthContext too, or the
+      // cached user (and this page's next load) would stay stale.
+      const res = await API.put(
+        "/profile/me",
         form
       );
 
+      updateUser(res.data.data);
       alert("Profile Updated");
     } catch (err) {
       console.error(err);

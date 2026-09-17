@@ -1,20 +1,11 @@
-import { useEffect, useState } from "react";
-import API from "../services/api";
+import { useAuth } from "../context/AuthContext";
+
 export default function Profile() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    loadProfile();
-  }, []);
-
-  const loadProfile = async () => {
-    try {
-      const res = await API.get("/users/me");
-      setUser(res.data.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // AuthContext already holds the logged-in user (populated at login
+  // and rehydrated from localStorage on load) — no separate fetch
+  // needed. The previous version called GET /users/me, a route that
+  // was never actually built on the backend.
+  const { user } = useAuth();
 
   return (
     <>
