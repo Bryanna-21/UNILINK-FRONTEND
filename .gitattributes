@@ -1,0 +1,18 @@
+# Normalize line endings in the repository to LF, regardless of the
+# committer's local autocrlf setting. This is what was causing every
+# file in the repo to show as "modified" after any zip round-trip or
+# checkout on a machine with a different autocrlf config — Git saw
+# every line as changed even when only 1-2 real lines had.
+* text=auto eol=lf
+
+# Explicit, though `text=auto` above would already detect these —
+# spelled out so intent isn't left to Git's binary-detection heuristic.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary

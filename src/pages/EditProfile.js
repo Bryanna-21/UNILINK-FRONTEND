@@ -3,10 +3,13 @@ import API from "../services/api";
 import { useAuth } from "../context/AuthContext";
 
 export default function EditProfile() {
-  const { updateUser } = useAuth();
+  const { user, updateUser } = useAuth();
+  // Seeded from the cached user so the form opens with the current
+  // name/bio instead of blank — previously this always started empty,
+  // meaning a save without retyping the name would wipe it to "".
   const [form, setForm] = useState({
-    name: "",
-    bio: ""
+    name: user?.name || "",
+    bio: user?.bio || ""
   });
 
   const handleSubmit = async e => {
