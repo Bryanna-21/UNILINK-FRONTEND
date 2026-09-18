@@ -18,7 +18,9 @@ export const getDashboardStats = async () => {
   return data.data;
 };
 
-export default {
+const adminService = {
   getUsers,
   getDashboardStats,
 };
+
+export default adminService;
