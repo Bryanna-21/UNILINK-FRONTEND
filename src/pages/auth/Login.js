@@ -193,6 +193,22 @@ export default function Login() {
 
         </div>
 
+        <div className="login-footer" style={{ marginTop: 12 }}>
+
+          <span>On your phone?</span>
+
+          <Link to="/download">
+            Get the app
+          </Link>
+
+          <span>·</span>
+
+          <Link to="/privacy">
+            Privacy
+          </Link>
+
+        </div>
+
       </div>
 
     </div>

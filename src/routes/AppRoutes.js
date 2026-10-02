@@ -69,6 +69,8 @@ import Settings from "../pages/Settings";
 /* Error pages */
 import Unauthorized from "../pages/Errors/Unauthorized";
 import NotFound from "../pages/Errors/NotFound";
+import Download from "../pages/Download";
+import Privacy from "../pages/Privacy";
 
 export default function AppRoutes() {
   return (
@@ -351,6 +353,11 @@ export default function AppRoutes() {
       {/* ===== Misc ===== */}
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
+      {/* Public to everyone, signed in or not: deliberately NOT inside PublicRoute,
+          which would redirect signed-in users to their dashboard. */}
+      <Route path="/download" element={<Download />} />
+      <Route path="/privacy" element={<Privacy />} />
+
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

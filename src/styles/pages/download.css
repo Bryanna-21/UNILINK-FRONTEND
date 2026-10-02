@@ -1,0 +1,238 @@
+/* Public pages: /download and /privacy. Palette taken from the UniLink logo. */
+.dl-page {
+  --navy: #152356;
+  --blue: #1560c8;
+  --teal: #0fafb3;
+  --ink: #1e293b;
+  --muted: #64748b;
+  --line: #dbe2ea;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f5f9ff 0%, #eefaf9 100%);
+  color: var(--ink);
+  padding: 32px 20px 56px;
+  box-sizing: border-box;
+}
+
+.dl-wrap {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.dl-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  font-size: 14px;
+}
+
+.dl-nav a {
+  color: var(--blue);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.dl-nav a:hover {
+  text-decoration: underline;
+}
+
+.dl-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.dl-brand img {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+}
+
+.dl-brand span b {
+  color: var(--teal);
+}
+
+.dl-hero {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.dl-hero img {
+  width: 112px;
+  height: 112px;
+  border-radius: 26px;
+  box-shadow: 0 12px 30px rgba(21, 96, 200, 0.18);
+}
+
+.dl-hero h1 {
+  margin: 20px 0 8px;
+  font-size: 30px;
+  color: var(--navy);
+}
+
+.dl-hero p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+.dl-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 26px;
+  margin-bottom: 18px;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+}
+
+.dl-card h2 {
+  margin: 0 0 6px;
+  font-size: 19px;
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dl-card h2 svg {
+  color: var(--blue);
+}
+
+.dl-sub {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.dl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 15px 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  background: linear-gradient(90deg, var(--blue), var(--teal));
+  cursor: pointer;
+}
+
+.dl-btn:hover {
+  filter: brightness(1.06);
+}
+
+.dl-btn:focus-visible {
+  outline: 3px solid var(--navy);
+  outline-offset: 2px;
+}
+
+.dl-btn[disabled] {
+  background: #cbd5e1;
+  color: #475569;
+  cursor: not-allowed;
+  filter: none;
+}
+
+.dl-meta {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.dl-steps {
+  margin: 0;
+  padding-left: 22px;
+  line-height: 1.65;
+}
+
+.dl-steps li {
+  margin-bottom: 8px;
+}
+
+.dl-note {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: #f1f7ff;
+  border: 1px solid #cfe1fb;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.dl-hash {
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--muted);
+  word-break: break-all;
+}
+
+.dl-hash code {
+  display: block;
+  margin-top: 4px;
+  padding: 8px 10px;
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+}
+
+.dl-foot {
+  margin-top: 28px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.dl-foot a {
+  color: var(--blue);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Privacy policy typography */
+.legal h1 {
+  margin: 0 0 6px;
+  font-size: 30px;
+  color: var(--navy);
+}
+
+.legal .legal-date {
+  margin: 0 0 24px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.legal h2 {
+  margin: 28px 0 8px;
+  font-size: 19px;
+  color: var(--navy);
+}
+
+.legal p,
+.legal li {
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+.legal ul {
+  padding-left: 22px;
+  margin: 8px 0;
+}
+
+@media (max-width: 520px) {
+  .dl-hero h1 {
+    font-size: 25px;
+  }
+  .dl-card {
+    padding: 20px;
+  }
+}
