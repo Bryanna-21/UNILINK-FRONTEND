@@ -11,10 +11,12 @@ import "../styles/pages/download.css";
 // code change:
 //   REACT_APP_APK_URL      direct link to the APK (e.g. a GitHub Release asset)
 //   REACT_APP_APK_VERSION  shown to users, optional
+//   REACT_APP_APK_SIZE     shown to users (e.g. "125 MB"), optional
 //   REACT_APP_APK_SHA256   lets careful users verify the file, optional
 // With no URL set the button is disabled and says so: never a dead link.
 const APK_URL = process.env.REACT_APP_APK_URL || "";
 const APK_VERSION = process.env.REACT_APP_APK_VERSION || "";
+const APK_SIZE = process.env.REACT_APP_APK_SIZE || "";
 const APK_SHA256 = process.env.REACT_APP_APK_SHA256 || "";
 
 export default function Download() {
@@ -57,7 +59,12 @@ export default function Download() {
             </button>
           )}
 
-          {APK_VERSION && <div className="dl-meta">Version {APK_VERSION}</div>}
+          {(APK_VERSION || APK_SIZE) && (
+            <div className="dl-meta">
+              {[APK_VERSION && `Version ${APK_VERSION}`, APK_SIZE && `About ${APK_SIZE}`].filter(Boolean).join(" · ")}
+              {APK_SIZE ? " · best downloaded on Wi-Fi" : ""}
+            </div>
+          )}
 
           <h3 style={{ margin: "22px 0 8px", fontSize: 16 }}>How to install</h3>
           <ol className="dl-steps">
