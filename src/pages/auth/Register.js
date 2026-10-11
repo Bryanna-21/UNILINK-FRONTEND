@@ -14,7 +14,8 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [universities, setUniversities] = useState([]);
-  const [universitiesLoading, setUniversitiesLoading] = useState(true);
+  const [universitiesLoading, setUniversitiesLoading] = useState(false);
+  const [universityQuery, setUniversityQuery] = useState("");
   const [campuses, setCampuses] = useState([]);
   const [campusesLoading, setCampusesLoading] = useState(false);
   const [form, setForm] = useState({
@@ -27,33 +28,43 @@ export default function Register() {
   });
 
   useEffect(() => {
+    const query = universityQuery.trim();
     let cancelled = false;
 
-    const loadUniversities = async () => {
+    if (query.length < 2) {
+      setUniversities([]);
+      setUniversitiesLoading(false);
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    setUniversitiesLoading(true);
+    const timer = setTimeout(async () => {
       try {
-        const response = await api.get("/auth/universities");
-        const data = response.data?.data;
+        const response = await api.get("/auth/universities", {
+          params: { search: query },
+        });
 
         if (!cancelled) {
+          const data = response.data?.data;
           setUniversities(Array.isArray(data) ? data : []);
         }
       } catch {
         if (!cancelled) {
-          setError("Unable to load universities. Please refresh and try again.");
+          setUniversities([]);
+          setError("Unable to search universities. Please try again.");
         }
       } finally {
-        if (!cancelled) {
-          setUniversitiesLoading(false);
-        }
+        if (!cancelled) setUniversitiesLoading(false);
       }
-    };
-
-    loadUniversities();
+    }, 250);
 
     return () => {
       cancelled = true;
+      clearTimeout(timer);
     };
-  }, []);
+  }, [universityQuery]);
 
   useEffect(() => {
     let cancelled = false;
@@ -87,6 +98,33 @@ export default function Register() {
     loadCampuses();
     return () => { cancelled = true; };
   }, [form.universityId]);
+
+  const handleUniversityQueryChange = (e) => {
+    const value = e.target.value;
+    setUniversityQuery(value);
+    setUniversities([]);
+    setError("");
+    setForm((prev) => ({
+      ...prev,
+      universityId: "",
+      campusId: "",
+    }));
+    setCampuses([]);
+  };
+
+  const handleUniversitySelect = (university) => {
+    setUniversityQuery(
+      university.name +
+        (university.country ? ` (${university.country})` : "")
+    );
+    setUniversities([]);
+    setError("");
+    setForm((prev) => ({
+      ...prev,
+      universityId: university._id,
+      campusId: "",
+    }));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -183,28 +221,89 @@ export default function Register() {
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit}>
-          <select
-            name="universityId"
-            value={form.universityId}
-            onChange={handleChange}
-            className="input-field"
-            disabled={loading || universitiesLoading || universities.length === 0}
-            required
-          >
-            <option value="">
-              {universitiesLoading
-                ? "Loading universities..."
-                : universities.length === 0
-                  ? "No universities available"
-                  : "Select your university"}
-            </option>
-            {universities.map((university) => (
-              <option key={university._id} value={university._id}>
-                {university.name}
-                {university.country ? ` (${university.country})` : ""}
-              </option>
-            ))}
-          </select>
+          <div className="university-search">
+            <input
+              type="text"
+              name="universitySearch"
+              value={universityQuery}
+              onChange={handleUniversityQueryChange}
+              className="input-field"
+              placeholder="Type your university name"
+              autoComplete="off"
+              role="combobox"
+              aria-label="Search for your university"
+              aria-autocomplete="list"
+              aria-expanded={!form.universityId && universityQuery.trim().length >= 2}
+              aria-controls="university-search-results"
+              disabled={loading}
+              required={!form.universityId}
+            />
+
+            {!form.universityId && universityQuery.trim().length >= 0 && universityQuery.trim().length < 2 && (
+              <p className="university-search-hint">
+                Enter at least 2 characters to search.
+              </p>
+            )}
+
+            {!form.universityId && universityQuery.trim().length >= 2 && (
+              <div
+                id="university-search-results"
+                className="university-search-results"
+                role="listbox"
+              >
+                {universitiesLoading && (
+                  <div className="university-search-message">
+                    Searching universities...
+                  </div>
+                )}
+
+                {!universitiesLoading && universities.length === 0 && (
+                  <div className="university-search-message">
+                    No matching universities found.
+                  </div>
+                )}
+
+                {!universitiesLoading && universities.map((university) => (
+                  <button
+                    key={university._id}
+                    type="button"
+                    className="university-search-option"
+                    role="option"
+                    aria-selected="false"
+                    onClick={() => handleUniversitySelect(university)}
+                    disabled={loading}
+                  >
+                    <span>{university.name}</span>
+                    {university.country && (
+                      <span className="university-search-country">
+                        {university.country}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {form.universityId && (
+              <button
+                type="button"
+                className="university-search-change"
+                onClick={() => {
+                  setUniversityQuery("");
+                  setUniversities([]);
+                  setForm((prev) => ({
+                    ...prev,
+                    universityId: "",
+                    campusId: "",
+                  }));
+                  setCampuses([]);
+                }}
+                disabled={loading}
+              >
+                Change university
+              </button>
+            )}
+          </div>
 
           <select
             name="campusId"
@@ -276,7 +375,7 @@ export default function Register() {
           <button
             type="submit"
             className="auth-button"
-            disabled={loading || universitiesLoading || universities.length === 0 || campusesLoading || campuses.length === 0 || !form.universityId || !form.campusId}
+            disabled={loading || campusesLoading || campuses.length === 0 || !form.universityId || !form.campusId}
           >
             {loading ? "Registering..." : "Register"}
           </button>

@@ -104,3 +104,81 @@
     font-size: 24px;
   }
 }
+
+/* University typeahead used on the registration form */
+.university-search {
+  position: relative;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.university-search .input-field {
+  margin-bottom: 0;
+}
+
+.university-search-hint {
+  margin: 6px 2px 0;
+  color: #777;
+  font-size: 12px;
+}
+
+.university-search-results {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #d7dce2;
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.university-search-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+  padding: 11px 12px;
+  border: 0;
+  border-bottom: 1px solid #edf0f2;
+  background: #fff;
+  color: #222;
+  text-align: left;
+  cursor: pointer;
+}
+
+.university-search-option:last-child {
+  border-bottom: 0;
+}
+
+.university-search-option:hover,
+.university-search-option:focus-visible {
+  background: #f0f8f3;
+  outline: none;
+}
+
+.university-search-country {
+  color: #69727c;
+  font-size: 12px;
+}
+
+.university-search-message {
+  padding: 12px;
+  color: #69727c;
+  font-size: 14px;
+}
+
+.university-search-change {
+  margin-top: 7px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #087b43;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+}
