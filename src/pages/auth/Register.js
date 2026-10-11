@@ -140,10 +140,6 @@ export default function Register() {
       setError("Please select your university");
       return false;
     }
-    if (!form.campusId) {
-      setError("Please select your campus");
-      return false;
-    }
     if (!form.name.trim()) {
       setError("Please enter your name");
       return false;
@@ -311,7 +307,6 @@ export default function Register() {
             onChange={handleChange}
             className="input-field"
             disabled={!form.universityId || campusesLoading || campuses.length === 0 || loading}
-            required
           >
             <option value="">
               {!form.universityId
@@ -375,7 +370,7 @@ export default function Register() {
           <button
             type="submit"
             className="auth-button"
-            disabled={loading || campusesLoading || campuses.length === 0 || !form.universityId || !form.campusId}
+            disabled={loading || campusesLoading || !form.universityId}
           >
             {loading ? "Registering..." : "Register"}
           </button>
