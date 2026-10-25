@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { FaSignOutAlt, FaTimes } from "react-icons/fa";
 import { navigation } from "../../constants/navigation";
 import { useAuth } from "../../context/AuthContext";
@@ -27,7 +27,11 @@ export default function Sidebar({ isOpen, onClose }) {
         `}
       >
         <div className="h-20 flex items-center justify-between px-5 border-b border-slate-700">
-          <h1 className="text-2xl font-bold tracking-wide">UniLink</h1>
+          <h1 className="text-2xl font-bold tracking-wide">
+            <Link to="/" onClick={onClose} aria-label="UniLink home">
+              UniLink
+            </Link>
+          </h1>
           <button
             onClick={onClose}
             className="lg:hidden text-white hover:text-slate-300"

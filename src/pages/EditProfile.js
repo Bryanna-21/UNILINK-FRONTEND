@@ -1,6 +1,8 @@
 import { useState } from "react";
 import API from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import { notify } from "../utils/notify";
+import { getErrorMessage } from "../utils/errors";
 
 export default function EditProfile() {
   const { user, updateUser } = useAuth();
@@ -27,9 +29,10 @@ export default function EditProfile() {
       );
 
       updateUser(res.data.data);
-      alert("Profile Updated");
+      notify.success("Profile updated.");
     } catch (err) {
       console.error(err);
+      notify.error(getErrorMessage(err, "We couldn't save your profile."));
     }
   };
 
