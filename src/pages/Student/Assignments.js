@@ -1,270 +1,183 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FaClipboardList } from "react-icons/fa";
 
 import AssignmentCard from "../../components/academic/AssignmentCard";
-
 import SearchBar from "../../components/common/SearchBar";
 import Skeleton from "../../components/common/Skeleton";
 import Pagination from "../../components/common/Pagination";
-import Toast from "../../components/common/Toast";
+import StateMessage from "../../components/common/StateMessage";
 
-import { FaClipboardList } from "react-icons/fa";
+import courseService from "../../services/courseService";
+import assignmentService from "../../services/assignmentService";
+
+import { getErrorMessage } from "../../utils/errors";
+import { formatDate, unitLabel } from "../../utils/format";
 
 import "./Assignments.css";
 
-// import assignmentService from "../../services/assignmentService";
-
 const ITEMS_PER_PAGE = 6;
 
+// Assignments across the student's enrolled units, with the student's
+// own submission status. Sources: GET /courses, GET
+// /courses/:id/assignments and GET /courses/assignments/:id/my-submission.
+// Submitting happens inside the course page, which already has the form.
 const Assignments = () => {
+  const navigate = useNavigate();
 
   const [assignments, setAssignments] = useState([]);
-
-  const [filteredAssignments, setFilteredAssignments] = useState([]);
-
+  const [hasUnits, setHasUnits] = useState(true);
+  const [skipped, setSkipped] = useState(0);
   const [loading, setLoading] = useState(true);
-
+  const [error, setError] = useState("");
   const [search, setSearch] = useState("");
-
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [toast, setToast] = useState({
-    show: false,
-    type: "success",
-    message: "",
-  });
+  const load = useCallback(async () => {
+    setLoading(true);
+    setError("");
 
-  useEffect(() => {
-    fetchAssignments();
+    try {
+      const response = await courseService.getCourses();
+      const courses = Array.isArray(response?.data) ? response.data : [];
+
+      setHasUnits(courses.length > 0);
+
+      const perCourse = await Promise.allSettled(
+        courses.map((course) =>
+          assignmentService.getAssignmentsForCourse(course._id)
+        )
+      );
+
+      const flat = [];
+      let failed = 0;
+
+      perCourse.forEach((result, index) => {
+        if (result.status !== "fulfilled") {
+          failed += 1;
+          return;
+        }
+
+        const course = courses[index];
+        const items = Array.isArray(result.value?.data) ? result.value.data : [];
+
+        items.forEach((assignment) => flat.push({ assignment, course }));
+      });
+
+      const withSubmissions = await Promise.all(
+        flat.map(async ({ assignment, course }) => {
+          let submission = null;
+          let submissionKnown = true;
+
+          try {
+            const sub = await assignmentService.getMySubmission(assignment._id);
+            submission = sub?.data ?? null;
+          } catch (err) {
+            submissionKnown = false;
+          }
+
+          return { assignment, course, submission, submissionKnown };
+        })
+      );
+
+      const now = Date.now();
+
+      const rows = withSubmissions.map(
+        ({ assignment, course, submission, submissionKnown }) => {
+          const graded =
+            submission && submission.grade !== null && submission.grade !== undefined;
+          const due = assignment.dueDate ? new Date(assignment.dueDate) : null;
+
+          return {
+            id: assignment._id,
+            courseId: course._id,
+            title: assignment.title,
+            unit: unitLabel(course),
+            description: assignment.instructions,
+            deadline: formatDate(assignment.dueDate),
+            dueTime: due ? due.getTime() : null,
+            submitted: Boolean(submission),
+            submissionKnown,
+            status: graded ? "Graded" : submission ? "Submitted" : "Pending",
+            marks: graded ? submission.grade : undefined,
+            totalMarks: assignment.maxScore,
+            overdue: Boolean(!submission && due && due.getTime() < now),
+          };
+        }
+      );
+
+      rows.sort((a, b) => (a.dueTime ?? Infinity) - (b.dueTime ?? Infinity));
+
+      setAssignments(rows);
+      setSkipped(failed);
+    } catch (err) {
+      setAssignments([]);
+      setError(getErrorMessage(err, "We couldn't load your assignments."));
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
-    filterAssignments();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search, assignments]);
+    load();
+  }, [load]);
 
-  const fetchAssignments = async () => {
-
-    setLoading(true);
-
-    try {
-
-      /*
-      const response =
-        await assignmentService.getAssignments();
-
-      setAssignments(response.data);
-      setFilteredAssignments(response.data);
-      */
-
-      const demoAssignments = [
-
-        {
-          id: 1,
-          title: "Database Design Project",
-          unit: "CS202 - Database Management Systems",
-          description:
-            "Design a relational database system and submit documentation.",
-          createdBy: "Dr. Mary Wanjiku",
-          deadline: "15 July 2026",
-          status: "Pending",
-        },
-
-        {
-          id: 2,
-          title: "Algorithm Analysis Report",
-          unit: "CS201 - Data Structures and Algorithms",
-          description:
-            "Analyze different algorithms and compare performance.",
-          createdBy: "Dr. James Kariuki",
-          deadline: "20 July 2026",
-          status: "Completed",
-        },
-
-        {
-          id: 3,
-          title: "Software Requirements Document",
-          unit: "CS203 - Software Engineering",
-          description:
-            "Prepare system requirements documentation for a software project.",
-          createdBy: "Mr. Peter Otieno",
-          deadline: "25 July 2026",
-          status: "Pending",
-        },
-                {
-          id: 4,
-          title: "Operating Systems Lab",
-          unit: "CS301 - Operating Systems",
-          description:
-            "Implement process scheduling algorithms and submit the report.",
-          createdBy: "Mr. Samuel Kiptoo",
-          deadline: "30 July 2026",
-          status: "Pending",
-        },
-
-        {
-          id: 5,
-          title: "Computer Networks Practical",
-          unit: "CS305 - Computer Networks",
-          description:
-            "Configure network devices and submit screenshots with explanation.",
-          createdBy: "Dr. Alice Chebet",
-          deadline: "2 August 2026",
-          status: "Completed",
-        },
-
-        {
-          id: 6,
-          title: "Artificial Intelligence Research",
-          unit: "CS401 - Artificial Intelligence",
-          description:
-            "Write a research paper on machine learning applications.",
-          createdBy: "Prof. John Koech",
-          deadline: "10 August 2026",
-          status: "Pending",
-        },
-
-      ];
-
-      setAssignments(demoAssignments);
-      setFilteredAssignments(demoAssignments);
-
-    } catch (error) {
-
-      console.error(error);
-
-      setToast({
-        show: true,
-        type: "error",
-        message: "Unable to load assignments.",
-      });
-
-    } finally {
-
-      setLoading(false);
-
-    }
-  };
-
-  const filterAssignments = () => {
-
+  const filtered = useMemo(() => {
     const keyword = search.toLowerCase().trim();
+    if (!keyword) return assignments;
 
-    if (!keyword) {
-      setFilteredAssignments(assignments);
-      setCurrentPage(1);
-      return;
-    }
-
-    const filtered = assignments.filter((assignment) =>
-
-      assignment.title.toLowerCase().includes(keyword) ||
-
-      assignment.unit.toLowerCase().includes(keyword) ||
-
-      assignment.createdBy.toLowerCase().includes(keyword) ||
-
-      assignment.status.toLowerCase().includes(keyword)
-
+    return assignments.filter(
+      (item) =>
+        (item.title || "").toLowerCase().includes(keyword) ||
+        (item.unit || "").toLowerCase().includes(keyword) ||
+        item.status.toLowerCase().includes(keyword)
     );
+  }, [assignments, search]);
 
-    setFilteredAssignments(filtered);
-
+  useEffect(() => {
     setCurrentPage(1);
+  }, [search]);
 
-  };
-
-  const statistics = useMemo(() => {
-
-    const completed = filteredAssignments.filter(
-      (item) => item.status === "Completed"
-    ).length;
-
-    const pending = filteredAssignments.filter(
-      (item) => item.status === "Pending"
-    ).length;
-
-    return {
-      total: filteredAssignments.length,
-      completed,
-      pending,
-    };
-
-  }, [filteredAssignments]);
-
-  const totalPages = Math.ceil(
-    filteredAssignments.length / ITEMS_PER_PAGE
+  const statistics = useMemo(
+    () => ({
+      total: filtered.length,
+      pending: filtered.filter((item) => !item.submitted).length,
+      completed: filtered.filter((item) => item.submitted).length,
+    }),
+    [filtered]
   );
 
+  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
   const lastIndex = currentPage * ITEMS_PER_PAGE;
+  const current = filtered.slice(lastIndex - ITEMS_PER_PAGE, lastIndex);
 
-  const firstIndex = lastIndex - ITEMS_PER_PAGE;
-
-  const currentAssignments = filteredAssignments.slice(
-    firstIndex,
-    lastIndex
-  );
-    const handleAssignmentOpen = (assignment) => {
-
-    console.log("Opening assignment:", assignment);
-
-    /*
-      Later:
-
-      navigate(
-        `/student/assignments/${assignment.id}`
-      );
-
-    */
-
-  };
+  const openCourse = (item) => navigate(`/student/courses/${item.courseId}`);
 
   return (
-
     <div className="assignments-page">
-
-
       <main className="assignments-content">
-
         <div className="assignments-header">
-
           <div>
-
             <h1>Assignments</h1>
-
-            <p>
-              View assignments, deadlines and submission status.
-            </p>
-
+            <p>Assignments from your units, with your submission status.</p>
           </div>
 
           <div className="assignments-summary">
-
             <div className="summary-card">
-
               <h2>{statistics.total}</h2>
-
               <span>Total</span>
-
             </div>
 
             <div className="summary-card">
-
               <h2>{statistics.pending}</h2>
-
-              <span>Pending</span>
-
+              <span>Not submitted</span>
             </div>
 
             <div className="summary-card">
-
               <h2>{statistics.completed}</h2>
-
-              <span>Completed</span>
-
+              <span>Submitted</span>
             </div>
-
           </div>
-
         </div>
 
         <SearchBar
@@ -274,46 +187,63 @@ const Assignments = () => {
         />
 
         {loading ? (
-
-          <Skeleton
-            variant="card"
-            count={6}
+          <Skeleton variant="card" count={3} />
+        ) : error ? (
+          <StateMessage
+            kind="error"
+            title="Assignments unavailable"
+            text={error}
+            action={
+              <button type="button" className="list-btn" onClick={load}>
+                Try again
+              </button>
+            }
           />
-
-        ) : currentAssignments.length === 0 ? (
-
+        ) : !hasUnits ? (
+          <StateMessage
+            title="No units yet"
+            text="Add your units to see their assignments."
+            action={
+              <Link className="list-btn" to="/student/courses">
+                Go to my courses
+              </Link>
+            }
+          />
+        ) : current.length === 0 ? (
           <div className="empty-assignments">
-
             <FaClipboardList size={60} />
-
             <h3>No Assignments Found</h3>
-
             <p>
-              No assignment matches your search.
+              {search
+                ? "No assignment matches your search."
+                : "Your lecturers haven't set any assignments yet."}
             </p>
-
           </div>
-
         ) : (
-
           <>
+            {skipped > 0 && (
+              <p className="list-hint">
+                Assignments for {skipped} of your units could not be loaded.
+              </p>
+            )}
 
             <div className="assignments-grid">
-
-              {currentAssignments.map((assignment) => (
-
+              {current.map((item) => (
                 <AssignmentCard
-
-                  key={assignment.id}
-
-                  assignment={assignment}
-
-                  onClick={handleAssignmentOpen}
-
+                  key={item.id}
+                  title={item.title}
+                  unit={item.unit}
+                  description={item.description}
+                  deadline={item.deadline}
+                  submitted={item.submitted}
+                  submissionStatus={item.status}
+                  overdue={item.overdue}
+                  marks={item.marks}
+                  totalMarks={item.totalMarks}
+                  onView={() => openCourse(item)}
+                  onSubmit={() => openCourse(item)}
                 />
-
               ))}
-
             </div>
 
             <Pagination
@@ -321,29 +251,11 @@ const Assignments = () => {
               totalPages={totalPages}
               onPageChange={setCurrentPage}
             />
-
           </>
-
         )}
-
-        <Toast
-          show={toast.show}
-          type={toast.type}
-          message={toast.message}
-          onClose={() =>
-            setToast((prev) => ({
-              ...prev,
-              show: false,
-            }))
-          }
-        />
-
       </main>
-
     </div>
-
   );
-
 };
 
 export default Assignments;

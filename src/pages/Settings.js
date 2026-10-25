@@ -1,26 +1,35 @@
+import { Link } from "react-router-dom";
+
 import Card from "../components/common/Card";
 import "../styles/pages/settings.css";
 
-// NOTE for whoever fills in the real link: replace ANDROID_APK_URL
-// below with the actual GitHub Releases URL once one exists. Left as
-// an obvious placeholder rather than a guessed URL, since a wrong
-// link that looks real is worse than an honest "not set yet" state —
-// it would 404 silently and nobody would know until a user complained.
-const ANDROID_APK_URL = "REPLACE_WITH_GITHUB_RELEASES_URL";
-
-const androidLinkIsSet = ANDROID_APK_URL !== "REPLACE_WITH_GITHUB_RELEASES_URL";
+// The Android download link comes from the same environment variable
+// as the public Download page (REACT_APP_APK_URL), so publishing a new
+// APK is one Vercel setting, not a code change. With no link set the
+// button is disabled and says so plainly.
+const ANDROID_APK_URL = process.env.REACT_APP_APK_URL || "";
 
 export default function Settings() {
   return (
     <div className="settings-page">
       <h2>Settings</h2>
 
-      <Card title="Account Settings" subtitle="Profile settings will appear here.">
-        <p>Coming soon.</p>
+      <Card
+        title="Account"
+        subtitle="Update your name, bio and profile details."
+      >
+        <Link className="get-app-download-btn" to="/profile/edit">
+          Edit profile
+        </Link>
       </Card>
 
-      <Card title="Privacy" subtitle="Privacy settings will appear here.">
-        <p>Coming soon.</p>
+      <Card
+        title="Privacy"
+        subtitle="How UniLink collects and uses your information."
+      >
+        <Link className="get-app-download-btn" to="/privacy">
+          Read the privacy notice
+        </Link>
       </Card>
 
       <Card
@@ -31,15 +40,22 @@ export default function Settings() {
           <div className="get-app-platform">
             <div className="get-app-platform-name">
               Android
-              <span className="get-app-platform-status get-app-platform-status--available">
-                Available
+              <span
+                className={`get-app-platform-status ${
+                  ANDROID_APK_URL
+                    ? "get-app-platform-status--available"
+                    : "get-app-platform-status--unavailable"
+                }`}
+              >
+                {ANDROID_APK_URL ? "Available" : "Coming soon"}
               </span>
             </div>
+
             <p className="get-app-platform-note">
-              Download the APK directly — UniLink isn't on the Play Store yet.
+              Download the APK directly. UniLink isn't on the Play Store yet.
             </p>
 
-            {androidLinkIsSet ? (
+            {ANDROID_APK_URL ? (
               <a
                 className="get-app-download-btn"
                 href={ANDROID_APK_URL}
@@ -49,14 +65,9 @@ export default function Settings() {
                 Download for Android
               </a>
             ) : (
-              <>
-                <span className="get-app-download-btn get-app-download-btn--disabled">
-                  Download for Android
-                </span>
-                <p className="get-app-placeholder-note">
-                  Link not set yet — add the GitHub Releases URL in Settings.js.
-                </p>
-              </>
+              <span className="get-app-download-btn get-app-download-btn--disabled">
+                Download link coming soon
+              </span>
             )}
           </div>
 
@@ -67,9 +78,11 @@ export default function Settings() {
                 Not available yet
               </span>
             </div>
+
             <p className="get-app-platform-note">
-              An iOS build isn't published yet. Check back soon.
+              An iOS build isn't published yet.
             </p>
+
             <span className="get-app-download-btn get-app-download-btn--disabled">
               Download for iOS
             </span>

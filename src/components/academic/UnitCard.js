@@ -1,19 +1,17 @@
 import React from "react";
-import {
-  FaBook,
-  FaFileAlt,
-  FaClipboardList,
-  FaUsers,
-  FaArrowRight
-} from "react-icons/fa";
+import { FaBook, FaUsers, FaArrowRight } from "react-icons/fa";
 import "./UnitCard.css";
 
+// Only statistics that are really known are shown. The old card
+// printed "0 Notes" and "0 Assignments" whenever a count was missing,
+// which looked like real data.
 const UnitCard = ({ unit, onClick }) => {
   if (!unit) return null;
 
+  const hasMembers = typeof unit.members === "number";
+
   return (
     <div className="unit-card">
-
       <div className="unit-header">
         <div className="unit-icon">
           <FaBook />
@@ -21,60 +19,37 @@ const UnitCard = ({ unit, onClick }) => {
 
         <div className="unit-details">
           <h3>{unit.name || "Unnamed Unit"}</h3>
-          <span>
-            {unit.code || "No Unit Code"}
-          </span>
+          <span>{unit.code || "No Unit Code"}</span>
         </div>
       </div>
 
-
-      <div className="unit-description">
-        <p>
-          {unit.description ||
-            "Access notes, assignments, discussions, exams and learning resources for this unit."}
-        </p>
-      </div>
-
-
-      <div className="unit-statistics">
-
-        <div className="unit-stat">
-          <FaFileAlt />
-          <span>
-            {unit.notes || 0} Notes
-          </span>
+      {unit.description && (
+        <div className="unit-description">
+          <p>{unit.description}</p>
         </div>
+      )}
 
-
-        <div className="unit-stat">
-          <FaClipboardList />
-          <span>
-            {unit.assignments || 0} Assignments
-          </span>
+      {hasMembers && (
+        <div className="unit-statistics">
+          <div className="unit-stat">
+            <FaUsers />
+            <span>
+              {unit.members} {unit.members === 1 ? "Member" : "Members"}
+            </span>
+          </div>
         </div>
-
-
-        <div className="unit-stat">
-          <FaUsers />
-          <span>
-            {unit.members || 0} Members
-          </span>
-        </div>
-
-      </div>
-
+      )}
 
       <button
+        type="button"
         className="unit-button"
         onClick={() => onClick && onClick(unit)}
       >
         Open Unit
         <FaArrowRight />
       </button>
-
     </div>
   );
 };
-
 
 export default UnitCard;

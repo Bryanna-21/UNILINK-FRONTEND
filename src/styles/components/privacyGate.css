@@ -1,0 +1,74 @@
+.pn-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(10, 20, 40, 0.65);
+}
+
+.pn-gate-box {
+  width: 100%;
+  max-width: 460px;
+  padding: 24px;
+  border-radius: 14px;
+  background: #fff;
+  color: #1a2433;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.pn-gate-box h2 {
+  margin: 0 0 12px;
+  font-size: 20px;
+}
+
+.pn-gate-box p {
+  margin: 0 0 12px;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+.pn-gate-box a {
+  color: #0b63ce;
+  font-weight: 600;
+}
+
+.pn-gate-error {
+  color: #b42318;
+}
+
+.pn-gate-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.pn-gate-primary,
+.pn-gate-secondary {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pn-gate-primary {
+  background: #0b63ce;
+  color: #fff;
+}
+
+.pn-gate-secondary {
+  background: #fff;
+  color: #1a2433;
+  border-color: #c8d0dc;
+}
+
+.pn-gate-primary:disabled,
+.pn-gate-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

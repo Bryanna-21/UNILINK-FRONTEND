@@ -10,11 +10,11 @@ import api from "./api";
  */
 const attendanceService = {
   /**
-   * Sign (mark) attendance for a course session
+   * Sign (mark) attendance for a course session on a date (YYYY-MM-DD)
    */
-  signAttendance: async (courseId) => {
+  signAttendance: async (courseId, date) => {
     try {
-      const response = await api.post(`/courses/${courseId}/attendance`);
+      const response = await api.post(`/courses/${courseId}/attendance`, { date });
       return response.data;
     } catch (error) {
       console.error("Failed to sign attendance:", error);

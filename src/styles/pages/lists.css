@@ -1,0 +1,191 @@
+/* Shared styles for the pages that read real data: Communities, Events,
+   Search, Attendance, and the state messages used by the academic pages.
+   Uses the app's own tokens (src/styles/base/variables.css). Every row
+   wraps and every text block can shrink, so nothing forces a sideways
+   scroll at phone widths. */
+
+.list-page {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 4px 0 32px;
+}
+
+.list-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.list-page-header h2 {
+  margin: 0;
+  color: var(--text);
+}
+
+.list-page-header p {
+  margin: 4px 0 0;
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+.list-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.list-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.list-card-body {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+.list-card-body h3 {
+  margin: 0 0 4px;
+  color: var(--text);
+  font-size: 17px;
+  overflow-wrap: anywhere;
+}
+
+.list-card-body p {
+  margin: 0 0 4px;
+  color: var(--text-light);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.list-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-top: 6px;
+  color: var(--text-light);
+  font-size: 13px;
+}
+
+.list-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.list-btn {
+  flex: 0 0 auto;
+  min-height: 40px;
+  padding: 8px 18px;
+  border: 1px solid var(--primary);
+  border-radius: 10px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.list-btn:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+
+.list-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.list-btn--ghost {
+  background: transparent;
+  color: var(--primary);
+}
+
+.list-btn--ghost:hover:not(:disabled) {
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.list-input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+.list-hint {
+  margin: 8px 0 16px;
+  color: var(--text-light);
+  font-size: 13px;
+}
+
+.state-message {
+  padding: 28px 18px;
+  text-align: center;
+  color: var(--text-light);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.state-message h3 {
+  margin: 0 0 6px;
+  color: var(--text);
+  font-size: 17px;
+}
+
+.state-message p {
+  margin: 0 0 12px;
+  font-size: 14px;
+}
+
+.state-message--error {
+  border-color: var(--danger);
+}
+
+.state-message > :last-child {
+  margin-bottom: 0;
+}
+
+[data-theme="dark"] .list-card,
+[data-theme="dark"] .state-message,
+[data-theme="dark"] .list-input {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .list-page-header h2,
+[data-theme="dark"] .list-card-body h3,
+[data-theme="dark"] .state-message h3,
+[data-theme="dark"] .list-input {
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .list-card-body p,
+[data-theme="dark"] .list-page-header p,
+[data-theme="dark"] .list-card-meta,
+[data-theme="dark"] .list-hint,
+[data-theme="dark"] .state-message {
+  color: #94a3b8;
+}

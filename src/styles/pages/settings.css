@@ -16,7 +16,7 @@
 
 .get-app-platform {
   flex: 1;
-  min-width: 220px;
+  min-width: min(220px, 100%);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 16px;

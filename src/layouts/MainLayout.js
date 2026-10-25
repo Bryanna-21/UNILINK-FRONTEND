@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "../components/layout/Sidebar";
 import Topbar from "../components/layout/Topbar";
 import EmergencyMenu from "../components/Emergency";
+import PrivacyNoticeGate from "../components/PrivacyNoticeGate";
 import "../styles/layout/layout.css";
 
 export default function MainLayout() {
@@ -18,6 +19,7 @@ export default function MainLayout() {
         </div>
       </div>
       <EmergencyMenu />
+      <PrivacyNoticeGate />
     </div>
   );
 }

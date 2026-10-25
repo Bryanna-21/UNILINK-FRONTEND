@@ -376,6 +376,14 @@ export default function Register() {
           </button>
         </form>
 
+        <p className="auth-link" style={{ fontSize: 13 }}>
+          After you sign in you will be asked to confirm you have read our{" "}
+          <Link to="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: "#007bff", textDecoration: "none" }}>
+            Privacy Notice
+          </Link>
+          , which explains what we collect and why.
+        </p>
+
         <p className="auth-link">
           Already have an account?{" "}
           <Link to="/login" style={{ cursor: "pointer", color: "#007bff", textDecoration: "none" }}>

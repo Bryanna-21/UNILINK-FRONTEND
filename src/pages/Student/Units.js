@@ -1,161 +1,72 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+
 import UnitCard from "../../components/academic/UnitCard";
+import Skeleton from "../../components/common/Skeleton";
+import StateMessage from "../../components/common/StateMessage";
+import useMyCourses from "../../hooks/useMyCourses";
+
 import "./Units.css";
 
-
+// The units the student is enrolled in, straight from GET /courses.
 const Units = () => {
+  const navigate = useNavigate();
+  const { courses, loading, error, reload } = useMyCourses();
 
-  const [units, setUnits] = useState([]);
-
-
-
-  useEffect(() => {
-
-    /*
-      Temporary frontend data.
-      Replace with API integration later.
-    */
-
-    const demoUnits = [
-
-      {
-        id: 1,
-        name: "Data Structures and Algorithms",
-        code: "CS201",
-        description:
-          "Study data organization, algorithms, searching and optimization techniques.",
-        notes: 15,
-        assignments: 4,
-        members: 80
-      },
-
-
-      {
-        id: 2,
-        name: "Database Management Systems",
-        code: "CS202",
-        description:
-          "Learn database design, SQL, normalization and database administration.",
-        notes: 20,
-        assignments: 3,
-        members: 95
-      },
-
-
-      {
-        id: 3,
-        name: "Software Engineering",
-        code: "CS203",
-        description:
-          "Explore software development methodologies, testing and project management.",
-        notes: 18,
-        assignments: 5,
-        members: 100
-      }
-
-    ];
-
-
-    setUnits(demoUnits);
-
-
-  }, []);
-
-
-
-  const handleUnitOpen = (unit) => {
-
-    console.log(
-      "Opening unit:",
-      unit
-    );
-
-    /*
-      Later:
-
-      navigate(
-        `/student/units/${unit.id}`
-      )
-
-    */
-
-  };
-
-
+  const units = courses.map((course) => ({
+    id: course._id,
+    name: course.title,
+    code: course.code,
+    description: course.description,
+    members:
+      typeof course.enrolledCount === "number" ? course.enrolledCount : undefined,
+  }));
 
   return (
-
     <div className="units-page">
-
-
-
-
       <main className="units-content">
-
-
         <div className="units-header">
-
-          <h1>
-            My Units
-          </h1>
-
-
-          <p>
-            Access unit materials, assignments, discussions and academic resources.
-          </p>
-
+          <h1>My Units</h1>
+          <p>The units you are enrolled in.</p>
         </div>
 
-
-
-
-        <div className="units-grid">
-
-
-          {
-            units.length > 0 ?
-
-
-            units.map((unit) => (
-
+        {loading ? (
+          <Skeleton variant="card" count={3} />
+        ) : error ? (
+          <StateMessage
+            kind="error"
+            title="Units unavailable"
+            text={error}
+            action={
+              <button type="button" className="list-btn" onClick={reload}>
+                Try again
+              </button>
+            }
+          />
+        ) : units.length === 0 ? (
+          <StateMessage
+            title="You haven't added any units"
+            text="Pick your units to see their notes, assignments and discussions."
+            action={
+              <Link className="list-btn" to="/student/courses">
+                Go to my courses
+              </Link>
+            }
+          />
+        ) : (
+          <div className="units-grid">
+            {units.map((unit) => (
               <UnitCard
-
                 key={unit.id}
-
                 unit={unit}
-
-                onClick={handleUnitOpen}
-
+                onClick={(item) => navigate(`/student/courses/${item.id}`)}
               />
-
-            ))
-
-
-            :
-
-
-            <div className="empty-units">
-
-              No units available.
-
-            </div>
-
-
-          }
-
-
-        </div>
-
-
-
+            ))}
+          </div>
+        )}
       </main>
-
-
     </div>
-
   );
-
 };
-
 
 export default Units;
