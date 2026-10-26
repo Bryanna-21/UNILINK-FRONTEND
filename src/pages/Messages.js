@@ -7,6 +7,7 @@ import userService from "../services/userService";
 import { useAuth } from "../context/AuthContext";
 
 import "../styles/messages.css";
+import "../styles/pages/aiFab.css";
 
 const TABS = ["Messages", "Unread", "Communities", "Lecturers"];
 
@@ -125,6 +126,15 @@ const Messages = () => {
 
   return (
     <div className="messages-page">
+      <button
+        type="button"
+        className="ai-fab"
+        onClick={() => navigate("/ai-assistant")}
+        aria-label="Open UniLink AI"
+      >
+        AI
+      </button>
+
 
       <div className="messages-header">
         <h1>Messages</h1>

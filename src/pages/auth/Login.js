@@ -105,7 +105,11 @@ export default function Login() {
       <div className="login-card">
 
         <div className="login-logo">
-          <h1>UniLink</h1>
+          <h1>
+            <Link to="/" style={{ color: "inherit", textDecoration: "none" }}>
+              UniLink
+            </Link>
+          </h1>
           <p>University Management Platform</p>
         </div>
 

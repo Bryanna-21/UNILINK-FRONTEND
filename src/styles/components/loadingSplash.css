@@ -1,0 +1,106 @@
+.splash-root {
+  --splash-size: min(260px, 62vw);
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+}
+
+.splash-logo {
+  width: var(--splash-size);
+  height: var(--splash-size);
+  object-fit: contain;
+  animation: splash-breathe 2200ms ease-in-out infinite;
+}
+
+.splash-dots {
+  display: flex;
+  gap: 10px;
+  margin-top: calc(var(--splash-size) * 0.546);
+}
+
+.splash-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  opacity: 0.3;
+  animation-duration: 1080ms;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.splash-dots span:nth-child(1) { background: #1560c8; animation-name: splash-dot-1; }
+.splash-dots span:nth-child(2) { background: #152356; animation-name: splash-dot-2; }
+.splash-dots span:nth-child(3) { background: #0fafb3; animation-name: splash-dot-3; }
+
+.splash-brand {
+  position: absolute;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  opacity: 0;
+  animation: splash-brand-in 420ms ease-out 180ms forwards;
+}
+
+.splash-by {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.splash-exile {
+  color: #152356;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+@keyframes splash-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.94; }
+  50% { transform: scale(1.035); opacity: 1; }
+}
+
+/* Each dot runs 380 ms up and 380 ms down, staggered by 160 ms, inside
+   one 1080 ms loop, exactly as the app's Animated.stagger does. */
+@keyframes splash-dot-1 {
+  0% { opacity: 0.3; transform: scale(0.85); }
+  35.19% { opacity: 1; transform: scale(1); }
+  70.37%, 100% { opacity: 0.3; transform: scale(0.85); }
+}
+
+@keyframes splash-dot-2 {
+  0%, 14.81% { opacity: 0.3; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1); }
+  85.19%, 100% { opacity: 0.3; transform: scale(0.85); }
+}
+
+@keyframes splash-dot-3 {
+  0%, 29.63% { opacity: 0.3; transform: scale(0.85); }
+  64.81% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0.3; transform: scale(0.85); }
+}
+
+@keyframes splash-brand-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-logo,
+  .splash-dots span {
+    animation: none;
+  }
+
+  .splash-dots span {
+    opacity: 0.6;
+  }
+
+  .splash-brand {
+    animation: none;
+    opacity: 1;
+  }
+}

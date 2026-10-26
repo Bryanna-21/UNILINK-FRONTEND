@@ -28,6 +28,7 @@ import MyNotifications from "../pages/MyNotifications";
 import Notes from "../pages/Student/Notes";
 import Attendance from "../pages/Student/Attendance";
 import Units from "../pages/Student/Units";
+import AcademicsHub from "../pages/Student/AcademicsHub";
 
 /* Lecturer pages */
 import LecturerDashboard from "../pages/Lecturer/Dashboard";
@@ -201,6 +202,14 @@ export default function AppRoutes() {
             element={
               <RoleGuard roles={["student"]}>
                 <Attendance />
+              </RoleGuard>
+            }
+          />
+          <Route
+            path="/student/academics"
+            element={
+              <RoleGuard roles={["student"]}>
+                <AcademicsHub />
               </RoleGuard>
             }
           />

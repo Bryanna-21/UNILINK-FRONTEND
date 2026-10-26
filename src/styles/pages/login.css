@@ -8,7 +8,9 @@
 }
 
 .login-card{
-    width:420px;
+    width:100%;
+    max-width:420px;
+    box-sizing:border-box;
     background:#fff;
     padding:40px;
     border-radius:15px;
@@ -92,4 +94,14 @@
     color:#2563eb;
     margin-left:8px;
     font-weight:600;
+}
+
+@media (max-width: 480px){
+    .login-page{
+        padding:16px;
+    }
+
+    .login-card{
+        padding:28px 20px;
+    }
 }
