@@ -126,7 +126,7 @@ export default function EmergencyMenu() {
 
 const fab = {
   position: "fixed",
-  bottom: "20px",
+  bottom: "calc(20px + var(--bottom-tabs-height, 0px))",
   right: "20px",
   background: "red",
   color: "white",
@@ -138,7 +138,7 @@ const fab = {
 
 const menu = {
   position: "fixed",
-  bottom: "80px",
+  bottom: "calc(80px + var(--bottom-tabs-height, 0px))",
   right: "20px",
   width: "260px",
   background: "white",

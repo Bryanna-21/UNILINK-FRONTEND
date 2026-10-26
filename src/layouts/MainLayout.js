@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/layout/Sidebar";
 import Topbar from "../components/layout/Topbar";
+import PageTransition from "../components/layout/PageTransition";
+import AppFooter from "../components/layout/AppFooter";
 import EmergencyMenu from "../components/Emergency";
 import PrivacyNoticeGate from "../components/PrivacyNoticeGate";
 import "../styles/layout/layout.css";
@@ -15,7 +17,8 @@ export default function MainLayout() {
       <div className="main">
         <Topbar onMenuClick={() => setSidebarOpen(true)} />
         <div className="content">
-          <Outlet />
+          <PageTransition><Outlet /></PageTransition>
+          <AppFooter />
         </div>
       </div>
       <EmergencyMenu />

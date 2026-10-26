@@ -1,0 +1,28 @@
+/* Motion shared across the app, kept in step with the mobile app. */
+
+.page-enter {
+  animation: page-enter 220ms ease-out both;
+}
+
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* The AI assistant's "Thinking..." line pulses between 35% and 100%
+   opacity every 450 ms each way, like the app's typing indicator. */
+.ai-typing {
+  animation: ai-typing-pulse 900ms ease-in-out infinite;
+}
+
+@keyframes ai-typing-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter,
+  .ai-typing {
+    animation: none;
+  }
+}

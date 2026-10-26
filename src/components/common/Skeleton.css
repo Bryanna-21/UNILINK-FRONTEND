@@ -22,12 +22,23 @@
     rgba(255,255,255,0.6),
     transparent
   );
-  animation: skeleton-loading 1.3s infinite;
+  animation: skeleton-loading 1260ms ease-in-out infinite;
 }
 
+/* 1100 ms sweep then a 160 ms rest, as in the app's LoadingSkeleton. */
 @keyframes skeleton-loading {
+  0% {
+    left: -150%;
+  }
+  87.3%,
   100% {
     left: 150%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after {
+    animation: none;
   }
 }
 

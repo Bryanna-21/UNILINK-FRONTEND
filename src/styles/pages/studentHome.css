@@ -1,0 +1,194 @@
+/* Student Home and Academics hub. Mirrors the app's cards and sections. */
+
+.sh-page {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 4px 0 32px;
+}
+
+.sh-header h1 {
+  margin: 0 0 4px;
+  color: var(--text);
+  font-size: 26px;
+  overflow-wrap: anywhere;
+}
+
+.sh-header p {
+  margin: 0;
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+.sh-section {
+  margin-top: 26px;
+}
+
+.sh-section h2 {
+  margin: 0 0 12px;
+  color: var(--text);
+  font-size: 18px;
+}
+
+.sh-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.sh-section-head h2 {
+  margin: 0;
+}
+
+.sh-section-head a,
+.sh-link {
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.sh-link {
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.sh-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sh-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+  gap: 12px;
+}
+
+.sh-card,
+.sh-nav-card,
+.sh-empty {
+  display: block;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: var(--text);
+  box-sizing: border-box;
+}
+
+.sh-card h3 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  overflow-wrap: anywhere;
+}
+
+.sh-card p {
+  margin: 0 0 6px;
+  color: var(--text-light);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.sh-card--row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.sh-card--row h3 {
+  margin: 0;
+  flex: 1 1 180px;
+  min-width: 0;
+}
+
+.sh-nav-card strong {
+  display: block;
+  font-size: 16px;
+  overflow-wrap: anywhere;
+}
+
+.sh-nav-card span {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-light);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.sh-card--link,
+.sh-nav-card,
+.sh-empty--link {
+  transition: transform 160ms ease, box-shadow 160ms ease, opacity 120ms ease;
+}
+
+.sh-card--link:hover,
+.sh-nav-card:hover,
+.sh-empty--link:hover {
+  transform: translateY(-2px);
+}
+
+.sh-card--link:active,
+.sh-nav-card:active,
+.sh-empty--link:active {
+  opacity: 0.7;
+}
+
+.sh-meta {
+  color: var(--text-light);
+  font-size: 13px;
+}
+
+.sh-time {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.sh-empty {
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+[data-theme="dark"] .sh-card,
+[data-theme="dark"] .sh-nav-card,
+[data-theme="dark"] .sh-empty {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .sh-header h1,
+[data-theme="dark"] .sh-section h2 {
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .sh-header p,
+[data-theme="dark"] .sh-card p,
+[data-theme="dark"] .sh-nav-card span,
+[data-theme="dark"] .sh-meta,
+[data-theme="dark"] .sh-empty {
+  color: #94a3b8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sh-card--link,
+  .sh-nav-card,
+  .sh-empty--link {
+    transition: none;
+  }
+
+  .sh-card--link:hover,
+  .sh-nav-card:hover,
+  .sh-empty--link:hover {
+    transform: none;
+  }
+}

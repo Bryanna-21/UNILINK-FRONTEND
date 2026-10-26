@@ -90,7 +90,7 @@ export default function Topbar({ onMenuClick }) {
             <FaBell />
             {unread > 0 && (
               <span className="notification-badge">
-                {unread > 99 ? "99+" : unread}
+                {unread > 9 ? "9+" : unread}
               </span>
             )}
           </Link>
