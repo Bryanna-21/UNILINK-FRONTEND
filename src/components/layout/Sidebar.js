@@ -1,12 +1,14 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { FaSignOutAlt, FaTimes } from "react-icons/fa";
-import { navigation, studentMenu } from "../../constants/navigation";
+import { navigation, tabForPath } from "../../constants/navigation";
 import BottomTabs from "./BottomTabs";
 import { useAuth } from "../../context/AuthContext";
 
 export default function Sidebar({ isOpen, onClose }) {
   const { user, logout } = useAuth();
+  const { pathname } = useLocation();
   const menu = navigation[user?.role] || [];
+  const activeTab = user?.role === "student" ? tabForPath(pathname) : null;
 
   const renderLink = (item) => {
     const Icon = item.icon;
@@ -18,7 +20,9 @@ export default function Sidebar({ isOpen, onClose }) {
         onClick={onClose}
         className={({ isActive }) =>
           `flex items-center gap-4 px-4 py-3 rounded-xl mb-2 transition-all duration-200 ${
-            isActive ? "bg-blue-600 shadow-lg" : "hover:bg-slate-800"
+            (item.key ? activeTab === item.key : isActive)
+              ? "bg-blue-600 shadow-lg"
+              : "hover:bg-slate-800"
           }`
         }
       >
@@ -63,16 +67,7 @@ export default function Sidebar({ isOpen, onClose }) {
         </div>
 
         <div className="flex-1 overflow-y-auto px-3 py-5">
-          {user?.role === "student"
-            ? studentMenu.map((group) => (
-                <div key={group.key} className="mb-4">
-                  <p className="px-4 pb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
-                    {group.heading}
-                  </p>
-                  {group.items.map(renderLink)}
-                </div>
-              ))
-            : menu.map(renderLink)}
+          {menu.map(renderLink)}
         </div>
 
         <div className="border-t border-slate-700 p-4">

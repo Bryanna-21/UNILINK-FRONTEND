@@ -192,3 +192,118 @@
     transform: none;
   }
 }
+
+/* Academics / Campus Hub segmented control, as in the app */
+.sh-segments {
+  display: flex;
+  gap: 4px;
+  margin-top: 18px;
+  padding: 4px;
+  background: rgba(100, 116, 139, 0.14);
+  border-radius: 12px;
+}
+
+.sh-segment {
+  flex: 1 1 0;
+  min-height: 40px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text-light);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+.sh-segment--active {
+  background: var(--surface);
+  color: var(--primary);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+/* Me */
+.me-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.me-avatar {
+  flex: 0 0 auto;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.me-details {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.me-details h1 {
+  margin: 0 0 6px;
+  color: var(--text);
+  font-size: 22px;
+  overflow-wrap: anywhere;
+}
+
+.me-details p {
+  margin: 6px 0 0;
+  color: var(--text-light);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.me-menu {
+  margin-top: 18px;
+}
+
+.me-menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.me-menu-item span {
+  margin: 0;
+  font-size: 20px;
+}
+
+[data-theme="dark"] .me-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .me-details h1 {
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .me-details p,
+[data-theme="dark"] .sh-segment {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .sh-segment--active {
+  background: #1e293b;
+  color: #60a5fa;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sh-segment {
+    transition: none;
+  }
+}

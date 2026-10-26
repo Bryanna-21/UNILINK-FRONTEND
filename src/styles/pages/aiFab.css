@@ -1,0 +1,38 @@
+/* The app's floating "UniLink AI" button on Messages. It sits above the
+   emergency button, and above the phone tab bar when that is showing. */
+.ai-fab {
+  position: fixed;
+  right: 20px;
+  bottom: calc(92px + var(--bottom-tabs-height, 0px));
+  z-index: 900;
+  width: 52px;
+  height: 52px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--primary, #2563eb);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: transform 160ms ease, opacity 120ms ease;
+}
+
+.ai-fab:hover {
+  transform: translateY(-2px);
+}
+
+.ai-fab:active {
+  opacity: 0.7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-fab {
+    transition: none;
+  }
+
+  .ai-fab:hover {
+    transform: none;
+  }
+}
