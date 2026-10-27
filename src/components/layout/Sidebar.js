@@ -1,8 +1,12 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { FaSignOutAlt, FaTimes } from "react-icons/fa";
+import { FaMobileAlt, FaSignOutAlt, FaTimes } from "react-icons/fa";
 import { navigation, tabForPath } from "../../constants/navigation";
 import BottomTabs from "./BottomTabs";
 import { useAuth } from "../../context/AuthContext";
+
+// Every role gets the download page for the mobile app, set apart from the
+// role navigation.
+const APPS_ITEM = { title: "Apps", path: "/apps", icon: FaMobileAlt };
 
 export default function Sidebar({ isOpen, onClose }) {
   const { user, logout } = useAuth();
@@ -68,6 +72,10 @@ export default function Sidebar({ isOpen, onClose }) {
 
         <div className="flex-1 overflow-y-auto px-3 py-5">
           {menu.map(renderLink)}
+
+          <div className="mt-4 border-t border-slate-700 pt-4">
+            {renderLink(APPS_ITEM)}
+          </div>
         </div>
 
         <div className="border-t border-slate-700 p-4">

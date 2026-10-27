@@ -1,0 +1,69 @@
+.apps-page {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 4px 0 32px;
+}
+
+.apps-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.apps-header img {
+  width: 56px;
+  height: 56px;
+  flex: 0 0 auto;
+  border-radius: 14px;
+}
+
+.apps-header h1 {
+  margin: 0 0 2px;
+  color: var(--text);
+  font-size: 26px;
+}
+
+.apps-header p {
+  margin: 0;
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+.apps-foot {
+  margin-top: 18px;
+  color: var(--text-light);
+  font-size: 13px;
+}
+
+.apps-foot a {
+  color: var(--primary);
+}
+
+/* Secondary action under the download button */
+.dl-copy {
+  display: block;
+  margin-top: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--primary, #2563eb);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dl-copy:hover {
+  text-decoration: underline;
+}
+
+[data-theme="dark"] .apps-header h1 {
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .apps-header p,
+[data-theme="dark"] .apps-foot {
+  color: #94a3b8;
+}
