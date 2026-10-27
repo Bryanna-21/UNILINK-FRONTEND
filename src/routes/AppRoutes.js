@@ -66,6 +66,7 @@ import StudyGroups from "../pages/StudyGroups";
 import Polls from "../pages/Polls";
 import Clubs from "../pages/Clubs";
 import Settings from "../pages/Settings";
+import Apps from "../pages/Apps";
 
 /* Error pages */
 import Unauthorized from "../pages/Errors/Unauthorized";
@@ -356,6 +357,7 @@ export default function AppRoutes() {
           <Route path="/polls" element={<Polls />} />
           <Route path="/clubs" element={<Clubs />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/apps" element={<Apps />} />
         </Route>
       </Route>
 
