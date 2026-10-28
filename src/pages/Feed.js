@@ -22,6 +22,10 @@ const DEFAULT_MODE = "reels";
 const hasVideo = (post) =>
   Array.isArray(post.media) && post.media.some((item) => item.type === "video");
 
+// Chronicles holds what is written and shared as files: text posts, photos
+// and documents. Video posts live in Reels only, exactly as in the app.
+export const isChronicle = (post) => !hasVideo(post);
+
 export default function Feed() {
   const [posts, setPosts] = useState([]);
   const [mode, setMode] = useState(DEFAULT_MODE);
@@ -57,6 +61,7 @@ export default function Feed() {
   }, [mode]);
 
   const reels = useMemo(() => posts.filter(hasVideo), [posts]);
+  const chronicles = useMemo(() => posts.filter(isChronicle), [posts]);
 
   const patchPost = (id, patch) =>
     setPosts((prev) =>
@@ -157,12 +162,12 @@ export default function Feed() {
           onReshare={handleReshare}
           onComments={setCommentsFor}
         />
-      ) : posts.length === 0 ? (
-        <StateMessage title="No posts yet" text="Be the first to post! Tap + to share." />
+      ) : chronicles.length === 0 ? (
+        <StateMessage title="No chronicles yet" text="Be the first to share something! Tap + to post." />
       ) : (
         <div className="chronicles">
-          {posts.map((post) => (
-            <PostCard key={post._id} post={post} />
+          {chronicles.map((post) => (
+            <PostCard key={post._id} post={post} refresh={fetchFeed} />
           ))}
         </div>
       )}

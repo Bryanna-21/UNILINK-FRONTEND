@@ -48,7 +48,7 @@ export default function DownloadCards({ signedIn = false }) {
 
         {APK_URL ? (
           <>
-            <a className="dl-btn" href={APK_URL} rel="noopener noreferrer">
+            <a className="dl-btn dl-btn--glow" href={APK_URL} rel="noopener noreferrer">
               <FaDownload aria-hidden="true" /> Download for Android
             </a>
 

@@ -1,0 +1,90 @@
+/* A document posted to Campus > Chronicles (see DocumentItem in PostCard.js). */
+
+.post-doc {
+  grid-column: 1 / -1; /* span the whole media grid, not one small cell */
+  min-width: 0;
+  border: 1px solid #dbe2ea;
+  border-radius: 10px;
+  background: #f8fafc;
+  overflow: hidden;
+}
+
+.post-doc__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+}
+
+.post-doc__icon {
+  flex: 0 0 auto;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.post-doc__meta {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.post-doc__meta strong {
+  color: #1e293b;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.post-doc__meta span {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.post-doc__open {
+  flex: 0 0 auto;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: #1560c8;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.post-doc__open:hover {
+  background: #0f4fa8;
+}
+
+.post-doc__open:focus-visible,
+.post-doc__pages:focus-visible {
+  outline: 3px solid #152356;
+  outline-offset: 2px;
+}
+
+/* Pages sit side by side; swipe or scroll sideways to turn them. */
+.post-doc__pages {
+  display: flex;
+  gap: 8px;
+  padding: 0 12px 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.post-doc__pages img {
+  flex: 0 0 min(86%, 420px);
+  max-height: 460px;
+  object-fit: contain;
+  scroll-snap-align: start;
+  border: 1px solid #dbe2ea;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.post-doc__note {
+  margin: 0;
+  padding: 0 12px 12px;
+  color: #64748b;
+  font-size: 13px;
+}

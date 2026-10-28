@@ -2,16 +2,62 @@ import { useState } from "react";
 import API from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import "../styles/Postcard.css";
+import "../styles/postDocument.css";
 
-// Renders one attachment. Images/videos come from Cloudinary with a
-// real `type`; anything else (PDFs etc.) isn't supported by the
-// backend's media schema yet - see media.type enum in Post.js - so
-// there's nothing to render for that case today, only image/video.
+// A posted document (PDF or Word). The backend renders each page to an
+// image (media.pages), so the pages can be read right here by scrolling
+// sideways, like the app. Without page images (still preparing, or the
+// render failed) the card falls back to a plain "Open" link.
+function DocumentItem({ item }) {
+  const pages = Array.isArray(item.pages)
+    ? [...item.pages].sort((a, b) => a.page - b.page)
+    : [];
+  const name = item.originalName || "Document";
+  const count = item.pageCount || pages.length;
+
+  return (
+    <div className="post-doc">
+      <div className="post-doc__head">
+        <span className="post-doc__icon" aria-hidden="true">📄</span>
+
+        <div className="post-doc__meta">
+          <strong>{name}</strong>
+          {count > 0 && <span>{count === 1 ? "1 page" : `${count} pages`}</span>}
+        </div>
+
+        <a className="post-doc__open" href={item.url} target="_blank" rel="noopener noreferrer">
+          Open
+        </a>
+      </div>
+
+      {pages.length > 0 ? (
+        <div className="post-doc__pages" tabIndex={0} aria-label={`${name}, scroll sideways to read every page`}>
+          {pages.map((page) => (
+            <img
+              key={page.page}
+              src={page.url}
+              alt={`${name}, page ${page.page}`}
+              loading="lazy"
+            />
+          ))}
+        </div>
+      ) : item.processingStatus === "pending" ? (
+        <p className="post-doc__note">Preparing the pages. Use Open to read it now.</p>
+      ) : null}
+    </div>
+  );
+}
+
+// Renders one attachment: video, document or image (the backend's media.type).
 function MediaItem({ item }) {
   if (item.type === "video") {
     return (
       <video className="post-media" controls src={item.url} />
     );
+  }
+
+  if (item.type === "document") {
+    return <DocumentItem item={item} />;
   }
 
   return (
@@ -34,7 +80,7 @@ export default function PostCard({ post, refresh }) {
       try {
         setLoading(true);
         await API.delete(`/posts/${post.id || post._id}`);
-        refresh();
+        if (typeof refresh === "function") refresh();
       } catch (err) {
         console.error("Error deleting post:", err);
         setError(err.response?.data?.message || "Failed to delete post");
