@@ -1,4 +1,5 @@
-/* A document posted to Campus > Chronicles (see DocumentItem in PostCard.js). */
+/* A document posted to Campus > Chronicles (see DocumentItem in PostCard.js
+   and DocumentPager.js). */
 
 .post-doc {
   grid-column: 1 / -1; /* span the whole media grid, not one small cell */
@@ -57,34 +58,128 @@
 }
 
 .post-doc__open:focus-visible,
-.post-doc__pages:focus-visible {
+.doc-pager__track:focus-visible,
+.doc-pager__nav:focus-visible {
   outline: 3px solid #152356;
   outline-offset: 2px;
 }
 
-/* Pages sit side by side; swipe or scroll sideways to turn them. */
-.post-doc__pages {
-  display: flex;
-  gap: 8px;
+.post-doc__note {
+  margin: 0;
+  padding: 2px 12px 14px;
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ---- The page-by-page reader ---- */
+
+.doc-pager {
   padding: 0 12px 12px;
+}
+
+.doc-pager__viewport {
+  position: relative;
+  border: 1px solid #dbe2ea;
+  border-radius: 8px;
+  background: #e9eaee;
+  overflow: hidden;
+}
+
+/* One page fills the width; swiping, dragging or the buttons move one page. */
+.doc-pager__track {
+  display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  touch-action: pan-x pan-y;
+  cursor: grab;
 }
 
-.post-doc__pages img {
-  flex: 0 0 min(86%, 420px);
-  max-height: 460px;
-  object-fit: contain;
+.doc-pager__track::-webkit-scrollbar {
+  display: none;
+}
+
+.doc-pager__track.is-dragging {
+  scroll-snap-type: none;
+  cursor: grabbing;
+  user-select: none;
+}
+
+.doc-pager__slide {
+  flex: 0 0 100%;
+  min-width: 0;
   scroll-snap-align: start;
-  border: 1px solid #dbe2ea;
-  border-radius: 6px;
-  background: #fff;
+  scroll-snap-stop: always;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.post-doc__note {
-  margin: 0;
-  padding: 0 12px 12px;
+.doc-pager__slide img {
+  display: block;
+  max-width: 100%;
+  max-height: 520px;
+  object-fit: contain;
+  background: #fff;
+  user-select: none;
+}
+
+.doc-pager__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.72);
+  color: #fff;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.doc-pager__nav--prev {
+  left: 8px;
+}
+
+.doc-pager__nav--next {
+  right: 8px;
+}
+
+.doc-pager__nav:hover:not(:disabled) {
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.doc-pager__nav:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.doc-pager__count {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.doc-pager__hint {
+  margin: 6px 0 0;
   color: #64748b;
-  font-size: 13px;
+  font-size: 12px;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .doc-pager__track {
+    scroll-behavior: auto;
+  }
 }

@@ -1,19 +1,47 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import API from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import DocumentPager from "./DocumentPager";
 import "../styles/Postcard.css";
 import "../styles/postDocument.css";
 
-// A posted document (PDF or Word). The backend renders each page to an
-// image (media.pages), so the pages can be read right here by scrolling
-// sideways, like the app. Without page images (still preparing, or the
-// render failed) the card falls back to a plain "Open" link.
+// How often a freshly posted document is checked for its page images, and for how long.
+const DOC_POLL_MS = 6000;
+const DOC_POLL_MAX = 30;
+
+const waitingForPages = (media) =>
+  Array.isArray(media) &&
+  media.some(
+    (item) =>
+      item.type === "document" &&
+      item.processingStatus === "pending" &&
+      !(Array.isArray(item.pages) && item.pages.length > 0)
+  );
+
+// A posted document (PDF or Word). Every document gets the same header (name,
+// page count, Open). The backend renders each page to an image (media.pages),
+// shown one at a time. When there are no page images the card says why, so a
+// document is never just a blank or broken box:
+//   - still being prepared (checked again automatically),
+//   - preparing failed,
+//   - an older post whose pages have not been made yet.
 function DocumentItem({ item }) {
   const pages = Array.isArray(item.pages)
     ? [...item.pages].sort((a, b) => a.page - b.page)
     : [];
   const name = item.originalName || "Document";
   const count = item.pageCount || pages.length;
+
+  let note = null;
+  if (pages.length === 0) {
+    if (item.processingStatus === "pending") {
+      note = "Preparing the pages. They will appear here by themselves.";
+    } else if (item.processingStatus === "failed") {
+      note = "The pages could not be prepared. Use Open to read the file.";
+    } else {
+      note = "The pages for this file are not ready yet. Use Open to read it now.";
+    }
+  }
 
   return (
     <div className="post-doc">
@@ -31,19 +59,10 @@ function DocumentItem({ item }) {
       </div>
 
       {pages.length > 0 ? (
-        <div className="post-doc__pages" tabIndex={0} aria-label={`${name}, scroll sideways to read every page`}>
-          {pages.map((page) => (
-            <img
-              key={page.page}
-              src={page.url}
-              alt={`${name}, page ${page.page}`}
-              loading="lazy"
-            />
-          ))}
-        </div>
-      ) : item.processingStatus === "pending" ? (
-        <p className="post-doc__note">Preparing the pages. Use Open to read it now.</p>
-      ) : null}
+        <DocumentPager name={name} pages={pages} />
+      ) : (
+        <p className="post-doc__note" role="status">{note}</p>
+      )}
     </div>
   );
 }
@@ -69,6 +88,37 @@ export default function PostCard({ post, refresh }) {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [media, setMedia] = useState(post.media);
+
+  // A new post, or the feed refreshing, brings fresh media.
+  useEffect(() => {
+    setMedia(post.media);
+  }, [post.media]);
+
+  // A document posted a moment ago has no page images yet. Check for them every
+  // few seconds, so the pages appear without anyone having to refresh.
+  const postId = post.id || post._id;
+  const pending = waitingForPages(media);
+  useEffect(() => {
+    if (!pending || !postId) return undefined;
+    let tries = 0;
+    let stopped = false;
+    const timer = setInterval(async () => {
+      tries += 1;
+      try {
+        const res = await API.get(`/posts/${postId}`);
+        const fresh = res?.data?.data?.media;
+        if (!stopped && Array.isArray(fresh)) setMedia(fresh);
+      } catch {
+        // Quiet: the next check tries again.
+      }
+      if (tries >= DOC_POLL_MAX) clearInterval(timer);
+    }, DOC_POLL_MS);
+    return () => {
+      stopped = true;
+      clearInterval(timer);
+    };
+  }, [pending, postId]);
 
   const postAuthorId = post.userId;
   const isAuthor = user && String(postAuthorId) === String(user.id);
@@ -104,9 +154,9 @@ export default function PostCard({ post, refresh }) {
       <div className="post-body">
         <p>{post.content}</p>
 
-        {Array.isArray(post.media) && post.media.length > 0 && (
+        {Array.isArray(media) && media.length > 0 && (
           <div className="post-media-grid">
-            {post.media.map((item, i) => (
+            {media.map((item, i) => (
               <MediaItem key={item.publicId || i} item={item} />
             ))}
           </div>
