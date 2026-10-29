@@ -1,4 +1,5 @@
 import axios from "axios";
+import { isDeadSession } from "../utils/sessionErrors";
 
 const API_BASE_URL =
   process.env.REACT_APP_API_URL || "http://localhost:5000/api";
@@ -53,9 +54,21 @@ api.interceptors.response.use(
       });
     }
 
+    // 503 = the server is busy for a moment (it has just restarted for an update, or its
+    // database is reconnecting). That is not a bad login: leave the session alone and try the
+    // request once more after a short pause.
+    if (error.response.status === 503 && !originalRequest._retry503) {
+      originalRequest._retry503 = true;
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      return api(originalRequest);
+    }
+
+    // Only a login that is really finished signs the person out (see utils/sessionErrors.js).
+    // Any other 401, such as a wrong password on the login form, is just an error to show.
     if (
       error.response.status === 401 &&
-      !originalRequest._retry
+      !originalRequest._retry &&
+      isDeadSession(error)
     ) {
       originalRequest._retry = true;
 
