@@ -5,6 +5,7 @@ import Topbar from "../components/layout/Topbar";
 import PageTransition from "../components/layout/PageTransition";
 import AppFooter from "../components/layout/AppFooter";
 import EmergencyMenu from "../components/Emergency";
+import EmergencyAlertBanner from "../components/EmergencyAlertBanner";
 import PrivacyNoticeGate from "../components/PrivacyNoticeGate";
 import "../styles/layout/layout.css";
 
@@ -21,6 +22,7 @@ export default function MainLayout() {
           <AppFooter />
         </div>
       </div>
+      <EmergencyAlertBanner />
       <EmergencyMenu />
       <PrivacyNoticeGate />
     </div>

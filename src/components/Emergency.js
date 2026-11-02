@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import emergencyService from "../services/emergencyService";
+import SosButton from "./SosButton";
 import {
   FaPhone,
   FaHospital,
@@ -78,6 +79,8 @@ export default function EmergencyMenu() {
 
       {open && (
         <div style={menu}>
+          <SosButton contacts={contacts} />
+
           <h4>Emergency Contacts</h4>
 
           {contacts.length === 0 ? (
