@@ -29,6 +29,8 @@ import Notes from "../pages/Student/Notes";
 import Attendance from "../pages/Student/Attendance";
 import Units from "../pages/Student/Units";
 import AcademicsHub from "../pages/Student/AcademicsHub";
+import LecturerTools from "../pages/Lecturer/LecturerTools";
+import AdminTools from "../pages/Admin/AdminTools";
 
 /* Lecturer pages */
 import LecturerDashboard from "../pages/Lecturer/Dashboard";
@@ -327,6 +329,24 @@ export default function AppRoutes() {
             element={
               <RoleGuard roles={["admin"]}>
                 <ManageUsers />
+              </RoleGuard>
+            }
+          />
+
+          {/* Tools hubs: the second tab for lecturers and admins */}
+          <Route
+            path="/lecturer/tools"
+            element={
+              <RoleGuard roles={["lecturer"]}>
+                <LecturerTools />
+              </RoleGuard>
+            }
+          />
+          <Route
+            path="/admin/tools"
+            element={
+              <RoleGuard roles={["admin"]}>
+                <AdminTools />
               </RoleGuard>
             }
           />

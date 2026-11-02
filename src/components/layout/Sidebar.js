@@ -1,6 +1,6 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { FaMobileAlt, FaSignOutAlt, FaTimes } from "react-icons/fa";
-import { navigation, tabForPath } from "../../constants/navigation";
+import { tabsForRole, activeTabKey } from "../../constants/roleTabs";
 import BottomTabs from "./BottomTabs";
 import { useAuth } from "../../context/AuthContext";
 
@@ -11,8 +11,8 @@ const APPS_ITEM = { title: "Apps", path: "/apps", icon: FaMobileAlt };
 export default function Sidebar({ isOpen, onClose }) {
   const { user, logout } = useAuth();
   const { pathname } = useLocation();
-  const menu = navigation[user?.role] || [];
-  const activeTab = user?.role === "student" ? tabForPath(pathname) : null;
+  const menu = tabsForRole(user?.role);
+  const activeTab = activeTabKey(user?.role, pathname);
 
   const renderLink = (item) => {
     const Icon = item.icon;

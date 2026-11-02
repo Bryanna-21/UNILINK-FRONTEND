@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import { useAuth } from "../../context/AuthContext";
-import { studentTabs, tabForPath } from "../../constants/navigation";
+import { tabsForRole, activeTabKey } from "../../constants/roleTabs";
 
 import "../../styles/layout/bottomTabs.css";
 
@@ -13,7 +13,8 @@ export default function BottomTabs() {
   const { user } = useAuth();
   const { pathname } = useLocation();
 
-  const show = user?.role === "student";
+  const tabs = tabsForRole(user?.role);
+  const show = tabs.length > 0;
 
   useEffect(() => {
     if (!show) return undefined;
@@ -24,11 +25,11 @@ export default function BottomTabs() {
 
   if (!show) return null;
 
-  const active = tabForPath(pathname);
+  const active = activeTabKey(user?.role, pathname);
 
   return (
     <nav className="bottom-tabs" aria-label="Main">
-      {studentTabs.map((tab) => (
+      {tabs.map((tab) => (
         <Link
           key={tab.key}
           to={tab.path}
@@ -38,7 +39,7 @@ export default function BottomTabs() {
           <span className="bottom-tab-glyph" aria-hidden="true">
             {tab.glyph}
           </span>
-          <span className="bottom-tab-label">{tab.title}</span>
+          <span className="bottom-tab-label">{tab.shortTitle || tab.title}</span>
         </Link>
       ))}
     </nav>
