@@ -48,6 +48,7 @@ import Announcements from "../pages/Lecturer/Announcements";
 /* Admin pages */
 import Dashboard from "../pages/Admin/Dashboard";
 import ManageUsers from "../pages/Admin/Users";
+import ManageRoles from "../pages/Admin/ManageRoles";
 
 /* Shared pages (any authenticated role) */
 import Feed from "../pages/Feed";
@@ -347,6 +348,15 @@ export default function AppRoutes() {
             element={
               <RoleGuard roles={["admin"]}>
                 <AdminTools />
+              </RoleGuard>
+            }
+          />
+
+          <Route
+            path="/admin/roles"
+            element={
+              <RoleGuard roles={["admin"]}>
+                <ManageRoles />
               </RoleGuard>
             }
           />

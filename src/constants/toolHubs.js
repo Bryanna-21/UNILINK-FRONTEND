@@ -32,6 +32,7 @@ export const ADMIN_TOOL_GROUPS = [
     title: "People",
     cards: [
       ["Users", "Browse every user in your university", "/admin/users"],
+      ["Make Lecturer or Admin", "Change a user's role", "/admin/roles"],
     ],
   },
   {
