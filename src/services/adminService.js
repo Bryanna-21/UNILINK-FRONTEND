@@ -13,14 +13,6 @@ export const getUsers = async ({ search, role } = {}) => {
   return data.data;
 };
 
-// Change a person's role directly. An admin can make a student a lecturer; only a superadmin can
-// make admins (the server decides, see the backend's utils/roleChange.rules.js). The person is
-// signed out everywhere and signs in again to see their new tools.
-export const changeUserRole = async (userId, role, reason) => {
-  const { data } = await api.patch(`/admin/users/${userId}/role`, { role, reason });
-  return data;
-};
-
 export const getDashboardStats = async () => {
   const { data } = await api.get("/admin/dashboard-stats");
   return data.data;

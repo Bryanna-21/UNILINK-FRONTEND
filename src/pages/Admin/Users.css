@@ -196,35 +196,3 @@
   }
 
 }
-
-/* Change role: only the buttons that will work for this person (the server decides which). */
-.role-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.role-btn {
-  padding: 6px 12px;
-  border: 1px solid #2563eb;
-  border-radius: 8px;
-  background: #fff;
-  color: #1d4ed8;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.role-btn:hover:not(:disabled) {
-  background: #eff6ff;
-}
-
-.role-btn:disabled {
-  opacity: 0.5;
-  cursor: default;
-}
-
-.role-btn:focus-visible {
-  outline: 3px solid #1e3a8a;
-  outline-offset: 2px;
-}

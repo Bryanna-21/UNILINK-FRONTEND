@@ -7,7 +7,7 @@ import {
   FaSearch
 } from "react-icons/fa";
 import { toast } from "react-hot-toast";
-import { getUsers, changeUserRole } from "../../services/adminService";
+import { getUsers } from "../../services/adminService";
 import "./Users.css";
 
 
@@ -19,30 +19,6 @@ const Users = () => {
   const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
-
-  // The person whose role is being changed right now (one at a time).
-  const [changingId, setChangingId] = useState(null);
-
-  const ROLE_BUTTON = { lecturer: "Make lecturer", admin: "Make admin", student: "Make student" };
-
-  const handleChangeRole = async (user, role) => {
-    const ok = window.confirm(
-      `Make ${user.name} ${role === "admin" ? "an admin" : role === "lecturer" ? "a lecturer" : "a student"}? ` +
-        "They will be signed out and need to sign in again."
-    );
-    if (!ok) return;
-
-    try {
-      setChangingId(user.id);
-      const res = await changeUserRole(user.id, role);
-      toast.success(res?.message || "Role changed.");
-      setUsers((await getUsers()) || []);
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Could not change the role.");
-    } finally {
-      setChangingId(null);
-    }
-  };
 
 
 
@@ -214,10 +190,6 @@ const Users = () => {
                   Status
                 </th>
 
-                <th>
-                  Change role
-                </th>
-
               </tr>
 
             </thead>
@@ -233,13 +205,13 @@ const Users = () => {
                 loading ? (
 
                   <tr>
-                    <td colSpan={5}>Loading users...</td>
+                    <td colSpan={4}>Loading users...</td>
                   </tr>
 
                 ) : filteredUsers.length === 0 ? (
 
                   <tr>
-                    <td colSpan={5}>No users found.</td>
+                    <td colSpan={4}>No users found.</td>
                   </tr>
 
                 ) : filteredUsers.map((user)=>(
@@ -325,28 +297,6 @@ const Users = () => {
 
                       </span>
 
-
-                    </td>
-
-                    <td>
-
-                      <div className="role-actions">
-                        {(user.assignableRoles || []).length === 0 ? (
-                          <small>—</small>
-                        ) : (
-                          user.assignableRoles.map((role) => (
-                            <button
-                              key={role}
-                              type="button"
-                              className="role-btn"
-                              disabled={changingId === user.id}
-                              onClick={() => handleChangeRole(user, role)}
-                            >
-                              {ROLE_BUTTON[role] || role}
-                            </button>
-                          ))
-                        )}
-                      </div>
 
                     </td>
 

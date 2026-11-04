@@ -27,11 +27,6 @@ describe("resolveWebLink", () => {
     expect(resolveWebLink("/post/abc123")).toBe("/feed");
     expect(resolveWebLink("/user/abc123")).toBeNull();
   });
-  test("emergency links open the reports page for staff only", () => {
-    for (const role of ["lecturer", "admin", "superadmin"]) expect(resolveWebLink("/emergency/r1", role)).toBe("/lecturer/emergency-reports");
-    expect(resolveWebLink("/emergency/r1", "student")).toBeNull();
-    expect(resolveWebLink("/emergency/r1")).toBeNull();
-  });
   test("existing web routes pass through; empty links go nowhere", () => {
     expect(resolveWebLink("/messages/abc123")).toBe("/messages/abc123");
     expect(resolveWebLink("/exams/abc123")).toBe("/exams/abc123");

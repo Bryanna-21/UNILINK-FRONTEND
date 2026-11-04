@@ -4,20 +4,18 @@ import { toast } from "react-hot-toast";
 import { FaBell, FaCheckDouble } from "react-icons/fa";
 
 import userNotificationService from "../services/userNotificationService";
-import { useAuth } from "../context/AuthContext";
 import { resolveWebLink } from "../utils/notificationLinks";
 
 import "./MyNotifications.css";
 
 // The tabs, like Instagram's: everything, then people following you, likes and comments on your
-// posts, mentions, and emergencies. Grades, exams and the like show under All. New messages are
-// not here: they show on Messages.
+// posts, mentions, and academic updates. New messages are not here: they show on Messages.
 const TABS = [
   { key: "all", label: "All" },
   { key: "followers", label: "Followers" },
   { key: "activity", label: "Likes & comments" },
   { key: "mentions", label: "Mentions & tags" },
-  { key: "emergency", label: "Emergency" },
+  { key: "updates", label: "Updates" },
 ];
 
 const TYPE_LABEL = {
@@ -29,7 +27,6 @@ const TYPE_LABEL = {
   post_like: "Like",
   post_comment: "Comment",
   mention: "Mention",
-  emergency_alert: "Emergency",
   announcement: "Announcement",
   timetable: "Timetable",
   opportunity: "Opportunity",
@@ -37,7 +34,7 @@ const TYPE_LABEL = {
   moderation: "Account",
 };
 
-const NO_COUNTS = { all: 0, followers: 0, activity: 0, mentions: 0, emergency: 0, updates: 0 };
+const NO_COUNTS = { all: 0, followers: 0, activity: 0, mentions: 0, updates: 0 };
 
 // Which tab a notification belongs to (the same grouping the server uses).
 const categoryOf = (type) => {
@@ -45,13 +42,11 @@ const categoryOf = (type) => {
   if (type === "new_follower") return "followers";
   if (type === "post_like" || type === "post_comment") return "activity";
   if (type === "mention") return "mentions";
-  if (type === "emergency_alert") return "emergency";
   return "updates";
 };
 
 const MyNotifications = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
   const [category, setCategory] = useState("all");
   const [notifications, setNotifications] = useState([]);
   const [counts, setCounts] = useState(NO_COUNTS);
@@ -105,7 +100,7 @@ const MyNotifications = () => {
       }
     }
 
-    const destination = resolveWebLink(notification.link, user?.role);
+    const destination = resolveWebLink(notification.link);
     if (destination) {
       navigate(destination);
     }
