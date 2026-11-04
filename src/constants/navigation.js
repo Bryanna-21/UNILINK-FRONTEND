@@ -3,15 +3,7 @@ import {
   FaBook,
   FaClipboardList,
   FaComments,
-  FaBell,
-  FaCog,
   FaUsers,
-  FaUserGraduate,
-  FaChartBar,
-  FaBullhorn,
-  FaUpload,
-  FaExclamationTriangle,
-  FaRobot,
   FaUserCircle,
 } from "react-icons/fa";
 
@@ -88,11 +80,45 @@ export const studentTabs = [
   },
 ];
 
-// Which tab a path belongs to (longest owned path wins).
-export const tabForPath = (pathname) => {
+// Lecturers and admins get the same five tabs, with a Tools tab where students have Academics.
+// Lecturer Tools and Admin Tools are pages of cards that lead to everything the role can do.
+export const lecturerTabs = [
+  { key: "home", title: "Home", glyph: "\u2302", icon: FaHome, path: "/lecturer/dashboard", owns: ["/lecturer/dashboard"] },
+  {
+    key: "tools",
+    title: "Tools",
+    glyph: "\uD83D\uDEE0",
+    icon: FaBook,
+    path: "/lecturer/tools",
+    // "/lecturer" catches every lecturer page; the longer "/lecturer/dashboard" wins for Home.
+    owns: ["/lecturer"],
+  },
+  { key: "campus", title: "Campus", glyph: "\uD83D\uDC65", icon: FaUsers, path: "/feed", owns: ["/feed", "/communities", "/events"] },
+  { key: "messages", title: "Messages", glyph: "\uD83D\uDCAC", icon: FaComments, path: "/messages", owns: ["/messages", "/ai-assistant"] },
+  { key: "me", title: "Me", glyph: "\uD83D\uDC64", icon: FaUserCircle, path: "/profile", owns: ["/profile", "/notifications-me", "/settings", "/search"] },
+];
+
+export const adminTabs = [
+  { key: "home", title: "Home", glyph: "\u2302", icon: FaHome, path: "/admin/dashboard", owns: ["/admin/dashboard"] },
+  {
+    key: "tools",
+    title: "Tools",
+    glyph: "\uD83D\uDEE0",
+    icon: FaClipboardList,
+    path: "/admin/tools",
+    owns: ["/admin", "/notifications", "/lecturer/emergency-reports"],
+  },
+  { key: "campus", title: "Campus", glyph: "\uD83D\uDC65", icon: FaUsers, path: "/feed", owns: ["/feed", "/communities", "/events"] },
+  { key: "messages", title: "Messages", glyph: "\uD83D\uDCAC", icon: FaComments, path: "/messages", owns: ["/messages"] },
+  { key: "me", title: "Me", glyph: "\uD83D\uDC64", icon: FaUserCircle, path: "/profile", owns: ["/profile", "/notifications-me", "/settings", "/search"] },
+];
+
+// Which tab a path belongs to (longest owned path wins). Students by default; pass another
+// role's tabs for lecturers and admins.
+export const tabForPath = (pathname, tabs = studentTabs) => {
   let best = { key: null, length: -1 };
 
-  studentTabs.forEach((tab) => {
+  tabs.forEach((tab) => {
     tab.owns.forEach((owned) => {
       const hit = pathname === owned || pathname.startsWith(`${owned}/`);
 
@@ -107,25 +133,6 @@ export const tabForPath = (pathname) => {
 
 export const navigation = {
   student: studentTabs,
-  lecturer: [
-    { title: "Dashboard", path: "/lecturer/dashboard", icon: FaHome },
-    { title: "My Courses", path: "/lecturer/courses", icon: FaBook },
-    { title: "Upload Notes", path: "/lecturer/upload-notes", icon: FaUpload },
-    { title: "Exams", path: "/lecturer/exams", icon: FaClipboardList },
-    { title: "Submissions", path: "/lecturer/submissions", icon: FaUserGraduate },
-    { title: "Emergency Reports", path: "/lecturer/emergency-reports", icon: FaExclamationTriangle },
-    { title: "AI Assistant", path: "/ai-assistant", icon: FaRobot },
-    { title: "Announcements", path: "/lecturer/announcements", icon: FaBullhorn },
-    { title: "Analytics", path: "/lecturer/analytics", icon: FaChartBar },
-    { title: "Messages", path: "/messages", icon: FaComments },
-    { title: "Notifications", path: "/notifications-me", icon: FaBell },
-    { title: "Settings", path: "/settings", icon: FaCog },
-  ],
-  admin: [
-    { title: "Dashboard", path: "/admin/dashboard", icon: FaHome },
-    { title: "Users", path: "/admin/users", icon: FaUsers },
-    { title: "Notifications", path: "/notifications", icon: FaBell },
-    { title: "Analytics", path: "/lecturer/analytics", icon: FaChartBar },
-    { title: "Settings", path: "/settings", icon: FaCog },
-  ],
+  lecturer: lecturerTabs,
+  admin: adminTabs,
 };

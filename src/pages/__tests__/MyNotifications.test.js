@@ -5,13 +5,14 @@ import MyNotifications from "../MyNotifications";
 import service from "../../services/userNotificationService";
 
 jest.mock("../../services/userNotificationService");
+jest.mock("../../context/AuthContext", () => ({ useAuth: () => ({ user: { id: "me", role: "lecturer" } }) }));
 jest.mock("react-hot-toast", () => ({ toast: { error: jest.fn(), success: jest.fn() } }));
 const mockNavigate = jest.fn();
 jest.mock("react-router-dom", () => ({ ...jest.requireActual("react-router-dom"), useNavigate: () => mockNavigate }));
 global.IS_REACT_ACT_ENVIRONMENT = true;
 
 const note = (id, type, title, read = false, link = "") => ({ _id: id, type, title, read, link, createdAt: "2026-10-27T10:00:00Z" });
-const counts = { all: 5, followers: 1, activity: 2, mentions: 1, updates: 1 };
+const counts = { all: 5, followers: 1, activity: 2, mentions: 1, emergency: 1, updates: 0 };
 
 let container;
 let root;
@@ -31,7 +32,7 @@ const tab = (label) => [...container.querySelectorAll("button.mn-tab")].find((b)
 test("has the five tabs, with unread counts on the ones that have any", async () => {
   await render();
   const labels = [...container.querySelectorAll("button.mn-tab")].map((b) => b.textContent.replace(/\d+$/, ""));
-  expect(labels).toEqual(["All", "Followers", "Likes & comments", "Mentions & tags", "Updates"]);
+  expect(labels).toEqual(["All", "Followers", "Likes & comments", "Mentions & tags", "Emergency"]);
   expect(tab("All").querySelector(".mn-tab-badge").textContent).toBe("5");
   expect(tab("Likes & comments").querySelector(".mn-tab-badge").textContent).toBe("2");
 });
@@ -94,4 +95,15 @@ test("the Mark all read button hides when the current tab has nothing unread", a
   await act(async () => { tab("Followers").click(); });
   await flush();
   expect(container.querySelector(".mn-mark-all")).toBeNull();
+});
+
+test("an emergency alert opens the reports page for staff, and counts under the Emergency tab", async () => {
+  service.markNotificationRead.mockResolvedValue({});
+  service.getMyNotifications.mockResolvedValue({ data: [note("e1", "emergency_alert", "SOS from Amina", false, "/emergency/r1")], counts });
+  await render();
+  expect(tab("Emergency").querySelector(".mn-tab-badge").textContent).toBe("1");
+  await act(async () => { container.querySelector(".mn-item").click(); });
+  await flush();
+  expect(tab("Emergency").querySelector(".mn-tab-badge")).toBeNull();
+  expect(mockNavigate).toHaveBeenCalledWith("/lecturer/emergency-reports");
 });

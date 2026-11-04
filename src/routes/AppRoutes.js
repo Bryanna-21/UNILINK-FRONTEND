@@ -172,7 +172,7 @@ export default function AppRoutes() {
           <Route
             path="/notifications-me"
             element={
-              <RoleGuard roles={["student", "lecturer"]}>
+              <RoleGuard roles={["student", "lecturer", "admin"]}>
                 <MyNotifications />
               </RoleGuard>
             }
@@ -330,6 +330,22 @@ export default function AppRoutes() {
             element={
               <RoleGuard roles={["admin"]}>
                 <ManageUsers />
+              </RoleGuard>
+            }
+          />
+          <Route
+            path="/admin/tools"
+            element={
+              <RoleGuard roles={["admin"]}>
+                <AdminTools />
+              </RoleGuard>
+            }
+          />
+          <Route
+            path="/lecturer/tools"
+            element={
+              <RoleGuard roles={["lecturer"]}>
+                <LecturerTools />
               </RoleGuard>
             }
           />
