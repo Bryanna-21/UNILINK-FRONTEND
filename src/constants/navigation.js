@@ -111,6 +111,7 @@ export const navigation = {
     { title: "Dashboard", path: "/lecturer/dashboard", icon: FaHome },
     { title: "My Courses", path: "/lecturer/courses", icon: FaBook },
     { title: "Upload Notes", path: "/lecturer/upload-notes", icon: FaUpload },
+    { title: "Create Assignment", path: "/lecturer/create-assignment", icon: FaClipboardList },
     { title: "Exams", path: "/lecturer/exams", icon: FaClipboardList },
     { title: "Submissions", path: "/lecturer/submissions", icon: FaUserGraduate },
     { title: "Emergency Reports", path: "/lecturer/emergency-reports", icon: FaExclamationTriangle },

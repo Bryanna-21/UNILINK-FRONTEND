@@ -6,6 +6,7 @@ import PageTransition from "../components/layout/PageTransition";
 import AppFooter from "../components/layout/AppFooter";
 import EmergencyMenu from "../components/Emergency";
 import PrivacyNoticeGate from "../components/PrivacyNoticeGate";
+import NewMessageAlerts from "../components/NewMessageAlerts";
 import "../styles/layout/layout.css";
 
 export default function MainLayout() {
@@ -23,6 +24,7 @@ export default function MainLayout() {
       </div>
       <EmergencyMenu />
       <PrivacyNoticeGate />
+      <NewMessageAlerts />
     </div>
   );
 }

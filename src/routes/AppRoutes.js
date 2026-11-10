@@ -35,6 +35,7 @@ import LecturerDashboard from "../pages/Lecturer/Dashboard";
 import LecturerCourses from "../pages/Lecturer/Courses";
 import ExamList from "../pages/Lecturer/ExamList";
 import UploadNotes from "../pages/Lecturer/UploadNotes";
+import CreateAssignment from "../pages/Lecturer/CreateAssignment";
 import CreateExam from "../pages/Lecturer/CreateExam";
 import ViewExam from "../pages/Lecturer/ViewExam";
 import EditExam from "../pages/Lecturer/EditExam";
@@ -59,6 +60,9 @@ import Notifications from "../pages/Notifications";
 import Profile from "../pages/Profile";
 import EditProfile from "../pages/EditProfile";
 import Search from "../pages/Search";
+import UserProfile from "../pages/UserProfile";
+import BlockedPeople from "../pages/BlockedPeople";
+import CommunityStandards from "../pages/CommunityStandards";
 import Marketplace from "../pages/Marketplace";
 import LostAndFound from "../pages/LostAndFound";
 import Library from "../pages/Library";
@@ -281,6 +285,14 @@ export default function AppRoutes() {
             }
           />
           <Route
+            path="/lecturer/create-assignment"
+            element={
+              <RoleGuard roles={["lecturer"]}>
+                <CreateAssignment />
+              </RoleGuard>
+            }
+          />
+          <Route
             path="/lecturer/submissions"
             element={
               <RoleGuard roles={["lecturer", "admin"]}>
@@ -357,6 +369,9 @@ export default function AppRoutes() {
           <Route path="/polls" element={<Polls />} />
           <Route path="/clubs" element={<Clubs />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/settings/blocked" element={<BlockedPeople />} />
+          <Route path="/community-standards" element={<CommunityStandards />} />
+          <Route path="/user/:id" element={<UserProfile />} />
           <Route path="/apps" element={<Apps />} />
         </Route>
       </Route>

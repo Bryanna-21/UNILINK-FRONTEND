@@ -27,6 +27,7 @@ const CreateAssignment = () => {
 
   useEffect(() => {
     loadCourses();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadCourses = async () => {

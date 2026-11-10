@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 
 import Card from "../components/common/Card";
+import PrivacySettingsCard from "../components/PrivacySettingsCard";
+import "../styles/pages/safetyPages.css";
 import "../styles/pages/settings.css";
 
 // The Android download link comes from the same environment variable
@@ -23,13 +25,20 @@ export default function Settings() {
         </Link>
       </Card>
 
+      <PrivacySettingsCard />
+
       <Card
-        title="Privacy"
-        subtitle="How UniLink collects and uses your information."
+        title="Safety"
+        subtitle="Who you see, and the rules everyone follows."
       >
-        <Link className="get-app-download-btn" to="/privacy">
-          Read the privacy notice
-        </Link>
+        <div className="settings-links">
+          <Link className="get-app-download-btn" to="/settings/blocked">
+            Blocked people
+          </Link>
+          <Link className="get-app-download-btn" to="/community-standards">
+            Community Standards
+          </Link>
+        </div>
       </Card>
 
       <Card

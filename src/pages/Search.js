@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 import StateMessage from "../components/common/StateMessage";
 import peopleService from "../services/peopleService";
@@ -7,6 +7,7 @@ import peopleService from "../services/peopleService";
 import { getErrorMessage } from "../utils/errors";
 
 import "../styles/pages/lists.css";
+import "../styles/pages/userProfile.css";
 
 // The backend matches usernames by prefix, 3 to 20 characters of
 // letters, numbers, dots and underscores.
@@ -106,14 +107,19 @@ export default function Search() {
       ) : results.length > 0 ? (
         <div className="list-stack">
           {results.map((person) => (
-            <div className="list-card" key={person._id}>
+            <Link
+              className="list-card list-card-link"
+              key={person._id}
+              to={`/user/${person._id}`}
+              aria-label={`Open ${person.name}'s profile`}
+            >
               <div className="list-card-body">
                 <h3>{person.name}</h3>
                 {person.username && <p>@{person.username}</p>}
               </div>
 
               <span className="list-badge">{person.role}</span>
-            </div>
+            </Link>
           ))}
         </div>
       ) : null}

@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { Link, useInRouterContext } from "react-router-dom";
 import API from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import DocumentPager from "./DocumentPager";
 import "../styles/Postcard.css";
 import "../styles/postDocument.css";
+import "../styles/pages/userProfile.css";
 
 // How often a freshly posted document is checked for its page images, and for how long.
 const DOC_POLL_MS = 6000;
@@ -84,6 +86,21 @@ function MediaItem({ item }) {
   );
 }
 
+// "Posted by <name>", and the name opens that person's profile. Rendered without a router (as in
+// tests) it is just text.
+function AuthorName({ post }) {
+  const inRouter = useInRouterContext();
+  const name = post.authorName || "Unknown user";
+  if (inRouter && post.userId) {
+    return (
+      <Link className="post-author-link" to={`/user/${post.userId}`}>
+        {name}
+      </Link>
+    );
+  }
+  return name;
+}
+
 export default function PostCard({ post, refresh }) {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -147,7 +164,7 @@ export default function PostCard({ post, refresh }) {
       <div className="post-header">
         <h4>{post.title || "Untitled"}</h4>
         <span className="post-author">
-          Posted by {post.authorName || "Unknown user"}
+          Posted by <AuthorName post={post} />
         </span>
       </div>
 
