@@ -7,17 +7,20 @@ const prefersReducedMotion = () =>
   typeof window.matchMedia === "function" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-export default function DocumentPager({ name, pages }) {
+// `expected` is how many pages there will be once the server has drawn them all; `preparing` is true while it is
+// still drawing, so the reader knows more are coming.
+export default function DocumentPager({ name, pages, expected = 0, preparing = false }) {
   const trackRef = useRef(null);
   const drag = useRef(null);
   const [index, setIndex] = useState(0);
   const [dragging, setDragging] = useState(false);
-  const total = pages.length;
+  const drawn = pages.length;
+  const total = Math.max(expected, drawn);
 
   const goTo = useCallback(
     (target) => {
       const el = trackRef.current;
-      const next = Math.max(0, Math.min(total - 1, target));
+      const next = Math.max(0, Math.min(drawn - 1, target));
       setIndex(next);
       if (!el) return;
       const left = next * el.clientWidth;
@@ -27,7 +30,7 @@ export default function DocumentPager({ name, pages }) {
         el.scrollLeft = left;
       }
     },
-    [total]
+    [drawn]
   );
 
   // Keeps the counter right when the reader swipes instead of pressing a button.
@@ -36,7 +39,7 @@ export default function DocumentPager({ name, pages }) {
     if (!el || drag.current) return;
     const current = Math.round(el.scrollLeft / Math.max(1, el.clientWidth));
     setIndex((prev) => {
-      const clamped = Math.max(0, Math.min(total - 1, current));
+      const clamped = Math.max(0, Math.min(drawn - 1, current));
       return prev === clamped ? prev : clamped;
     });
   };
@@ -53,7 +56,7 @@ export default function DocumentPager({ name, pages }) {
 
   // Touch already scrolls and snaps by itself. A mouse needs dragging taught to it.
   const handlePointerDown = (event) => {
-    if (event.pointerType !== "mouse" || event.button !== 0 || total < 2) return;
+    if (event.pointerType !== "mouse" || event.button !== 0 || drawn < 2) return;
     const el = trackRef.current;
     drag.current = { x: event.clientX, left: el.scrollLeft, moved: false };
   };
@@ -132,7 +135,7 @@ export default function DocumentPager({ name, pages }) {
               type="button"
               className="doc-pager__nav doc-pager__nav--next"
               onClick={() => goTo(index + 1)}
-              disabled={index === total - 1}
+              disabled={index >= drawn - 1}
               aria-label="Next page"
             >
               ›
@@ -144,8 +147,10 @@ export default function DocumentPager({ name, pages }) {
         )}
       </div>
 
-      {total > 1 && (
-        <p className="doc-pager__hint">Swipe, drag or use the arrows to turn the page</p>
+      {preparing ? (
+        <p className="doc-pager__hint" role="status">Preparing more pages… they will appear here by themselves</p>
+      ) : (
+        total > 1 && <p className="doc-pager__hint">Swipe, drag or use the arrows to turn the page</p>
       )}
     </div>
   );
