@@ -106,3 +106,18 @@
   border-radius: 6px;
   background: #f0f0f0;
 }
+
+.save-btn {
+  border: 0;
+  background: transparent;
+  color: var(--primary, #2563eb);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.save-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

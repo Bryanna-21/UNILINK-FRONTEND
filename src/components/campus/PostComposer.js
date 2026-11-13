@@ -3,6 +3,8 @@ import { FaImage, FaVideo, FaTimes } from "react-icons/fa";
 
 import API from "../../services/api";
 import { getErrorMessage } from "../../utils/errors";
+import AudienceSelect from "./AudienceSelect";
+import { DEFAULT_AUDIENCE, audienceFields, audienceIsComplete } from "../../utils/audience";
 
 // The post composer, now a dialog opened by the "+" button (as in the
 // app) instead of a column beside the feed. Validation and the upload
@@ -13,6 +15,8 @@ export default function PostComposer({ onClose, onPosted }) {
   const [mediaFiles, setMediaFiles] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  // Who the post is for. A new post is for the author's university until they choose otherwise.
+  const [audience, setAudience] = useState(DEFAULT_AUDIENCE);
 
   useEffect(() => {
     const onKey = (event) => {
@@ -47,6 +51,9 @@ export default function PostComposer({ onClose, onPosted }) {
     if (cleanTitle.length < 5) return setError("Title must be at least 5 characters");
     if (!cleanContent) return setError("Please enter content");
     if (cleanContent.length < 10) return setError("Content must be at least 10 characters");
+    if (!audienceIsComplete(audience)) {
+      return setError(audience.kind === "universities" ? "Choose at least one university, or pick another audience." : "Choose at least one person, or pick another audience.");
+    }
 
     setSubmitting(true);
     setError("");
@@ -55,6 +62,7 @@ export default function PostComposer({ onClose, onPosted }) {
       const formData = new FormData();
       formData.append("title", cleanTitle);
       formData.append("content", cleanContent);
+      Object.entries(audienceFields(audience)).forEach(([key, val]) => formData.append(key, val));
       mediaFiles.forEach((file) => formData.append("media", file));
 
       await API.post("/posts", formData, {
@@ -104,6 +112,8 @@ export default function PostComposer({ onClose, onPosted }) {
           onChange={(event) => setContent(event.target.value)}
           disabled={submitting}
         />
+
+        <AudienceSelect value={audience} onChange={setAudience} disabled={submitting} />
 
         {mediaFiles.length > 0 && (
           <div className="campus-chips">

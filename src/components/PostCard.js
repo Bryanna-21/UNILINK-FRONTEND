@@ -2,21 +2,26 @@ import { useEffect, useState } from "react";
 import API from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import DocumentPager from "./DocumentPager";
+import { audienceBadge } from "../utils/audience";
+import { savePostMedia } from "../utils/savePost";
 import "../styles/Postcard.css";
 import "../styles/postDocument.css";
 
-// How often a freshly posted document is checked for its page images, and for how long.
-const DOC_POLL_MS = 6000;
-const DOC_POLL_MAX = 30;
+// How often a document that is still being prepared is checked for new page images, and for how long.
+// Pages are drawn a few at a time (1 and 2 first), so the check goes on until the document is finished.
+const DOC_POLL_MS = 4000;
+const DOC_POLL_MAX = 60;
 
 const waitingForPages = (media) =>
   Array.isArray(media) &&
-  media.some(
-    (item) =>
-      item.type === "document" &&
-      item.processingStatus === "pending" &&
-      !(Array.isArray(item.pages) && item.pages.length > 0)
-  );
+  media.some((item) => item.type === "document" && item.processingStatus === "pending");
+
+// A fingerprint of how far every document is, so the post only updates when something changed.
+const progressOf = (media) =>
+  (Array.isArray(media) ? media : [])
+    .filter((item) => item.type === "document")
+    .map((item) => `${item.processingStatus}:${(item.pages || []).length}`)
+    .join("|");
 
 // A posted document (PDF or Word). Every document gets the same header (name,
 // page count, Open). The backend renders each page to an image (media.pages),
@@ -30,7 +35,10 @@ function DocumentItem({ item }) {
     ? [...item.pages].sort((a, b) => a.page - b.page)
     : [];
   const name = item.originalName || "Document";
-  const count = item.pageCount || pages.length;
+  const count = Math.max(item.pageCount || 0, pages.length);
+  const preparing = item.processingStatus === "pending" && pages.length > 0;
+  const partlyFailed = item.processingStatus === "failed" && pages.length > 0;
+  const longNote = item.totalPages && item.totalPages > count ? `Showing the first ${count} of ${item.totalPages} pages` : null;
 
   let note = null;
   if (pages.length === 0) {
@@ -50,7 +58,7 @@ function DocumentItem({ item }) {
 
         <div className="post-doc__meta">
           <strong>{name}</strong>
-          {count > 0 && <span>{count === 1 ? "1 page" : `${count} pages`}</span>}
+          {count > 0 && <span>{longNote || (count === 1 ? "1 page" : `${count} pages`)}</span>}
         </div>
 
         <a className="post-doc__open" href={item.url} target="_blank" rel="noopener noreferrer">
@@ -59,7 +67,12 @@ function DocumentItem({ item }) {
       </div>
 
       {pages.length > 0 ? (
-        <DocumentPager name={name} pages={pages} />
+        <>
+          <DocumentPager name={name} pages={pages} expected={count} preparing={preparing} />
+          {partlyFailed && (
+            <p className="post-doc__note" role="status">Some pages could not be prepared. Use Open to read the whole file.</p>
+          )}
+        </>
       ) : (
         <p className="post-doc__note" role="status">{note}</p>
       )}
@@ -108,7 +121,8 @@ export default function PostCard({ post, refresh }) {
       try {
         const res = await API.get(`/posts/${postId}`);
         const fresh = res?.data?.data?.media;
-        if (!stopped && Array.isArray(fresh)) setMedia(fresh);
+        // Replace only when a page arrived or the status changed, so a page being read does not jump.
+        if (!stopped && Array.isArray(fresh)) setMedia((current) => (progressOf(current) === progressOf(fresh) ? current : fresh));
       } catch {
         // Quiet: the next check tries again.
       }
@@ -120,10 +134,24 @@ export default function PostCard({ post, refresh }) {
     };
   }, [pending, postId]);
 
+  const [saving, setSaving] = useState(false);
+  const handleSave = async () => {
+    if (saving) return;
+    setSaving(true);
+    setError("");
+    try {
+      const result = await savePostMedia(post, media);
+      if (result.failed > 0 && result.saved + result.opened === 0) setError("The files could not be saved. Check your connection and try again.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const postAuthorId = post.userId;
   const isAuthor = user && String(postAuthorId) === String(user.id);
   const isAdmin = user?.role === "admin";
   const canDelete = isAuthor || isAdmin;
+  const hasMedia = Array.isArray(media) && media.length > 0;
 
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this post?")) {
@@ -166,17 +194,25 @@ export default function PostCard({ post, refresh }) {
       <div className="post-footer">
         <small>
           📅 {new Date(post.createdAt).toLocaleDateString()}
+          {audienceBadge(post.audience) ? ` · ${audienceBadge(post.audience)}` : ""}
         </small>
 
-        {canDelete && (
+        {(hasMedia || canDelete) && (
           <div className="post-actions">
-            <button
-              onClick={handleDelete}
-              className="delete-btn"
-              disabled={loading}
-            >
-              {loading ? "Deleting..." : "🗑️ Delete"}
-            </button>
+            {hasMedia && (
+              <button type="button" onClick={handleSave} className="save-btn" disabled={saving} aria-label="Save this post's files">
+                {saving ? "Saving..." : "⬇️ Save"}
+              </button>
+            )}
+            {canDelete && (
+              <button
+                onClick={handleDelete}
+                className="delete-btn"
+                disabled={loading}
+              >
+                {loading ? "Deleting..." : "🗑️ Delete"}
+              </button>
+            )}
           </div>
         )}
       </div>

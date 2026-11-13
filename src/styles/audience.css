@@ -1,0 +1,16 @@
+/* "Who can see this post?" (components/campus/AudienceSelect.js) */
+.audience { margin-top: 10px; }
+.audience__label { display: block; font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.audience__select { width: 100%; }
+.audience__hint { margin: 4px 0 0; font-size: 12px; color: var(--text-light, #64748b); }
+.audience__sub { margin: 10px 0 2px; font-size: 13px; font-weight: 700; color: var(--text); }
+.audience__finder { margin-top: 8px; }
+.audience__list { list-style: none; margin: 6px 0 0; padding: 0; max-height: 180px; overflow-y: auto; }
+.audience-row { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 4px; border: 0; border-bottom: 1px solid var(--border, #e2e8f0); background: transparent; color: var(--text); text-align: left; cursor: pointer; font-size: 14px; }
+.audience-row:disabled { opacity: 0.6; cursor: default; }
+.audience-row__name small { color: var(--text-light, #64748b); }
+.audience-row__add { color: var(--primary, #2563eb); font-weight: 700; font-size: 13px; }
+.audience-row__on { color: var(--text-light, #64748b); font-weight: 700; font-size: 13px; }
+.audience-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.audience-chip { border: 0; border-radius: 999px; padding: 4px 10px; background: var(--primary, #2563eb); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; }
+.audience__error { margin: 8px 0 0; font-size: 13px; color: #dc2626; }
