@@ -1,0 +1,8 @@
+.sec-form { display: flex; flex-direction: column; gap: 10px; max-width: 420px; }
+.sec-form label { font-size: 13px; font-weight: 700; color: var(--text); }
+.sec-form input { padding: 10px 12px; border: 1px solid var(--border, #e2e8f0); border-radius: 10px; font-size: 15px; background: var(--surface, #fff); color: var(--text); }
+.sec-hint { margin: 0; font-size: 12px; color: var(--text-light, #64748b); }
+.sec-error { margin: 0; font-size: 13px; color: #dc2626; }
+.sec-ok { margin: 0; font-size: 14px; color: var(--text); }
+.sec-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+.sec-danger { color: #dc2626; }

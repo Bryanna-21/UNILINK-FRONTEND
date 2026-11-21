@@ -66,6 +66,9 @@ import StudyGroups from "../pages/StudyGroups";
 import Polls from "../pages/Polls";
 import Clubs from "../pages/Clubs";
 import Settings from "../pages/Settings";
+import ChangePassword from "../pages/ChangePassword";
+import StudentAnnouncements from "../pages/Student/Announcements";
+import Projects from "../pages/Projects";
 import Apps from "../pages/Apps";
 
 /* Error pages */
@@ -356,7 +359,10 @@ export default function AppRoutes() {
           <Route path="/study-groups" element={<StudyGroups />} />
           <Route path="/polls" element={<Polls />} />
           <Route path="/clubs" element={<Clubs />} />
+          <Route path="/announcements" element={<StudentAnnouncements />} />
+          <Route path="/projects" element={<Projects />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/settings/change-password" element={<ChangePassword />} />
           <Route path="/apps" element={<Apps />} />
         </Route>
       </Route>

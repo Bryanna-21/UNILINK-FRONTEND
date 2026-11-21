@@ -6,6 +6,8 @@ import discussionService from "../../services/discussionService";
 import unitService from "../../services/unitService";
 import noteService from "../../services/noteService";
 import catService from "../../services/catService";
+import pastPaperService from "../../services/pastPaperService";
+import { isSafeUrl } from "../../utils/format";
 import assignmentService from "../../services/assignmentService";
 import messageService from "../../services/messageService";
 import { useAuth } from "../../context/AuthContext";
@@ -19,6 +21,7 @@ const TABS = [
   { key: "assignments", label: "Assignments", available: true },
   { key: "cats", label: "CATs", available: true },
   { key: "notes", label: "Notes", available: true },
+  { key: "papers", label: "Past Papers", available: true },
 ];
 
 const CourseDetail = () => {
@@ -40,6 +43,8 @@ const CourseDetail = () => {
   const [unitsLoading, setUnitsLoading] = useState(true);
   const [notes, setNotes] = useState([]);
   const [notesLoading, setNotesLoading] = useState(true);
+  const [papers, setPapers] = useState([]);
+  const [papersLoading, setPapersLoading] = useState(true);
   const [cats, setCats] = useState([]);
   const [catResults, setCatResults] = useState({});
   const [catsLoading, setCatsLoading] = useState(true);
@@ -73,6 +78,8 @@ const CourseDetail = () => {
       loadUnits();
     } else if (activeTab === "notes") {
       loadNotes();
+    } else if (activeTab === "papers") {
+      loadPapers();
     } else if (activeTab === "cats") {
       loadCats();
     } else if (activeTab === "assignments") {
@@ -140,6 +147,18 @@ const CourseDetail = () => {
       setToast({ show: true, type: "error", message: "Could not load notes." });
     } finally {
       setNotesLoading(false);
+    }
+  };
+
+  const loadPapers = async () => {
+    setPapersLoading(true);
+    try {
+      const res = await pastPaperService.getPastPapers(courseId);
+      setPapers(Array.isArray(res?.data) ? res.data : []);
+    } catch {
+      setToast({ show: true, type: "error", message: "Could not load past papers." });
+    } finally {
+      setPapersLoading(false);
     }
   };
 
@@ -438,6 +457,37 @@ const CourseDetail = () => {
                   <FaFileAlt />
                   <span>{note.title}</span>
                 </a>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeTab === "papers" && (
+        <div className="course-notes">
+          {papersLoading ? (
+            <Skeleton variant="card" count={3} />
+          ) : papers.length === 0 ? (
+            <div className="course-notes-empty">
+              <FaFileAlt size={32} />
+              <p>No past papers have been added for this course yet.</p>
+            </div>
+          ) : (
+            <div className="course-notes-list">
+              {papers.map((paper) => (
+                <div key={paper._id} className="note-entry" style={{ flexWrap: "wrap" }}>
+                  <FaFileAlt />
+                  <span>
+                    {paper.title}
+                    {paper.year ? ` (${paper.year})` : ""}
+                  </span>
+                  {isSafeUrl(paper.fileUrl) && (
+                    <a href={paper.fileUrl} target="_blank" rel="noopener noreferrer">Open paper</a>
+                  )}
+                  {isSafeUrl(paper.markingSchemeUrl) && (
+                    <a href={paper.markingSchemeUrl} target="_blank" rel="noopener noreferrer">Marking scheme</a>
+                  )}
+                </div>
               ))}
             </div>
           )}

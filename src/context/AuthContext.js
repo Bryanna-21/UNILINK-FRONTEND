@@ -233,9 +233,11 @@ export function AuthProvider({ children }) {
         code,
       });
 
+      // The server ends every session when a password changes, so this page signs out next ("Sign in again").
       return {
         success: true,
         message: response.data.message,
+        signedOut: !!response.data.signedOut,
       };
     } catch (error) {
       return {
@@ -305,6 +307,20 @@ export function AuthProvider({ children }) {
     setIsAuthenticated(false);
   };
 
+  // Ends every session of this account on every device (the server raises the account's token version), then signs out here.
+  const logoutEverywhere = async () => {
+    try {
+      await api.post("/auth/logout-all");
+      logout();
+      return { success: true, message: "You have been signed out of all devices." };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.response?.data?.message || "Could not sign out of all devices. Please try again.",
+      };
+    }
+  };
+
   const refreshUser = async () => {
     try {
       const response = await api.get("/auth/me");
@@ -366,6 +382,8 @@ export function AuthProvider({ children }) {
       requestPasswordChange,
 
       confirmPasswordChange,
+
+      logoutEverywhere,
 
       forgotPassword,
 
