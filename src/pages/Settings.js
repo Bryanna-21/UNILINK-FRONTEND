@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 import Card from "../components/common/Card";
+import SecurityCard from "../components/SecurityCard";
 import "../styles/pages/settings.css";
 
 // The Android download link comes from the same environment variable
@@ -13,6 +14,8 @@ export default function Settings() {
   return (
     <div className="settings-page">
       <h2>Settings</h2>
+
+      <SecurityCard />
 
       <Card
         title="Account"

@@ -9,8 +9,8 @@ import "../../styles/pages/studentHome.css";
 
 // The web counterpart of the app's Academics tab. Like the app it has
 // two segments, "Academics" and "Campus Hub". Pages that exist only in
-// the app (CATs, Past Papers, Projects, student Announcements) are not
-// listed, so nothing here links to a missing page.
+// the app, and every page listed here exists (Announcements and Projects are in the Campus Hub; Past Papers and CATs
+// are tabs on each course page).
 const SECTIONS = [
   {
     title: "My Studies",
@@ -49,6 +49,8 @@ const CAMPUS_HUB = [
   ["Clubs", "Join or start a club", "/clubs"],
   ["Study Groups", "Find or start a study group", "/study-groups"],
   ["Polls", "Vote on active polls", "/polls"],
+  ["Announcements", "News from lecturers and the university", "/announcements"],
+  ["Projects", "Start or follow a student project", "/projects"],
   ["Communities", "Groups at your university", "/communities"],
   ["Events", "What's happening on campus", "/events"],
   ["Marketplace", "Buy and sell with other students", "/marketplace"],
